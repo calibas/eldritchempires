@@ -15,9 +15,9 @@ public class Zoblin extends EntityMob{
 	int shortestDistance = 200;
 	private PathEntity path;
 	public boolean attacking = false;
-	public int nodex;
-	public int nodey;
-	public int nodez;
+	public int nodeX;
+	public int nodeY;
+	public int nodeZ;
 	
 	public Zoblin(World par1World) {
 		super(par1World);
@@ -63,9 +63,28 @@ public class Zoblin extends EntityMob{
         	
         	if (attacking == true)
             {
-//            	Minecraft.getMinecraft().thePlayer.addChatMessage("Zoblin: Attacking!");
-				path = this.worldObj.getEntityPathToXYZ(this, nodex, nodey, nodez, 40F, true, true, false, false);
-        		setPathToEntity(path);
+        		double xd = nodeX - this.posX;
+        		double yd = nodeY - this.posY;
+        		double zd = nodeZ - this.posZ;
+        		double distance = Math.sqrt(xd*xd + yd*yd + zd*zd);
+        		if (distance > 40.0D)
+        		{
+        			double deltaX = Math.sin(Math.atan2(xd,zd));
+        			double deltaZ = Math.cos(Math.atan2(xd, zd));
+        			int pathX = (int)(this.posX + (20*deltaX));
+        			int pathZ = (int)(this.posZ + (20*deltaZ));
+        			path = this.worldObj.getEntityPathToXYZ(this, pathX, getFirstUncoveredBlockHeight(pathX, pathZ), pathZ, 40F, true, true, false, false);
+        			setPathToEntity(path);
+        	//		Minecraft.getMinecraft().thePlayer.addChatMessage("Zoblin: Pathing to " + pathX + " " + pathZ);
+        			
+        		}
+        		else
+        		{
+//            		Minecraft.getMinecraft().thePlayer.addChatMessage("Zoblin: Attacking!");
+        			path = this.worldObj.getEntityPathToXYZ(this, nodeX, nodeY, nodeZ, 40F, true, true, false, false);
+        			setPathToEntity(path);
+        	//		Minecraft.getMinecraft().thePlayer.addChatMessage("Zoblin: Pathing to " + nodeX + " " + nodeZ);
+        		}
             }
         }
         
@@ -79,7 +98,7 @@ public class Zoblin extends EntityMob{
 		 // Max Health - default 20.0D - min 0.0D - max Double.MAX_VALUE
 		 this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(20.0D);
 		 // Follow Range - default 32.0D - min 0.0D - max 2048.0D
-		 this.func_110148_a(SharedMonsterAttributes.field_111265_b).func_111128_a(40.0D);
+		 this.func_110148_a(SharedMonsterAttributes.field_111265_b).func_111128_a(60.0D);
 		 // Knockback Resistance - default 0.0D - min 0.0D - max 1.0D
 		 this.func_110148_a(SharedMonsterAttributes.field_111266_c).func_111128_a(0.0D);
 		 // Movement Speed - default 0.699D - min 0.0D - max Double.MAX_VALUE
@@ -107,9 +126,9 @@ public class Zoblin extends EntityMob{
         if (attacking == true)
         {
         	par1NBTTagCompound.setBoolean("Attacking", attacking);
-        	par1NBTTagCompound.setInteger("AttackX", nodex);
-        	par1NBTTagCompound.setInteger("AttackY", nodey);
-        	par1NBTTagCompound.setInteger("AttackZ", nodez);
+        	par1NBTTagCompound.setInteger("AttackX", nodeX);
+        	par1NBTTagCompound.setInteger("AttackY", nodeY);
+        	par1NBTTagCompound.setInteger("AttackZ", nodeZ);
         }
     }
 
@@ -122,9 +141,9 @@ public class Zoblin extends EntityMob{
         if (par1NBTTagCompound.hasKey("Attacking"))
         {
             attacking = par1NBTTagCompound.getBoolean("Attacking");
-            nodex = par1NBTTagCompound.getInteger("AttackX");
-            nodey = par1NBTTagCompound.getInteger("AttackY");
-            nodez = par1NBTTagCompound.getInteger("AttackZ");
+            nodeX = par1NBTTagCompound.getInteger("AttackX");
+            nodeY = par1NBTTagCompound.getInteger("AttackY");
+            nodeZ = par1NBTTagCompound.getInteger("AttackZ");
         }
         
     }

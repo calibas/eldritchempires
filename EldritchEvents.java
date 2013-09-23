@@ -2,6 +2,7 @@ package eldritchempires;
 
 import java.util.List;
 
+import eldritchempires.entity.MagicEssence;
 import eldritchempires.entity.Zoblin;
 import eldritchempires.entity.ZoblinBomber;
 
@@ -27,12 +28,12 @@ public class EldritchEvents {
 	{
 		tickCount++;
 //		List playerList = event.world.playerEntities;
-		if (tickCount >= 50 && event.world.provider.dimensionId == 0 && !event.world.playerEntities.isEmpty())
+		if (tickCount >= 20 && event.world.provider.dimensionId == 0 && !event.world.playerEntities.isEmpty())
 		{
 //			data.markDirty();
 //			event.world.perWorldStorage.setData(EldritchWorldData.name, data);
 			data = EldritchWorldData.forWorld(event.world);
-			if (data != null)
+			if (data != null && !event.world.isRemote)
 			{
 //				System.out.println("Marker set:" + data.checkMarker());
 				
@@ -42,35 +43,48 @@ public class EldritchEvents {
 				int nodeX = data.getNodeX();
 				int nodeY = data.getNodeY();
 				int nodeZ = data.getNodeZ();
+//				if (event.world.checkChunksExist(markerX, markerY, markerZ, nodeX, nodeY, nodeZ))
+//				if (event.world.activeChunkSet != null)
+//				{
+					Chunk markerChunk = event.world.getChunkFromBlockCoords(markerX, markerZ);
+					Chunk nodeChunk = event.world.getChunkFromBlockCoords(nodeX, nodeZ);
+					
+					System.out.println("Server time: " + event.world.provider.getWorldTime());
 
-				if(data.checkMarker())
+				
+				if(data.checkMarker() && markerChunk.isChunkLoaded)
 				{
 	
 //					System.out.println("Marker found at:" + markerX + " " + markerY + " " + markerZ);
 //					System.out.println("BlockID:" + event.world.getBlockId(markerX, markerY, markerZ));
-					Chunk chunk = event.world.getChunkFromBlockCoords(markerX, markerZ);
 					
-					if (event.world.getBlockId(markerX, markerY, markerZ) != 254 && chunk.isChunkLoaded)
+					if (event.world.getBlockId(markerX, markerY, markerZ) != 254)
 					{
 						System.out.println("Marker unset" );
 						data.unSetMarker();
 						event.world.perWorldStorage.setData(EldritchWorldData.name, data);
+						wave = 0;
 					}
 				}
 				
-				if(data.checkNode())
+				if(data.checkNode() && nodeChunk.isChunkLoaded)
 				{
 	
 //					System.out.println("Marker found at:" + markerX + " " + markerY + " " + markerZ);
 //					System.out.println("BlockID:" + event.world.getBlockId(markerX, markerY, markerZ));
-					Chunk chunk = event.world.getChunkFromBlockCoords(markerX, markerZ);
 					
-					if (event.world.getBlockId(nodeX, nodeY, nodeZ) != 252 && chunk.isChunkLoaded)
+					if (event.world.getBlockId(nodeX, nodeY, nodeZ) != 252)
 					{
 						System.out.println("Node unset" );
 						data.unSetNode();
 						event.world.perWorldStorage.setData(EldritchWorldData.name, data);
+						wave = 0;
 					}
+				}
+				
+				if (data.checkMarker() && data.checkNode() && (event.world.provider.getWorldTime() - lastSpawn) < 0)
+				{
+					lastSpawn = event.world.provider.getWorldTime();
 				}
 				
 				if (data.checkMarker() && data.checkNode() && (event.world.provider.getWorldTime() - lastSpawn) >= 600)
@@ -79,6 +93,8 @@ public class EldritchEvents {
 //					System.out.println("Spawn code here");
 					wave++;
 					lastSpawn = event.world.provider.getWorldTime();
+					System.out.println("Spawn time: " + lastSpawn);
+//				}
 				}
 					
 			}
@@ -105,6 +121,7 @@ public class EldritchEvents {
 			case 2:
 				spawnWave("zoblin", 2, x, y, z, world);
 				spawnWave("zoblinBomber", 1, x, y, z, world);
+				spawnWave("magicEssence", 1, x, y, z, world);
 				break;
 			case 3:
 				spawnWave("zoblin", 2, x, y, z, world);
@@ -117,6 +134,7 @@ public class EldritchEvents {
 			case 5:
 				spawnWave("zoblin", 2, x, y, z, world);
 				spawnWave("zoblinBomber", 2, x, y, z, world);
+				spawnWave("magicEssence", 1, x, y, z, world);
 				break;
 		}
 	}
@@ -131,9 +149,9 @@ public class EldritchEvents {
 				zoblin.setLocationAndAngles((double)x, (double)y + 1, (double)z, 0.0F, 0.0F);
 				zoblin.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(2.099D);
 				zoblin.attacking = true;
-				zoblin.nodex = data.getNodeX();
-				zoblin.nodey = data.getNodeY();
-				zoblin.nodez = data.getNodeZ();
+				zoblin.nodeX = data.getNodeX();
+				zoblin.nodeY = data.getNodeY();
+				zoblin.nodeZ = data.getNodeZ();
 				world.spawnEntityInWorld(zoblin);
 			}
 			if (mobName == "zoblinBomber")
@@ -145,7 +163,24 @@ public class EldritchEvents {
 				zoblinBomber.nodex = data.getNodeX();
 				zoblinBomber.nodey = data.getNodeY();
 				zoblinBomber.nodez = data.getNodeZ();
+        		double xd = data.getNodeX() - x;
+        		double yd = data.getNodeY() - y;
+        		double zd = data.getNodeZ() - z;
+        		double distance = Math.sqrt(xd*xd + yd*yd + zd*zd);
+				zoblinBomber.timer = (int)(distance/3);
+				System.out.println("ZoblinBomber distance timer: " + distance + " " + zoblinBomber.timer );
 				world.spawnEntityInWorld(zoblinBomber);
+			}
+			if (mobName == "magicEssence")
+			{
+				MagicEssence entity = new MagicEssence(world);
+				entity.setLocationAndAngles((double)x, (double)y + 1, (double)z, 0.0F, 0.0F);
+				entity.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(2.599D);
+				entity.attacking = true;
+				entity.nodeX = data.getNodeX();
+				entity.nodeY = data.getNodeY();
+				entity.nodeZ = data.getNodeZ();
+				world.spawnEntityInWorld(entity);				
 			}
 
 		}

@@ -16,9 +16,9 @@ public class MagicEssence extends EntityMob{
 	int shortestDistance = 200;
 	private PathEntity path;
 	public boolean attacking = false;
-	public int nodex;
-	public int nodey;
-	public int nodez;
+	public int nodeX;
+	public int nodeY;
+	public int nodeZ;
 	
 	public MagicEssence(World par1World) {
 		super(par1World);
@@ -33,7 +33,7 @@ public class MagicEssence extends EntityMob{
         if (this.rand.nextInt(100) == 0 && attacking == true)
         {
 //            	Minecraft.getMinecraft().thePlayer.addChatMessage("MagicEssence: Attacking!");
-				path = this.worldObj.getEntityPathToXYZ(this, nodex, nodey, nodez, 40F, true, true, false, false);
+				path = this.worldObj.getEntityPathToXYZ(this, nodeX, nodeY, nodeZ, 40F, true, true, false, false);
         		setPathToEntity(path);
         }
         
@@ -89,9 +89,9 @@ public class MagicEssence extends EntityMob{
         if (attacking == true)
         {
         	par1NBTTagCompound.setBoolean("Attacking", attacking);
-        	par1NBTTagCompound.setInteger("AttackX", nodex);
-        	par1NBTTagCompound.setInteger("AttackY", nodey);
-        	par1NBTTagCompound.setInteger("AttackZ", nodez);
+        	par1NBTTagCompound.setInteger("AttackX", nodeX);
+        	par1NBTTagCompound.setInteger("AttackY", nodeY);
+        	par1NBTTagCompound.setInteger("AttackZ", nodeZ);
         }
     }
 
@@ -104,9 +104,9 @@ public class MagicEssence extends EntityMob{
         if (par1NBTTagCompound.hasKey("Attacking"))
         {
             attacking = par1NBTTagCompound.getBoolean("Attacking");
-            nodex = par1NBTTagCompound.getInteger("AttackX");
-            nodey = par1NBTTagCompound.getInteger("AttackY");
-            nodez = par1NBTTagCompound.getInteger("AttackZ");
+            nodeX = par1NBTTagCompound.getInteger("AttackX");
+            nodeY = par1NBTTagCompound.getInteger("AttackY");
+            nodeZ = par1NBTTagCompound.getInteger("AttackZ");
         }
         
     }
