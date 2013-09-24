@@ -25,20 +25,20 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 
-public class BlockNode extends BlockContainer{
+public class BlockCollector extends BlockContainer{
 
 	private PathEntity path;
 	private int searchRadius = 20;
 	EldritchWorldData data = new EldritchWorldData();
 	
-	public BlockNode(int par1, Material par2Material) {
+	public BlockCollector(int par1, Material par2Material) {
 		super(par1, par2Material);
 		this.setHardness(1.5F);
 		this.setResistance(5.0F);
 		this.setCreativeTab(EldritchEmpires.tabEldritch);
 		this.setTickRandomly(true);
-	    float f = 0.1F;		
-		this.setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 2.0F, 0.5F + f);
+	    float f = 0.25F;		
+		this.setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.5F, 0.5F + f);
 	}
 
 	public void onBlockAdded(World par1World, int par2, int par3, int par4) 

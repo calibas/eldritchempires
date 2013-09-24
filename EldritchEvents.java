@@ -49,7 +49,7 @@ public class EldritchEvents {
 					Chunk markerChunk = event.world.getChunkFromBlockCoords(markerX, markerZ);
 					Chunk nodeChunk = event.world.getChunkFromBlockCoords(nodeX, nodeZ);
 					
-					System.out.println("Server time: " + event.world.provider.getWorldTime());
+//					System.out.println("Server time: " + event.world.provider.getWorldTime());
 
 				
 				if(data.checkMarker() && markerChunk.isChunkLoaded)
@@ -93,7 +93,7 @@ public class EldritchEvents {
 //					System.out.println("Spawn code here");
 					wave++;
 					lastSpawn = event.world.provider.getWorldTime();
-					System.out.println("Spawn time: " + lastSpawn);
+//					System.out.println("Spawn time: " + lastSpawn);
 //				}
 				}
 					
@@ -141,6 +141,7 @@ public class EldritchEvents {
 	
 	public void spawnWave(String mobName, int count, int x, int y, int z, World world)
 	{
+		String annouce = "Incomming: ";
 		for (int i = 1; i < (count + 1); i++)
 		{
 			if (mobName == "zoblin")
@@ -153,6 +154,7 @@ public class EldritchEvents {
 				zoblin.nodeY = data.getNodeY();
 				zoblin.nodeZ = data.getNodeZ();
 				world.spawnEntityInWorld(zoblin);
+				annouce = annouce + "Zoblin, ";
 			}
 			if (mobName == "zoblinBomber")
 			{
@@ -168,8 +170,9 @@ public class EldritchEvents {
         		double zd = data.getNodeZ() - z;
         		double distance = Math.sqrt(xd*xd + yd*yd + zd*zd);
 				zoblinBomber.timer = (int)(distance/3);
-				System.out.println("ZoblinBomber distance timer: " + distance + " " + zoblinBomber.timer );
+//				System.out.println("ZoblinBomber distance timer: " + distance + " " + zoblinBomber.timer );
 				world.spawnEntityInWorld(zoblinBomber);
+				annouce = annouce + "Zoblin Bomber, ";
 			}
 			if (mobName == "magicEssence")
 			{
@@ -180,10 +183,13 @@ public class EldritchEvents {
 				entity.nodeX = data.getNodeX();
 				entity.nodeY = data.getNodeY();
 				entity.nodeZ = data.getNodeZ();
-				world.spawnEntityInWorld(entity);				
+				world.spawnEntityInWorld(entity);
+				annouce = annouce + "Magic Essence, ";
 			}
 
 		}
+		
+		Minecraft.getMinecraft().thePlayer.addChatMessage(annouce);
 	}
 	
 }

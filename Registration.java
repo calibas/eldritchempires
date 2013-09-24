@@ -21,7 +21,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 import eldritchempires.block.BlockMarker;
-import eldritchempires.block.BlockNode;
+import eldritchempires.block.BlockCollector;
 import eldritchempires.block.BlockSpawner;
 import eldritchempires.entity.MagicEssence;
 import eldritchempires.entity.StoneArcher;
@@ -47,7 +47,7 @@ public class Registration {
 	public static void registration()
 	{
 		// Add Blocks
-		node = new BlockNode(252, Material.wood).setUnlocalizedName("node");
+		node = new BlockCollector(252, Material.wood).setUnlocalizedName("node");
 		GameRegistry.registerBlock(node, ItemNode.class, EldritchEmpires.modid + (node.getUnlocalizedName().substring(5)));
 		LanguageRegistry.addName(new ItemStack(node, 1, 0), "Player Node");
 		LanguageRegistry.addName(new ItemStack(node, 1, 1), "Zoblin Node");		

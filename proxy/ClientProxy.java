@@ -7,6 +7,7 @@ import eldritchempires.entity.StoneArcher;
 import eldritchempires.entity.TileEntityNode;
 import eldritchempires.entity.Zoblin;
 import eldritchempires.entity.ZoblinBomber;
+import eldritchempires.model.CollectorRender;
 import eldritchempires.model.MagicEssenceRender;
 import eldritchempires.model.NodeRender;
 import eldritchempires.model.StoneArcherRender;
@@ -23,7 +24,7 @@ public class ClientProxy extends CommonProxy {
     	RenderingRegistry.registerEntityRenderingHandler(StoneArcher.class, new StoneArcherRender());
     	RenderingRegistry.registerEntityRenderingHandler(MagicEssence.class, new MagicEssenceRender());
 //    	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNode.class, new NodeRender());
-    	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNode.class, new NodeRender());
+    	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNode.class, new CollectorRender());
 
     }
    

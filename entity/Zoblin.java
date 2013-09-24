@@ -98,7 +98,7 @@ public class Zoblin extends EntityMob{
 		 // Max Health - default 20.0D - min 0.0D - max Double.MAX_VALUE
 		 this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(20.0D);
 		 // Follow Range - default 32.0D - min 0.0D - max 2048.0D
-		 this.func_110148_a(SharedMonsterAttributes.field_111265_b).func_111128_a(60.0D);
+		 this.func_110148_a(SharedMonsterAttributes.field_111265_b).func_111128_a(80.0D);
 		 // Knockback Resistance - default 0.0D - min 0.0D - max 1.0D
 		 this.func_110148_a(SharedMonsterAttributes.field_111266_c).func_111128_a(0.0D);
 		 // Movement Speed - default 0.699D - min 0.0D - max Double.MAX_VALUE
