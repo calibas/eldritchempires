@@ -4,14 +4,16 @@ import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import eldritchempires.entity.MagicEssence;
 import eldritchempires.entity.StoneArcher;
-import eldritchempires.entity.TileEntityNode;
+import eldritchempires.entity.TileEntityCollector;
 import eldritchempires.entity.Zoblin;
 import eldritchempires.entity.ZoblinBomber;
+import eldritchempires.entity.ZoblinBoss;
 import eldritchempires.model.CollectorRender;
 import eldritchempires.model.MagicEssenceRender;
 import eldritchempires.model.NodeRender;
 import eldritchempires.model.StoneArcherRender;
 import eldritchempires.model.ZoblinBomberRender;
+import eldritchempires.model.ZoblinBossRender;
 import eldritchempires.model.ZoblinRender;
 
 public class ClientProxy extends CommonProxy {
@@ -23,8 +25,9 @@ public class ClientProxy extends CommonProxy {
     	RenderingRegistry.registerEntityRenderingHandler(ZoblinBomber.class, new ZoblinBomberRender());
     	RenderingRegistry.registerEntityRenderingHandler(StoneArcher.class, new StoneArcherRender());
     	RenderingRegistry.registerEntityRenderingHandler(MagicEssence.class, new MagicEssenceRender());
+    	RenderingRegistry.registerEntityRenderingHandler(ZoblinBoss.class, new ZoblinBossRender());
 //    	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNode.class, new NodeRender());
-    	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNode.class, new CollectorRender());
+    	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCollector.class, new CollectorRender());
 
     }
    

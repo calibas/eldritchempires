@@ -6,15 +6,14 @@ import net.minecraft.world.WorldSavedData;
  
 public class EldritchWorldData extends WorldSavedData {
        
-        private static int test = 0;
-        private static boolean markerSet = false;
-        private static int markerX = 0;
-        private static int markerY = 0;
-        private static int markerZ = 0;
-        private static boolean nodeSet = false;
-        private static int nodeX = 0;
-        private static int nodeY = 0;
-        private static int nodeZ = 0;
+        private static boolean portalSet = false;
+        private static int portalX = 0;
+        private static int portalY = 0;
+        private static int portalZ = 0;
+        private static boolean collectorSet = false;
+        private static int collectorX = 0;
+        private static int collectorY = 0;
+        private static int collectorZ = 0;
         
         public static String name = "EldritchData";
     	
@@ -39,107 +38,114 @@ public class EldritchWorldData extends WorldSavedData {
         
         @Override
         public void readFromNBT(NBTTagCompound nbt){
-               test = nbt.getInteger("test");
-               markerX = nbt.getInteger("markerX");
-               markerY = nbt.getInteger("markerY");
-               markerZ = nbt.getInteger("markerZ");
-               markerSet = nbt.getBoolean("markerSet");
-               nodeX = nbt.getInteger("nodeX");
-               nodeY = nbt.getInteger("nodeY");
-               nodeZ = nbt.getInteger("nodeZ");
-               nodeSet = nbt.getBoolean("nodeSet");
+               portalX = nbt.getInteger("portalX");
+               portalY = nbt.getInteger("portalY");
+               portalZ = nbt.getInteger("portalZ");
+               portalSet = nbt.getBoolean("portalSet");
+               collectorX = nbt.getInteger("collectorX");
+               collectorY = nbt.getInteger("collectorY");
+               collectorZ = nbt.getInteger("collectorZ");
+               collectorSet = nbt.getBoolean("collectorSet");
         }
  
         @Override
         public void writeToNBT(NBTTagCompound nbt){
-                nbt.setInteger("test", test);
-                nbt.setInteger("markerX", markerX);
-                nbt.setInteger("markerY", markerY);
-                nbt.setInteger("markerZ", markerZ);
-                nbt.setBoolean("markerSet", markerSet);
-                nbt.setInteger("nodeX", nodeX);
-                nbt.setInteger("nodeY", nodeY);
-                nbt.setInteger("nodeZ", nodeZ);
-                nbt.setBoolean("nodeSet", nodeSet);
+                nbt.setInteger("portalX", portalX);
+                nbt.setInteger("portalY", portalY);
+                nbt.setInteger("portalZ", portalZ);
+                nbt.setBoolean("portalSet", portalSet);
+                nbt.setInteger("collectorX", collectorX);
+                nbt.setInteger("collectorY", collectorY);
+                nbt.setInteger("collectorZ", collectorZ);
+                nbt.setBoolean("collectorSet", collectorSet);
         }
        
-        public int getTest(){
-                return test;
-        }
-       
-        public void setTest(int newtest){
-                test = newtest;
-                markDirty();
-        }
-        
-        public void setMarker(int par1, int par2, int par3)
+        public void setPortal(int par1, int par2, int par3)
         {
-        	markerX = par1;
-        	markerY = par2;
-        	markerZ = par3;
-        	markerSet = true;
+        	portalX = par1;
+        	portalY = par2;
+        	portalZ = par3;
+        	portalSet = true;
         	markDirty();
         }
         
-        public void unSetMarker()
+        public void unSetPortal()
         {
-        	markerSet = false;
+        	portalSet = false;
         	markDirty();
         }
         
-        public int getMarkerX()
+        public int getPortalX()
         {
-        	return markerX;
+        	if (checkPortal())
+        		return portalX;
+        	else
+        		return 0;
         }
         
-        public int getMarkerY()
+        public int getPortalY()
         {
-        	return markerY;
+        	if (checkPortal())
+        		return portalY;
+        	else
+        		return 0;
         }
         
-        public int getMarkerZ()
+        public int getPortalZ()
         {
-        	return markerZ;
+        	if (checkPortal())
+        		return portalZ;
+        	else
+        		return 0;
         }
         
-        public boolean checkMarker()
+        public boolean checkPortal()
         {
-        	return markerSet;
+        	return portalSet;
         }
 
-        public void setNode(int par1, int par2, int par3)
+        public void setCollector(int par1, int par2, int par3)
         {
-        	nodeX = par1;
-        	nodeY = par2;
-        	nodeZ = par3;
-        	nodeSet = true;
+        	collectorX = par1;
+        	collectorY = par2;
+        	collectorZ = par3;
+        	collectorSet = true;
         	markDirty();
         }
         
-        public void unSetNode()
+        public void unSetCollector()
         {
-        	nodeSet = false;
+        	collectorSet = false;
         	markDirty();
         }
         
-        public int getNodeX()
+        public int getCollectorX()
         {
-        	return nodeX;
+        	if (checkCollector())
+        		return collectorX;
+        	else
+        		return 0;
         }
         
-        public int getNodeY()
+        public int getCollectorY()
         {
-        	return nodeY;
+        	if (checkCollector())
+        		return collectorY;
+        	else
+        		return 0;
         }
         
-        public int getNodeZ()
+        public int getCollectorZ()
         {
-        	return nodeZ;
+        	if (checkCollector())
+        		return collectorZ;
+        	else
+        		return 0;
         }
         
-        public boolean checkNode()
+        public boolean checkCollector()
         {
-        	return nodeSet;
+        	return collectorSet;
         }
 }
 

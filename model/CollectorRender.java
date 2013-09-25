@@ -3,7 +3,7 @@ package eldritchempires.model;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import eldritchempires.entity.TileEntityNode;
+import eldritchempires.entity.TileEntityCollector;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.FontRenderer;
@@ -23,11 +23,11 @@ public class CollectorRender extends TileEntitySpecialRenderer {
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double d0, double d1, double d2, float f) 
 	{
-		this.renderTileEntityCollectorAt((TileEntityNode)tileentity, d0, d1, d2, f);
+		this.renderTileEntityCollectorAt((TileEntityCollector)tileentity, d0, d1, d2, f);
 
 	}
 	
-    public void renderTileEntityCollectorAt(TileEntityNode par1TileEntity, double par2, double par4, double par6, float par8)
+    public void renderTileEntityCollectorAt(TileEntityCollector par1TileEntity, double par2, double par4, double par6, float par8)
     {
         int i = par1TileEntity.getBlockMetadata();
 

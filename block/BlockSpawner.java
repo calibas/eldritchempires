@@ -91,14 +91,14 @@ public class BlockSpawner extends BlockContainer{
   
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
-{
+    {
          icons = new Icon[2];
         
          for(int i = 0; i < icons.length; i++)
          {
                 icons[i] = par1IconRegister.registerIcon(EldritchEmpires.modid + ":" + (this.getUnlocalizedName().substring(5)) + i);
          }
-}
+    }
   
     @SideOnly(Side.CLIENT)
     public Icon getIcon(int par1, int par2)

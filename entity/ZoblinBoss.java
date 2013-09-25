@@ -1,17 +1,15 @@
 package eldritchempires.entity;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBreakDoor;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathEntity;
-import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
-public class MagicEssence extends EntityMob{
+public class ZoblinBoss extends EntityMob{
 
 	private PathEntity path;
 	public boolean attacking = false;
@@ -19,11 +17,9 @@ public class MagicEssence extends EntityMob{
 	public int nodeY;
 	public int nodeZ;
 	
-	public MagicEssence(World par1World) {
+	public ZoblinBoss(World par1World) {
 		super(par1World);
-//		this.getNavigator().setBreakDoors(true);
-//		this.tasks.addTask(0, new EntityAISwimming(this));
-//		this.tasks.addTask(1, new EntityAIBreakDoor(this));
+		this.experienceValue = 25;
 	}
 	
 	@Override
@@ -32,33 +28,29 @@ public class MagicEssence extends EntityMob{
         if (this.rand.nextInt(100) == 0 && attacking == true)
         {
        		double xd = nodeX - this.posX;
-    		double yd = nodeY - this.posY;
-    		double zd = nodeZ - this.posZ;
-    		double distance = Math.sqrt(xd*xd + yd*yd + zd*zd);
-    		if (distance > 40.0D)
-    		{
-    			double deltaX = Math.sin(Math.atan2(xd,zd));
-    			double deltaZ = Math.cos(Math.atan2(xd, zd));
-    			int pathX = (int)(this.posX + (20*deltaX));
-    			int pathZ = (int)(this.posZ + (20*deltaZ));
-    			path = this.worldObj.getEntityPathToXYZ(this, pathX, getFirstUncoveredBlockHeight(pathX, pathZ), pathZ, 40F, true, true, false, false);
-    			setPathToEntity(path);
-    	//		Minecraft.getMinecraft().thePlayer.addChatMessage("Zoblin: Pathing to " + pathX + " " + pathZ);
-    			
-    		}
-    		else
-    		{
-//        		Minecraft.getMinecraft().thePlayer.addChatMessage("Zoblin: Attacking!");
-    			path = this.worldObj.getEntityPathToXYZ(this, nodeX, nodeY, nodeZ, 40F, true, true, false, false);
-    			setPathToEntity(path);
-    	//		Minecraft.getMinecraft().thePlayer.addChatMessage("Zoblin: Pathing to " + nodeX + " " + nodeZ);
-    		}
+        	double yd = nodeY - this.posY;
+        	double zd = nodeZ - this.posZ;
+        	double distance = Math.sqrt(xd*xd + yd*yd + zd*zd);
+        	if (distance > 40.0D)
+        	{
+        			double deltaX = Math.sin(Math.atan2(xd,zd));
+        			double deltaZ = Math.cos(Math.atan2(xd, zd));
+        			int pathX = (int)(this.posX + (20*deltaX));
+        			int pathZ = (int)(this.posZ + (20*deltaZ));
+        			path = this.worldObj.getEntityPathToXYZ(this, pathX, getFirstUncoveredBlockHeight(pathX, pathZ), pathZ, 40F, true, true, false, false);
+        			setPathToEntity(path);
+        	//		Minecraft.getMinecraft().thePlayer.addChatMessage("Zoblin: Pathing to " + pathX + " " + pathZ);
+        			
+        	}
+        	else
+        	{
+//            		Minecraft.getMinecraft().thePlayer.addChatMessage("Zoblin: Attacking!");
+        			path = this.worldObj.getEntityPathToXYZ(this, nodeX, nodeY, nodeZ, 40F, true, true, false, false);
+        			setPathToEntity(path);
+        	//		Minecraft.getMinecraft().thePlayer.addChatMessage("Zoblin: Pathing to " + nodeX + " " + nodeZ);
+        	}
         }
         
-   		if (this.rand.nextInt(20) == 0)
-    		{
-    			worldObj.spawnParticle("magicCrit", posX, posY + 1.5D, posZ, 0.0D, 0.0D, 0.0D);
-    		}
         
         super.onLivingUpdate();
     }
@@ -67,44 +59,16 @@ public class MagicEssence extends EntityMob{
 	 {
 		 super.func_110147_ax();
 		 // Max Health - default 20.0D - min 0.0D - max Double.MAX_VALUE
-		 this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(30.0D);
+		 this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(120.0D);
 		 // Follow Range - default 32.0D - min 0.0D - max 2048.0D
 		 this.func_110148_a(SharedMonsterAttributes.field_111265_b).func_111128_a(80.0D);
 		 // Knockback Resistance - default 0.0D - min 0.0D - max 1.0D
-		 this.func_110148_a(SharedMonsterAttributes.field_111266_c).func_111128_a(0.0D);
+		 this.func_110148_a(SharedMonsterAttributes.field_111266_c).func_111128_a(0.9D);
 		 // Movement Speed - default 0.699D - min 0.0D - max Double.MAX_VALUE
-		 this.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(2.699D);
+		 this.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(0.699D);
 		 // Attack Damage - default 2.0D - min 0.0D - max Doubt.MAX_VALUE
-		 this.func_110148_a(SharedMonsterAttributes.field_111264_e).func_111128_a(2.0D);
+		 this.func_110148_a(SharedMonsterAttributes.field_111264_e).func_111128_a(4.0D);
 	 }
-    
-	@Override
-    protected Entity findPlayerToAttack()
-    {   
-    	return null;
-    }
-	
-    public Entity getEntityToAttack()
-    {
-        return null;
-    }
-    
-    public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
-    {
-    	return false;
-    }
-    
-//    public int getFirstUncoveredBlockHeight(int par1, int par2)
-//    {
-//        int k;
-//
-//        for (k = 63; !this.worldObj.isAirBlock(par1, k + 1, par2); ++k)
-//        {
-//            ;
-//        }
-//
-//        return k;
-//    }
     
     public int getFirstUncoveredBlockHeight(int par1, int par2)
     {
@@ -118,6 +82,7 @@ public class MagicEssence extends EntityMob{
         return k;
     }
     
+	
     public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
     {
         super.writeEntityToNBT(par1NBTTagCompound);

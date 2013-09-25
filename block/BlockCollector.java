@@ -9,7 +9,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import eldritchempires.EldritchEmpires;
 import eldritchempires.EldritchWorldData;
-import eldritchempires.entity.TileEntityNode;
+import eldritchempires.entity.TileEntityCollector;
 import eldritchempires.entity.Zoblin;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -45,18 +46,58 @@ public class BlockCollector extends BlockContainer{
 	{
 		if (!par1World.isRemote)
 		{
+			String announce = "";
+			double distance;
+			boolean goodDistance = true;
 			data = EldritchWorldData.forWorld(par1World);
-			if (!data.checkNode())
+			
+			if (data.checkPortal())
 			{
-				data.setNode(par2, par3, par4);
+        		double xd = data.getPortalX() - par2;
+        		double yd = data.getPortalY() - par3;
+        		double zd = data.getPortalZ() - par4;
+        		distance = Math.sqrt(xd*xd + yd*yd + zd*zd);
+        		if (distance >= 80.0D)
+        		{
+        			announce = "Portal too far";
+        			goodDistance = false;
+        		}
+        		if (distance <= 25.0D)
+        		{
+        			announce = "Portal too near";
+        			goodDistance = false;
+        		}	
+			}
+			
+			if (data.checkCollector())
+				announce = "Collector already placed. (" + data.getCollectorX() + "," + data.getCollectorY() + "," + data.getCollectorZ() + ")";
+			
+			if (!data.checkCollector() && goodDistance == true)
+			{
+				data.setCollector(par2, par3, par4);
 				par1World.perWorldStorage.setData(EldritchWorldData.name, data);
 				data = (EldritchWorldData) par1World.perWorldStorage.loadData(EldritchWorldData.class, EldritchWorldData.name);
-				System.out.println("Node set");
+				announce = "Collector set";
 			}
 			else
 			{
 				par1World.setBlockToAir(par2, par3, par4);
+				par1World.removeBlockTileEntity(par2, par3, par4);
+				
 			}
+			
+			int announceRadius = 100;
+			List<?> var4 = par1World.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(par2 - announceRadius, par3 - announceRadius, par4 - announceRadius, par2 + announceRadius, par3 + announceRadius, par4 + announceRadius));
+
+			if (var4 != null && !var4.isEmpty()) {
+				Iterator<?> var5 = var4.iterator();
+
+				while (var5.hasNext()) {
+					EntityPlayer var6 = (EntityPlayer)var5.next();
+					var6.addChatMessage(announce);
+				}
+			}
+			
 		}
 	}
 	
@@ -83,33 +124,33 @@ public class BlockCollector extends BlockContainer{
 		}
 		
 		// Zoblin Node
-		if (i == 1)
-		{
-			List<?> var4 = par1World.getEntitiesWithinAABB(Zoblin.class, AxisAlignedBB.getAABBPool().getAABB(par2 - searchRadius, par3 - searchRadius, par4 - searchRadius, par2 + searchRadius, par3 + searchRadius, par4 + searchRadius));
-			int j = var4.size();
-        
-			
-			
-			if (j <= 5)
-			{
-				Zoblin zoblin = new Zoblin(par1World);
-				zoblin.setLocationAndAngles((double)par2 + 0.5D, (double)par3, (double)par4 + 0.5D, 0.0F, 0.0F);
-				par1World.spawnEntityInWorld(zoblin);
-			}
-			
-
+//		if (i == 1)
+//		{
 //			List<?> var4 = par1World.getEntitiesWithinAABB(Zoblin.class, AxisAlignedBB.getAABBPool().getAABB(par2 - searchRadius, par3 - searchRadius, par4 - searchRadius, par2 + searchRadius, par3 + searchRadius, par4 + searchRadius));
-
-			if (var4 != null && !var4.isEmpty()) {
-				Iterator<?> var5 = var4.iterator();
-
-				while (var5.hasNext()) {
-					EntityLiving var6 = (EntityLiving)var5.next();
-					var6.setPosition((double)par2 + 0.5D, (double)par3 + 20.0D, (double)par4 + 0.5D);
-				}
-			}
-
-		}
+//			int j = var4.size();
+//        
+//			
+//			
+//			if (j <= 5)
+//			{
+//				Zoblin zoblin = new Zoblin(par1World);
+//				zoblin.setLocationAndAngles((double)par2 + 0.5D, (double)par3, (double)par4 + 0.5D, 0.0F, 0.0F);
+//				par1World.spawnEntityInWorld(zoblin);
+//			}
+//			
+//
+////			List<?> var4 = par1World.getEntitiesWithinAABB(Zoblin.class, AxisAlignedBB.getAABBPool().getAABB(par2 - searchRadius, par3 - searchRadius, par4 - searchRadius, par2 + searchRadius, par3 + searchRadius, par4 + searchRadius));
+//
+//			if (var4 != null && !var4.isEmpty()) {
+//				Iterator<?> var5 = var4.iterator();
+//
+//				while (var5.hasNext()) {
+//					EntityLiving var6 = (EntityLiving)var5.next();
+//					var6.setPosition((double)par2 + 0.5D, (double)par3 + 20.0D, (double)par4 + 0.5D);
+//				}
+//			}
+//
+//		}
     }
 	
 	@Override
@@ -117,7 +158,7 @@ public class BlockCollector extends BlockContainer{
     {
         try
         {
-        	return new TileEntityNode();
+        	return new TileEntityCollector();
         }
         catch (Exception exception)
         {

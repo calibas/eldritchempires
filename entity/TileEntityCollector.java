@@ -17,23 +17,20 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.WorldSavedData;
 
-public class TileEntityNode extends TileEntity
+public class TileEntityCollector extends TileEntity
 {
 	private int i = 0;
-	private double randX = 0.0D;
-	private double randZ = 0.0D;
 	private int searchRadius = 2;
-	int blockType = -1;
 	EldritchWorldData data = new EldritchWorldData();
 	
-	public TileEntityNode()
+	public TileEntityCollector()
     {
 
     }
 	
 	public void updateEntity() 
 	{
-		if (i < 200)
+		if (i < 100)
 		{
 			i++;
 			if (i % 5 == 0)
@@ -51,7 +48,6 @@ public class TileEntityNode extends TileEntity
 		}
 		else
 		{
-			System.out.println("!(i < 200)");
 ////			if(this.worldObj.loadItemData(WorldSavedDataEE.class, "EEWorldSaveData") == null){
 ////				WorldSavedData data = new WorldSavedDataEE("EEWorldSaveData");
 ////				this.worldObj.setItemData("EEWorldSaveData", data);

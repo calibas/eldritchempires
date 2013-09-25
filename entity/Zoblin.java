@@ -29,37 +29,37 @@ public class Zoblin extends EntityMob{
 	@Override
     public void onLivingUpdate()
     {
-        if (this.rand.nextInt(100) == 0)
+        if (this.rand.nextInt(50) == 0)
         {
-        	int i;
-        	int k;
-			if (attacking == false)
-			{
-			  for (i = (int)this.posX - 10; i < (int)this.posX + 10; i++)
-        	  {
-        		for (k = (int)this.posZ - 10; k < (int)this.posZ + 10; k++)
-        		{
-        			if (this.worldObj.getFirstUncoveredBlock(i, k) == 252)
-        			{
-        				int distance = (int) (Math.pow((i - (int)this.posX), 2) + Math.pow((k - (int)this.posZ), 2));
-        				if (shortestDistance == 200 || distance < shortestDistance)
-        				{
-        					shortestDistance = distance;
-        					closestNode[0] = i;
-        					closestNode[1] = getFirstUncoveredBlockHeight(i,k);
-        					closestNode[2] = k;
-        				}
-
-        			}
-        		}
-        	  }
-        	  if (shortestDistance != 200)
-        	  {
-				path = this.worldObj.getEntityPathToXYZ(this, closestNode[0], closestNode[1], closestNode[2], 40F, true, true, false, false);
-        		setPathToEntity(path);
-        	  }
-        	  shortestDistance = 200;
-			}
+//        	int i;
+//        	int k;
+//			if (attacking == false)
+//			{
+//			  for (i = (int)this.posX - 10; i < (int)this.posX + 10; i++)
+//        	  {
+//        		for (k = (int)this.posZ - 10; k < (int)this.posZ + 10; k++)
+//        		{
+//        			if (this.worldObj.getFirstUncoveredBlock(i, k) == 252)
+//        			{
+//        				int distance = (int) (Math.pow((i - (int)this.posX), 2) + Math.pow((k - (int)this.posZ), 2));
+//        				if (shortestDistance == 200 || distance < shortestDistance)
+//        				{
+//        					shortestDistance = distance;
+//        					closestNode[0] = i;
+//        					closestNode[1] = getFirstUncoveredBlockHeight(i,k);
+//        					closestNode[2] = k;
+//        				}
+//
+//        			}
+//        		}
+//        	  }
+//        	  if (shortestDistance != 200)
+//        	  {
+//				path = this.worldObj.getEntityPathToXYZ(this, closestNode[0], closestNode[1], closestNode[2], 40F, true, true, false, false);
+//        		setPathToEntity(path);
+//        	  }
+//        	  shortestDistance = 200;
+//			}
         	
         	if (attacking == true)
             {

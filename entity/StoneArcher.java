@@ -37,6 +37,7 @@ public class StoneArcher extends EntityMob implements IRangedAttackMob
 //		this.tasks.addTask(3, new EntityAIMoveTowardsTarget(this, 0.9D, 32.0F));
 //		this.tasks.addTask(4, new EntityAIWander(this, 0.5D));
         this.targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, ZoblinBomber.class, 0, true));
+        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, ZoblinBoss.class, 0, true));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, Zoblin.class, 0, true));
         this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityZombie.class, 0, true));
         this.targetTasks.addTask(4, new EntityAINearestAttackableTarget(this, EntitySkeleton.class, 0, true));

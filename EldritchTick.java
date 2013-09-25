@@ -41,10 +41,10 @@ public class EldritchTick implements ITickHandler{
 		
 			}
 	    
-			if(world == null){
-				System.out.println("world == null");
-	            return;
-	        }
+//			if(world == null){
+//				System.out.println("world == null");
+//	            return;
+//	        }
 	         
 	         worldData = EldritchWorldData.forWorld(world);
 	         worldData.markDirty();
