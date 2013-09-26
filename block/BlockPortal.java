@@ -2,17 +2,20 @@ package eldritchempires.block;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import eldritchempires.EldritchEmpires;
 import eldritchempires.EldritchEvents;
 import eldritchempires.EldritchWorldData;
+import eldritchempires.ParticleEffects;
 import eldritchempires.Registration;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
@@ -35,6 +38,21 @@ public class BlockPortal extends Block{
     public boolean isOpaqueCube()
     {
         return false;
+    }
+    
+	public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random) 
+	{
+		ParticleEffects.spawnParticle("zPortal", par2 + 0.5D, par3 + 0.1D, par4 + 0.5D, 0, 0, 0);
+//		par1World.spawnParticle("reddust", par2 + 0.5D, par3 + 0.5D, par4 + 0.5D, 0.0D, 0.0D, 0.0D);
+	}
+	
+    public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
+    {
+		System.out.println("Portal unset" );
+		data.unSetPortal();
+		world.perWorldStorage.setData(EldritchWorldData.name, data);
+		EldritchEvents.wave = 0;
+        return world.setBlockToAir(x, y, z);
     }
 	
 //	public void onBlockAdded(World par1World, int par2, int par3, int par4) 
@@ -84,7 +102,7 @@ public class BlockPortal extends Block{
 			}
 			
 			if (data.checkPortal())
-				announce = "Portal already placed. (" + data.getPortalX() + "," + data.getPortalY() + "," + data.getPortalZ() + ")";
+				announce = "Portal already placed. (" + data.getPortalX() + ", " + data.getPortalY() + ", " + data.getPortalZ() + ")";
 			
 			if (!data.checkPortal() && goodDistance == true)
 			{
@@ -97,6 +115,10 @@ public class BlockPortal extends Block{
 			{
 				par1World.setBlockToAir(par2, par3, par4);
 				par1World.removeBlockTileEntity(par2, par3, par4);
+				ItemStack droppedItem = new ItemStack(Registration.portal, 1);
+				EntityItem entityitem = new EntityItem(par1World, (double)par2 + 0.5D, (double)par3 + 0.5D, (double)par4 + 0.5D, droppedItem);
+				entityitem.delayBeforeCanPickup = 10;
+				par1World.spawnEntityInWorld(entityitem);
 				
 			}
 			

@@ -4,9 +4,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
-public class ItemMarker extends ItemBlock {
+public class ItemPortal extends ItemBlock {
 	
-    public ItemMarker(int par1)
+    public ItemPortal(int par1)
    {
          super(par1);
          setHasSubtypes(true);

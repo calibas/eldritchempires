@@ -32,8 +32,9 @@ import eldritchempires.entity.ZoblinBomber;
 import eldritchempires.entity.ZoblinBoss;
 import eldritchempires.item.ItemCondensedEssence;
 import eldritchempires.item.ItemGolemPart;
-import eldritchempires.item.ItemMarker;
-import eldritchempires.item.ItemNode;
+import eldritchempires.item.ItemInactiveCollector;
+import eldritchempires.item.ItemPortal;
+import eldritchempires.item.ItemCollector;
 import eldritchempires.item.ItemSpawner;
 
 public class Registration {
@@ -43,12 +44,13 @@ public class Registration {
 	public static Block portal;
 	public static Item golemPart;
 	public static Item condensedEssence;
+	public static Item inactiveCollector;
 	
 	public static void registration()
 	{
 		// Add Blocks
 		collector = new BlockCollector(252, Material.wood).setUnlocalizedName("collector");
-		GameRegistry.registerBlock(collector, ItemNode.class, EldritchEmpires.modid + (collector.getUnlocalizedName().substring(5)));
+		GameRegistry.registerBlock(collector, ItemCollector.class, EldritchEmpires.modid + (collector.getUnlocalizedName().substring(5)));
 		LanguageRegistry.addName(new ItemStack(collector, 1, 0), "Active Collector");
 		LanguageRegistry.addName(new ItemStack(collector, 1, 1), "Inactive Collector");		
 		
@@ -58,7 +60,7 @@ public class Registration {
 		LanguageRegistry.addName(new ItemStack(spawner, 1, 1), "Placeholder Spawner");
 	
 		portal = new BlockPortal(254).setUnlocalizedName("portal");
-		GameRegistry.registerBlock(portal, ItemMarker.class, EldritchEmpires.modid + (portal.getUnlocalizedName().substring(5)));
+		GameRegistry.registerBlock(portal, ItemPortal.class, EldritchEmpires.modid + (portal.getUnlocalizedName().substring(5)));
 		LanguageRegistry.addName(new ItemStack(portal, 1, 0), "Zoblin Portal");
 		LanguageRegistry.addName(new ItemStack(portal, 1, 1), "Placeholder Portal");
 		
@@ -83,11 +85,17 @@ public class Registration {
 		GameRegistry.registerItem(condensedEssence, "Condensed Essence");
 		LanguageRegistry.addName(condensedEssence, "Condensed Essence");
 		
+		inactiveCollector = new ItemInactiveCollector(5010).setUnlocalizedName("inactiveCollector").setCreativeTab(EldritchEmpires.tabEldritch);
+		GameRegistry.registerItem(inactiveCollector, "Inactive Collector");
+		LanguageRegistry.addName(inactiveCollector, "Inactive Collector");
+		
 		// Add Recipes
-		GameRegistry.addRecipe(new ItemStack(collector, 1, 0), new Object[] { "SPS", "SPS", " S ", 'S', Item.stick, 'P', Item.paper});
+		GameRegistry.addRecipe(new ItemStack(collector, 1, 0), new Object[] { "ROR", "ORO", "ROR", 'R', Item.redstone, 'O', new ItemStack(Block.obsidian, 1)});
+		GameRegistry.addRecipe(new ItemStack(portal, 1, 0), new Object[] { "CRC", "RER", "CRC", 'R', Item.redstone, 'E', Item.emerald, 'C', new ItemStack(Block.cobblestone, 1)});
 		GameRegistry.addRecipe(new ItemStack(spawner, 1, 0), new Object[] { " G ", "GBG", "GGG", 'G', golemPart, 'B', Item.bow});
 		GameRegistry.addRecipe(new ItemStack(golemPart, 1), new Object[] { "CCC", "III", "CCC", 'C', new ItemStack(Block.cobblestone, 1), 'I', Item.ingotIron});
 		GameRegistry.addRecipe(new ItemStack(Item.diamond, 1, 0), new Object[] { "EEE", "EEE", "EEE", 'E', condensedEssence});
+		GameRegistry.addRecipe(new ItemStack(collector, 1, 0), new Object[] { " R ", "RIR", " R ", 'R', Item.redstone, 'I', inactiveCollector});
 		
 		// Add Event Handler
 		MinecraftForge.EVENT_BUS.register(new EldritchEvents());

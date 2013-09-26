@@ -27,7 +27,7 @@ public class EldritchEvents {
 	
 	int tickCount = 0;
 	long lastSpawn = 0;
-	int wave = 0;
+	public static int wave = 0;
 	int announceRadius = 100;
 	boolean waveActive = true;
 	String announce = "Incomming: ";
@@ -47,12 +47,12 @@ public class EldritchEvents {
 			{
 //				System.out.println("Marker set:" + data.checkMarker());
 				
-				int markerX = data.getPortalX();
-				int markerY = data.getPortalY();
-				int markerZ = data.getPortalZ();
-				int nodeX = data.getCollectorX();
-				int nodeY = data.getCollectorY();
-				int nodeZ = data.getCollectorZ();
+				int portalX = data.getPortalX();
+				int portalY = data.getPortalY();
+				int portalZ = data.getPortalZ();
+				int collectorX = data.getCollectorX();
+				int collectorY = data.getCollectorY();
+				int collectorZ = data.getCollectorZ();
 //				if (event.world.checkChunksExist(markerX, markerY, markerZ, nodeX, nodeY, nodeZ))
 //				if (event.world.activeChunkSet != null)
 //				{
@@ -62,15 +62,15 @@ public class EldritchEvents {
 				
 				if(data.checkPortal())
 				{
-					Chunk portalChunk = event.world.getChunkFromBlockCoords(markerX, markerZ);
+					Chunk portalChunk = event.world.getChunkFromBlockCoords(portalX, portalZ);
 					if (portalChunk.isChunkLoaded)
 					{
 //					System.out.println("Marker found at:" + markerX + " " + markerY + " " + markerZ);
 //					System.out.println("BlockID:" + event.world.getBlockId(markerX, markerY, markerZ));
 					
-						if (event.world.getBlockId(markerX, markerY, markerZ) != 254)
+						if (event.world.getBlockId(portalX, portalY, portalZ) != 254)
 						{
-							System.out.println("Marker unset" );
+							System.out.println("Portal unset" );
 							data.unSetPortal();
 							event.world.perWorldStorage.setData(EldritchWorldData.name, data);
 							wave = 0;
@@ -80,15 +80,15 @@ public class EldritchEvents {
 				
 				if(data.checkCollector())
 				{
-					Chunk nodeChunk = event.world.getChunkFromBlockCoords(nodeX, nodeZ);
+					Chunk nodeChunk = event.world.getChunkFromBlockCoords(collectorX, collectorZ);
 					if (nodeChunk.isChunkLoaded)
 					{
 //					System.out.println("Marker found at:" + markerX + " " + markerY + " " + markerZ);
 //					System.out.println("BlockID:" + event.world.getBlockId(markerX, markerY, markerZ));
 					
-						if (event.world.getBlockId(nodeX, nodeY, nodeZ) != 252)
+						if (event.world.getBlockId(collectorX, collectorY, collectorZ) != 252)
 						{
-							System.out.println("Node unset" );
+							System.out.println("Collector unset" );
 							data.unSetCollector();
 							event.world.perWorldStorage.setData(EldritchWorldData.name, data);
 							wave = 0;
@@ -103,9 +103,9 @@ public class EldritchEvents {
 				
 				if (waveActive && data.checkPortal() && data.checkCollector() && (event.world.provider.getWorldTime() - lastSpawn) >= 600)
 				{
-					waves(wave, markerX, markerY, markerZ, event.world);
+					waves(wave, portalX, portalY, portalZ, event.world);
 //					System.out.println("Spawn code here");
-					List<?> var4 = event.world.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(nodeX - announceRadius, nodeY - announceRadius, nodeZ - announceRadius, nodeX + announceRadius, nodeY + announceRadius, nodeZ + announceRadius));
+					List<?> var4 = event.world.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(collectorX - announceRadius, collectorY - announceRadius, collectorZ - announceRadius, collectorX + announceRadius, collectorY + announceRadius, collectorZ + announceRadius));
 
 					if (var4 != null && !var4.isEmpty()) {
 						Iterator<?> var5 = var4.iterator();

@@ -3,8 +3,8 @@ package eldritchempires.item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
-public class ItemNode extends ItemBlock {
-    public ItemNode(int par1)
+public class ItemCollector extends ItemBlock {
+    public ItemCollector(int par1)
    {
          super(par1);
          setHasSubtypes(true);

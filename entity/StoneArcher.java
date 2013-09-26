@@ -24,9 +24,9 @@ public class StoneArcher extends EntityMob implements IRangedAttackMob
 {
 //	private PathEntity path;
 	public boolean guarding = false;
-	public int nodex;
-	public int nodey;
-	public int nodez;
+	public int nodeX;
+	public int nodeY;
+	public int nodeZ;
 	private EntityMoveHelper moveHelper;
 //	private PathFinder findPath;
 	
@@ -59,7 +59,7 @@ public class StoneArcher extends EntityMob implements IRangedAttackMob
 //        	setPathToEntity(path);
 //        	this.getMoveHelper().setMoveTo((double)nodex, (double)nodey + 1.0D, (double)nodez, 0.25D);
 //        	Minecraft.getMinecraft().thePlayer.addChatMessage("SA: I'm supposed to path to" + nodex + " " + nodey + " " + nodez + " " + guarding);
-        	this.setPosition((double)nodex + 0.5D, nodey + 0.2D, nodez + 0.5D);
+        	this.setPosition((double)nodeX + 0.5D, nodeY + 0.2D, nodeZ + 0.5D);
         }
         
 		super.onLivingUpdate();        
@@ -112,9 +112,9 @@ public class StoneArcher extends EntityMob implements IRangedAttackMob
         if (guarding == true)
         {
         	par1NBTTagCompound.setBoolean("Guarding", guarding);
-        	par1NBTTagCompound.setInteger("GuardX", nodex);
-        	par1NBTTagCompound.setInteger("GuardY", nodey);
-        	par1NBTTagCompound.setInteger("GuardZ", nodez);
+        	par1NBTTagCompound.setInteger("GuardX", nodeX);
+        	par1NBTTagCompound.setInteger("GuardY", nodeY);
+        	par1NBTTagCompound.setInteger("GuardZ", nodeZ);
         }
     }
 
@@ -127,9 +127,9 @@ public class StoneArcher extends EntityMob implements IRangedAttackMob
         if (par1NBTTagCompound.hasKey("Guarding"))
         {
             guarding = par1NBTTagCompound.getBoolean("Guarding");
-            nodex = par1NBTTagCompound.getInteger("GuardX");
-            nodey = par1NBTTagCompound.getInteger("GuardY");
-            nodez = par1NBTTagCompound.getInteger("GuardZ");
+            nodeX = par1NBTTagCompound.getInteger("GuardX");
+            nodeY = par1NBTTagCompound.getInteger("GuardY");
+            nodeZ = par1NBTTagCompound.getInteger("GuardZ");
         }
         
     }

@@ -1,5 +1,6 @@
 package eldritchempires.block;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -8,7 +9,9 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import eldritchempires.EldritchEmpires;
+import eldritchempires.EldritchEvents;
 import eldritchempires.EldritchWorldData;
+import eldritchempires.Registration;
 import eldritchempires.entity.TileEntityCollector;
 import eldritchempires.entity.Zoblin;
 import net.minecraft.block.Block;
@@ -18,6 +21,7 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathEntity;
@@ -70,7 +74,7 @@ public class BlockCollector extends BlockContainer{
 			}
 			
 			if (data.checkCollector())
-				announce = "Collector already placed. (" + data.getCollectorX() + "," + data.getCollectorY() + "," + data.getCollectorZ() + ")";
+				announce = "Collector already placed. (" + data.getCollectorX() + ", " + data.getCollectorY() + ", " + data.getCollectorZ() + ")";
 			
 			if (!data.checkCollector() && goodDistance == true)
 			{
@@ -83,6 +87,10 @@ public class BlockCollector extends BlockContainer{
 			{
 				par1World.setBlockToAir(par2, par3, par4);
 				par1World.removeBlockTileEntity(par2, par3, par4);
+				ItemStack droppedItem = new ItemStack(Registration.collector, 1);
+				EntityItem entityitem = new EntityItem(par1World, (double)par2 + 0.5D, (double)par3 + 0.5D, (double)par4 + 0.5D, droppedItem);
+				entityitem.delayBeforeCanPickup = 10;
+				par1World.spawnEntityInWorld(entityitem);
 				
 			}
 			
@@ -100,6 +108,15 @@ public class BlockCollector extends BlockContainer{
 			
 		}
 	}
+	
+    public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
+    {
+		System.out.println("Collector unset" );
+		data.unSetCollector();
+		world.perWorldStorage.setData(EldritchWorldData.name, data);
+		EldritchEvents.wave = 0;
+        return world.setBlockToAir(x, y, z);
+    }
 	
 	@Override
 	public void updateTick(World par1World, int par2, int par3, int par4, Random par5Random) 
@@ -179,6 +196,17 @@ public class BlockCollector extends BlockContainer{
     public int getRenderType()
     {
         return -1;
+    }
+    
+    public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
+    {
+             ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+             int count = quantityDropped(metadata, fortune, world.rand);
+             for(int i = 0; i < count; i++)
+             {
+                     ret.add(new ItemStack(Registration.inactiveCollector, 1, 0));
+             }
+             return ret;
     }
     
     @SideOnly(Side.CLIENT)

@@ -59,9 +59,9 @@ public class BlockSpawner extends BlockContainer{
 				StoneArcher stoneArcher = new StoneArcher(par1World);
 				stoneArcher.setLocationAndAngles((double)par2 + 0.5D, (double)par3, (double)par4 + 0.5D, 0.0F, 0.0F);
 				stoneArcher.guarding = true;
-				stoneArcher.nodex = par2;
-				stoneArcher.nodey = par3;
-				stoneArcher.nodez = par4;
+				stoneArcher.nodeX = par2;
+				stoneArcher.nodeY = par3;
+				stoneArcher.nodeZ = par4;
 				par1World.spawnEntityInWorld(stoneArcher);
 			}
 		}
