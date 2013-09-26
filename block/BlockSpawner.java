@@ -57,7 +57,7 @@ public class BlockSpawner extends BlockContainer{
 			if (j < 1)
 			{
 				StoneArcher stoneArcher = new StoneArcher(par1World);
-				stoneArcher.setLocationAndAngles((double)par2 + 0.5D, (double)par3, (double)par4 + 0.5D, 0.0F, 0.0F);
+				stoneArcher.setLocationAndAngles((double)par2 + 0.5D, (double)par3 + 0.1D, (double)par4 + 0.5D, 0.0F, 0.0F);
 				stoneArcher.guarding = true;
 				stoneArcher.nodeX = par2;
 				stoneArcher.nodeY = par3;
@@ -109,7 +109,7 @@ public class BlockSpawner extends BlockContainer{
     @SideOnly(Side.CLIENT)
     public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
-    	for (int var4 = 0; var4 < 2; ++var4)
+    	for (int var4 = 0; var4 < 1; ++var4)
     	{
     		par3List.add(new ItemStack(par1, 1, var4));
     	}

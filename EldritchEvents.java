@@ -105,16 +105,19 @@ public class EldritchEvents {
 				{
 					waves(wave, portalX, portalY, portalZ, event.world);
 //					System.out.println("Spawn code here");
-					List<?> var4 = event.world.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(collectorX - announceRadius, collectorY - announceRadius, collectorZ - announceRadius, collectorX + announceRadius, collectorY + announceRadius, collectorZ + announceRadius));
-
-					if (var4 != null && !var4.isEmpty()) {
-						Iterator<?> var5 = var4.iterator();
-
-						while (var5.hasNext()) {
-							EntityPlayer var6 = (EntityPlayer)var5.next();
-							var6.addChatMessage(announce);
-						}
-					}
+//					List<?> var4 = event.world.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(collectorX - announceRadius, collectorY - announceRadius, collectorZ - announceRadius, collectorX + announceRadius, collectorY + announceRadius, collectorZ + announceRadius));
+//
+//					if (var4 != null && !var4.isEmpty()) {
+//						Iterator<?> var5 = var4.iterator();
+//
+//						while (var5.hasNext()) {
+//							EntityPlayer var6 = (EntityPlayer)var5.next();
+//							var6.addChatMessage(announce);
+//						}
+//					}
+					EldritchMethods.broadcastMessageLocal(announce, collectorX, collectorY, collectorZ, 100, event.world);
+					
+					
 					announce = "Incomming: ";
 					wave++;
 					lastSpawn = event.world.provider.getWorldTime();
@@ -216,7 +219,7 @@ public class EldritchEvents {
         		double yd = data.getCollectorY() - y;
         		double zd = data.getCollectorZ() - z;
         		double distance = Math.sqrt(xd*xd + yd*yd + zd*zd);
-				zoblinBomber.timer = (int)((2*distance)/3);
+				zoblinBomber.timer = (int)(distance/2);
 //				System.out.println("ZoblinBomber distance timer: " + distance + " " + zoblinBomber.timer );
 				world.spawnEntityInWorld(zoblinBomber);
 				announce = announce + "Zoblin Bomber, ";

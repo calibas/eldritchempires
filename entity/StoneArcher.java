@@ -59,7 +59,7 @@ public class StoneArcher extends EntityMob implements IRangedAttackMob
 //        	setPathToEntity(path);
 //        	this.getMoveHelper().setMoveTo((double)nodex, (double)nodey + 1.0D, (double)nodez, 0.25D);
 //        	Minecraft.getMinecraft().thePlayer.addChatMessage("SA: I'm supposed to path to" + nodex + " " + nodey + " " + nodez + " " + guarding);
-        	this.setPosition((double)nodeX + 0.5D, nodeY + 0.2D, nodeZ + 0.5D);
+        	this.setPosition((double)nodeX + 0.5D, nodeY + 0.1D, nodeZ + 0.5D);
         }
         
 		super.onLivingUpdate();        

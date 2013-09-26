@@ -101,10 +101,13 @@ public class BlockPortal extends Block{
         		}	
 			}
 			
+			if (!(par1World.provider.dimensionId == 0))
+				announce = "Must be placed in surface dimension";
+			
 			if (data.checkPortal())
 				announce = "Portal already placed. (" + data.getPortalX() + ", " + data.getPortalY() + ", " + data.getPortalZ() + ")";
 			
-			if (!data.checkPortal() && goodDistance == true)
+			if (!data.checkPortal() && goodDistance == true && par1World.provider.dimensionId == 0)
 			{
 				data.setPortal(par2, par3, par4);
 				par1World.perWorldStorage.setData(EldritchWorldData.name, data);

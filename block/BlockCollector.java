@@ -28,6 +28,7 @@ import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 public class BlockCollector extends BlockContainer{
@@ -73,10 +74,13 @@ public class BlockCollector extends BlockContainer{
         		}	
 			}
 			
+			if (!(par1World.provider.dimensionId == 0))
+				announce = "Must be placed in surface dimension";
+			
 			if (data.checkCollector())
 				announce = "Collector already placed. (" + data.getCollectorX() + ", " + data.getCollectorY() + ", " + data.getCollectorZ() + ")";
 			
-			if (!data.checkCollector() && goodDistance == true)
+			if (!data.checkCollector() && goodDistance == true && par1World.provider.dimensionId == 0)
 			{
 				data.setCollector(par2, par3, par4);
 				par1World.perWorldStorage.setData(EldritchWorldData.name, data);
@@ -116,6 +120,14 @@ public class BlockCollector extends BlockContainer{
 		world.perWorldStorage.setData(EldritchWorldData.name, data);
 		EldritchEvents.wave = 0;
         return world.setBlockToAir(x, y, z);
+    }
+    
+    public void onBlockDestroyedByExplosion(World par1World, int x, int y, int z, Explosion par5Explosion) 
+    {
+		System.out.println("Collector unset" );
+		data.unSetCollector();
+		par1World.perWorldStorage.setData(EldritchWorldData.name, data);
+		EldritchEvents.wave = 0;
     }
 	
 	@Override
@@ -232,7 +244,7 @@ public class BlockCollector extends BlockContainer{
     @SideOnly(Side.CLIENT)
     public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
-    	for (int var4 = 0; var4 < 2; ++var4)
+    	for (int var4 = 0; var4 < 1; ++var4)
     	{
     		par3List.add(new ItemStack(par1, 1, var4));
     	}

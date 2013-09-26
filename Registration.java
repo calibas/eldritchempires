@@ -40,11 +40,11 @@ import eldritchempires.item.ItemSpawner;
 public class Registration {
 
 	public static Block collector;
+	public static Item inactiveCollector;	
+	public static Block portal;	
 	public static Block spawner;
-	public static Block portal;
 	public static Item golemPart;
 	public static Item condensedEssence;
-	public static Item inactiveCollector;
 	
 	public static void registration()
 	{
