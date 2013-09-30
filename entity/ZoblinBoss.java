@@ -13,13 +13,14 @@ public class ZoblinBoss extends EntityMob{
 
 	private PathEntity path;
 	public boolean attacking = false;
-	public int nodeX;
-	public int nodeY;
-	public int nodeZ;
+	public int collectorX;
+	public int collectorY;
+	public int collectorZ;
 	
 	public ZoblinBoss(World par1World) {
 		super(par1World);
-		this.experienceValue = 25;
+		this.experienceValue = 50;
+		this.setSize(1.0F, 2.9F);
 	}
 	
 	@Override
@@ -27,25 +28,29 @@ public class ZoblinBoss extends EntityMob{
     {
         if (this.rand.nextInt(100) == 0 && attacking == true)
         {
-       		double xd = nodeX - this.posX;
-        	double yd = nodeY - this.posY;
-        	double zd = nodeZ - this.posZ;
+        	// Long distance pathing code
+        	// Finding distance:
+       		double xd = collectorX - this.posX;
+        	double yd = collectorY - this.posY;
+        	double zd = collectorZ - this.posZ;
         	double distance = Math.sqrt(xd*xd + yd*yd + zd*zd);
         	if (distance > 40.0D)
         	{
-        			double deltaX = Math.sin(Math.atan2(xd,zd));
-        			double deltaZ = Math.cos(Math.atan2(xd, zd));
-        			int pathX = (int)(this.posX + (20*deltaX));
-        			int pathZ = (int)(this.posZ + (20*deltaZ));
-        			path = this.worldObj.getEntityPathToXYZ(this, pathX, getFirstUncoveredBlockHeight(pathX, pathZ), pathZ, 40F, true, true, false, false);
-        			setPathToEntity(path);
-        	//		Minecraft.getMinecraft().thePlayer.addChatMessage("Zoblin: Pathing to " + pathX + " " + pathZ);
+        		// Get direction:
+        		double deltaX = Math.sin(Math.atan2(xd,zd));
+        		double deltaZ = Math.cos(Math.atan2(xd, zd));
+        		// Set path:
+        		int pathX = (int)(this.posX + (20*deltaX));
+        		int pathZ = (int)(this.posZ + (20*deltaZ));
+        		path = this.worldObj.getEntityPathToXYZ(this, pathX, getFirstUncoveredBlockHeight(pathX, pathZ), pathZ, 40F, true, true, false, false);
+        		setPathToEntity(path);
+        	//	Minecraft.getMinecraft().thePlayer.addChatMessage("Zoblin: Pathing to " + pathX + " " + pathZ);
         			
         	}
         	else
         	{
 //            		Minecraft.getMinecraft().thePlayer.addChatMessage("Zoblin: Attacking!");
-        			path = this.worldObj.getEntityPathToXYZ(this, nodeX, nodeY, nodeZ, 40F, true, true, false, false);
+        			path = this.worldObj.getEntityPathToXYZ(this, collectorX, collectorY, collectorZ, 40F, true, true, false, false);
         			setPathToEntity(path);
         	//		Minecraft.getMinecraft().thePlayer.addChatMessage("Zoblin: Pathing to " + nodeX + " " + nodeZ);
         	}
@@ -89,9 +94,9 @@ public class ZoblinBoss extends EntityMob{
         if (attacking == true)
         {
         	par1NBTTagCompound.setBoolean("Attacking", attacking);
-        	par1NBTTagCompound.setInteger("AttackX", nodeX);
-        	par1NBTTagCompound.setInteger("AttackY", nodeY);
-        	par1NBTTagCompound.setInteger("AttackZ", nodeZ);
+        	par1NBTTagCompound.setInteger("AttackX", collectorX);
+        	par1NBTTagCompound.setInteger("AttackY", collectorY);
+        	par1NBTTagCompound.setInteger("AttackZ", collectorZ);
         }
     }
 
@@ -104,9 +109,9 @@ public class ZoblinBoss extends EntityMob{
         if (par1NBTTagCompound.hasKey("Attacking"))
         {
             attacking = par1NBTTagCompound.getBoolean("Attacking");
-            nodeX = par1NBTTagCompound.getInteger("AttackX");
-            nodeY = par1NBTTagCompound.getInteger("AttackY");
-            nodeZ = par1NBTTagCompound.getInteger("AttackZ");
+            collectorX = par1NBTTagCompound.getInteger("AttackX");
+            collectorY = par1NBTTagCompound.getInteger("AttackY");
+            collectorZ = par1NBTTagCompound.getInteger("AttackZ");
         }
         
     }

@@ -8,6 +8,7 @@ import eldritchempires.entity.TileEntityCollector;
 import eldritchempires.entity.Zoblin;
 import eldritchempires.entity.ZoblinBomber;
 import eldritchempires.entity.ZoblinBoss;
+import eldritchempires.entity.ZoblinWarrior;
 import eldritchempires.model.CollectorRender;
 import eldritchempires.model.MagicEssenceRender;
 import eldritchempires.model.NodeRender;
@@ -15,6 +16,7 @@ import eldritchempires.model.StoneArcherRender;
 import eldritchempires.model.ZoblinBomberRender;
 import eldritchempires.model.ZoblinBossRender;
 import eldritchempires.model.ZoblinRender;
+import eldritchempires.model.ZoblinWarriorRender;
 
 public class ClientProxy extends CommonProxy {
     
@@ -26,6 +28,7 @@ public class ClientProxy extends CommonProxy {
     	RenderingRegistry.registerEntityRenderingHandler(StoneArcher.class, new StoneArcherRender());
     	RenderingRegistry.registerEntityRenderingHandler(MagicEssence.class, new MagicEssenceRender());
     	RenderingRegistry.registerEntityRenderingHandler(ZoblinBoss.class, new ZoblinBossRender());
+    	RenderingRegistry.registerEntityRenderingHandler(ZoblinWarrior.class, new ZoblinWarriorRender());
 //    	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNode.class, new NodeRender());
     	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCollector.class, new CollectorRender());
 

@@ -10,6 +10,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import eldritchempires.EldritchEmpires;
 import eldritchempires.EldritchEvents;
+import eldritchempires.EldritchMethods;
 import eldritchempires.EldritchWorldData;
 import eldritchempires.Registration;
 import eldritchempires.entity.TileEntityCollector;
@@ -43,6 +44,7 @@ public class BlockCollector extends BlockContainer{
 		this.setResistance(5.0F);
 		this.setCreativeTab(EldritchEmpires.tabEldritch);
 		this.setTickRandomly(true);
+		this.setLightValue(0.5F);
 	    float f = 0.25F;		
 		this.setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.5F, 0.5F + f);
 	}
@@ -56,23 +58,23 @@ public class BlockCollector extends BlockContainer{
 			boolean goodDistance = true;
 			data = EldritchWorldData.forWorld(par1World);
 			
-			if (data.checkPortal())
-			{
-        		double xd = data.getPortalX() - par2;
-        		double yd = data.getPortalY() - par3;
-        		double zd = data.getPortalZ() - par4;
-        		distance = Math.sqrt(xd*xd + yd*yd + zd*zd);
-        		if (distance >= 80.0D)
-        		{
-        			announce = "Portal too far";
-        			goodDistance = false;
-        		}
-        		if (distance <= 25.0D)
-        		{
-        			announce = "Portal too near";
-        			goodDistance = false;
-        		}	
-			}
+//			if (data.checkPortal())
+//			{
+//        		double xd = data.getPortalX() - par2;
+//        		double yd = data.getPortalY() - par3;
+//        		double zd = data.getPortalZ() - par4;
+//        		distance = Math.sqrt(xd*xd + yd*yd + zd*zd);
+//        		if (distance >= 80.0D)
+//        		{
+//        			announce = "Portal too far";
+//        			goodDistance = false;
+//        		}
+//        		if (distance <= 25.0D)
+//        		{
+//        			announce = "Portal too near";
+//        			goodDistance = false;
+//        		}	
+//			}
 			
 			if (!(par1World.provider.dimensionId == 0))
 				announce = "Must be placed in surface dimension";
@@ -82,10 +84,14 @@ public class BlockCollector extends BlockContainer{
 			
 			if (!data.checkCollector() && goodDistance == true && par1World.provider.dimensionId == 0)
 			{
+//				int[] location = EldritchMethods.createPortal("zoblin", par2, par3, par4, par1World);
+//				data.setPortal(location[0], location[1], location[2]);
 				data.setCollector(par2, par3, par4);
+//				EldritchEvents.waveActive = true;
 				par1World.perWorldStorage.setData(EldritchWorldData.name, data);
 				data = (EldritchWorldData) par1World.perWorldStorage.loadData(EldritchWorldData.class, EldritchWorldData.name);
 				announce = "Collector set";
+				
 			}
 			else
 			{
@@ -113,21 +119,47 @@ public class BlockCollector extends BlockContainer{
 		}
 	}
 	
+    public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
+    {
+    	if (!par1World.isRemote)
+    	{
+    		if (!data.isWaveActive())
+    		{
+    			data.setActiveWave(true);
+    			par1World.perWorldStorage.setData(EldritchWorldData.name, data);
+    			data = (EldritchWorldData) par1World.perWorldStorage.loadData(EldritchWorldData.class, EldritchWorldData.name);
+    			EldritchMethods.broadcastMessageLocal("Collector Active", par2, par3, par4, 100, par1World);
+    		}
+    		else
+    		{
+    			data.setActiveWave(false);
+    			par1World.perWorldStorage.setData(EldritchWorldData.name, data);
+    			data = (EldritchWorldData) par1World.perWorldStorage.loadData(EldritchWorldData.class, EldritchWorldData.name);
+    			EldritchMethods.broadcastMessageLocal("Collector Inactive", par2, par3, par4, 100, par1World);
+    		}
+    	}
+		return true;
+    }
+	
     public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
     {
-		System.out.println("Collector unset" );
-		data.unSetCollector();
-		world.perWorldStorage.setData(EldritchWorldData.name, data);
-		EldritchEvents.wave = 0;
+//		System.out.println("Collector unset" );
+//		data.unSetCollector();
+//		world.perWorldStorage.setData(EldritchWorldData.name, data);
+//		EldritchEvents.wave = 0;
+//		world.setBlockToAir(data.getPortalX(), data.getPortalY(), data.getPortalZ());
+//		data.unSetPortal();
         return world.setBlockToAir(x, y, z);
     }
     
     public void onBlockDestroyedByExplosion(World par1World, int x, int y, int z, Explosion par5Explosion) 
     {
-		System.out.println("Collector unset" );
-		data.unSetCollector();
-		par1World.perWorldStorage.setData(EldritchWorldData.name, data);
-		EldritchEvents.wave = 0;
+//		System.out.println("Collector unset" );
+//		data.unSetCollector();
+//		par1World.perWorldStorage.setData(EldritchWorldData.name, data);
+//		par1World.setBlockToAir(data.getPortalX(), data.getPortalY(), data.getPortalZ());
+//		data.unSetPortal();
+//		EldritchEvents.wave = 0;
     }
 	
 	@Override
@@ -216,7 +248,7 @@ public class BlockCollector extends BlockContainer{
              int count = quantityDropped(metadata, fortune, world.rand);
              for(int i = 0; i < count; i++)
              {
-                     ret.add(new ItemStack(Registration.inactiveCollector, 1, 0));
+                     ret.add(new ItemStack(Registration.collector, 1, 0));
              }
              return ret;
     }

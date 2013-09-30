@@ -9,7 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.world.World;
 
-public class Zoblin extends EntityMob{
+public class ZoblinWarrior extends EntityMob{
 
 	int[] closestNode = new int[3];
 	int shortestDistance = 200;
@@ -20,7 +20,7 @@ public class Zoblin extends EntityMob{
 	public int nodeZ;
 	public String type = "normal";
 	
-	public Zoblin(World par1World) {
+	public ZoblinWarrior(World par1World) {
 		super(par1World);
 		this.getNavigator().setBreakDoors(true);
 		this.tasks.addTask(0, new EntityAISwimming(this));
@@ -97,15 +97,15 @@ public class Zoblin extends EntityMob{
 	 {
 		 super.func_110147_ax();
 		 // Max Health - default 20.0D - min 0.0D - max Double.MAX_VALUE
-		 this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(20.0D);
+		 this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(30.0D);
 		 // Follow Range - default 32.0D - min 0.0D - max 2048.0D
 		 this.func_110148_a(SharedMonsterAttributes.field_111265_b).func_111128_a(80.0D);
 		 // Knockback Resistance - default 0.0D - min 0.0D - max 1.0D
-		 this.func_110148_a(SharedMonsterAttributes.field_111266_c).func_111128_a(0.0D);
+		 this.func_110148_a(SharedMonsterAttributes.field_111266_c).func_111128_a(0.3D);
 		 // Movement Speed - default 0.699D - min 0.0D - max Double.MAX_VALUE
-		 this.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(0.699D);
+		 this.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(1.599D);
 		 // Attack Damage - default 2.0D - min 0.0D - max Doubt.MAX_VALUE
-		 this.func_110148_a(SharedMonsterAttributes.field_111264_e).func_111128_a(2.0D);
+		 this.func_110148_a(SharedMonsterAttributes.field_111264_e).func_111128_a(3.0D);
 	 }
     
     public int getFirstUncoveredBlockHeight(int par1, int par2)

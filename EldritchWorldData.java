@@ -14,6 +14,8 @@ public class EldritchWorldData extends WorldSavedData {
         private static int collectorX = 0;
         private static int collectorY = 0;
         private static int collectorZ = 0;
+        private static boolean waveActive = false;
+        private static int wave = 0;
         
         public static String name = "EldritchData";
     	
@@ -46,6 +48,7 @@ public class EldritchWorldData extends WorldSavedData {
                collectorY = nbt.getInteger("collectorY");
                collectorZ = nbt.getInteger("collectorZ");
                collectorSet = nbt.getBoolean("collectorSet");
+               waveActive = nbt.getBoolean("waveActive");
         }
  
         @Override
@@ -58,6 +61,17 @@ public class EldritchWorldData extends WorldSavedData {
                 nbt.setInteger("collectorY", collectorY);
                 nbt.setInteger("collectorZ", collectorZ);
                 nbt.setBoolean("collectorSet", collectorSet);
+                nbt.setBoolean("waveActive", waveActive);
+        }
+        
+        public void setActiveWave(boolean par1)
+        {
+        	waveActive = par1;
+        }
+        
+        public boolean isWaveActive()
+        {
+        	return waveActive;
         }
        
         public void setPortal(int par1, int par2, int par3)

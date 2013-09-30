@@ -30,6 +30,7 @@ import eldritchempires.entity.TileEntitySpawner;
 import eldritchempires.entity.Zoblin;
 import eldritchempires.entity.ZoblinBomber;
 import eldritchempires.entity.ZoblinBoss;
+import eldritchempires.entity.ZoblinWarrior;
 import eldritchempires.item.ItemCondensedEssence;
 import eldritchempires.item.ItemGolemPart;
 import eldritchempires.item.ItemInactiveCollector;
@@ -49,17 +50,17 @@ public class Registration {
 	public static void registration()
 	{
 		// Add Blocks
-		collector = new BlockCollector(252, Material.wood).setUnlocalizedName("collector");
+		collector = new BlockCollector(2864, Material.wood).setUnlocalizedName("collector");
 		GameRegistry.registerBlock(collector, ItemCollector.class, EldritchEmpires.modid + (collector.getUnlocalizedName().substring(5)));
 		LanguageRegistry.addName(new ItemStack(collector, 1, 0), "Active Collector");
 		LanguageRegistry.addName(new ItemStack(collector, 1, 1), "Inactive Collector");		
 		
-		spawner = new BlockSpawner(253, Material.rock).setUnlocalizedName("spawner");
+		spawner = new BlockSpawner(2865, Material.rock).setUnlocalizedName("spawner");
 		GameRegistry.registerBlock(spawner, ItemSpawner.class, EldritchEmpires.modid + (spawner.getUnlocalizedName().substring(5)));
 		LanguageRegistry.addName(new ItemStack(spawner, 1, 0), "Stone Archer Spawner");
 		LanguageRegistry.addName(new ItemStack(spawner, 1, 1), "Placeholder Spawner");
 	
-		portal = new BlockPortal(254).setUnlocalizedName("portal");
+		portal = new BlockPortal(2866).setUnlocalizedName("portal");
 		GameRegistry.registerBlock(portal, ItemPortal.class, EldritchEmpires.modid + (portal.getUnlocalizedName().substring(5)));
 		LanguageRegistry.addName(new ItemStack(portal, 1, 0), "Zoblin Portal");
 		LanguageRegistry.addName(new ItemStack(portal, 1, 1), "Placeholder Portal");
@@ -70,6 +71,7 @@ public class Registration {
 		registerEntity(StoneArcher.class, "StoneArcher");
 		registerEntity(MagicEssence.class, "MagicEssence");
 		registerEntity(ZoblinBoss.class, "ZoblinBoss");
+		registerEntity(ZoblinWarrior.class, "ZoblinWarrior");
 		
 		// Add TileEntities
 		GameRegistry.registerTileEntity(TileEntityCollector.class, "NodeEntity");
@@ -77,15 +79,15 @@ public class Registration {
 		
 		// Add Items
 //		Items.addItems();
-		golemPart = new ItemGolemPart(5008).setUnlocalizedName("golemPart").setCreativeTab(EldritchEmpires.tabEldritch);
+		golemPart = new ItemGolemPart(7620).setUnlocalizedName("golemPart").setCreativeTab(EldritchEmpires.tabEldritch);
 		GameRegistry.registerItem(golemPart, "Golem Part");
 		LanguageRegistry.addName(golemPart, "Golem Part");
 		
-		condensedEssence = new ItemCondensedEssence(5009).setUnlocalizedName("condensedEssence").setCreativeTab(EldritchEmpires.tabEldritch);
+		condensedEssence = new ItemCondensedEssence(7621).setUnlocalizedName("condensedEssence").setCreativeTab(EldritchEmpires.tabEldritch);
 		GameRegistry.registerItem(condensedEssence, "Condensed Essence");
 		LanguageRegistry.addName(condensedEssence, "Condensed Essence");
 		
-		inactiveCollector = new ItemInactiveCollector(5010).setUnlocalizedName("inactiveCollector").setCreativeTab(EldritchEmpires.tabEldritch);
+		inactiveCollector = new ItemInactiveCollector(7622).setUnlocalizedName("inactiveCollector").setCreativeTab(EldritchEmpires.tabEldritch);
 		GameRegistry.registerItem(inactiveCollector, "Inactive Collector");
 		LanguageRegistry.addName(inactiveCollector, "Inactive Collector");
 		
