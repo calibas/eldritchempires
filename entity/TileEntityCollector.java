@@ -20,7 +20,7 @@ import net.minecraft.world.WorldSavedData;
 public class TileEntityCollector extends TileEntity
 {
 	private int i = 0;
-	private int searchRadius = 2;
+	private double searchRadius = 1.5;
 	EldritchWorldData data = new EldritchWorldData();
 	
 	public TileEntityCollector()
@@ -30,7 +30,7 @@ public class TileEntityCollector extends TileEntity
 	
 	public void updateEntity() 
 	{
-		if (i < 100)
+		if (i < 100 && (this.getBlockMetadata() == 1))
 		{
 			i++;
 			if (i % 5 == 0)

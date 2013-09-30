@@ -32,6 +32,8 @@ public class BlockPortal extends Block{
 		this.setResistance(5.0F);
 		this.setCreativeTab(EldritchEmpires.tabEldritch);
 		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1F, 0.1F, 1F);
+		this.setBlockUnbreakable();
+		this.setLightValue(1.0F);
 	}
 
 	@Override
@@ -46,14 +48,14 @@ public class BlockPortal extends Block{
 //		par1World.spawnParticle("reddust", par2 + 0.5D, par3 + 0.5D, par4 + 0.5D, 0.0D, 0.0D, 0.0D);
 	}
 	
-    public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
-    {
-		System.out.println("Portal unset" );
-		data.unSetPortal();
-		world.perWorldStorage.setData(EldritchWorldData.name, data);
-		EldritchEvents.wave = 0;
-        return world.setBlockToAir(x, y, z);
-    }
+//    public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
+//    {
+//		System.out.println("Portal unset" );
+//		data.unSetPortal();
+//		world.perWorldStorage.setData(EldritchWorldData.name, data);
+//		EldritchEvents.wave = 0;
+//        return world.setBlockToAir(x, y, z);
+//    }
 	
 //	public void onBlockAdded(World par1World, int par2, int par3, int par4) 
 //	{
@@ -74,71 +76,71 @@ public class BlockPortal extends Block{
 //		}
 //	}
 	
-	public void onBlockAdded(World par1World, int par2, int par3, int par4) 
-	{
-		if (!par1World.isRemote)
-		{
-			String announce = "";
-			double distance;
-			boolean goodDistance = true;
-			data = EldritchWorldData.forWorld(par1World);
-			
-			if (data.checkCollector())
-			{
-        		double xd = data.getCollectorX() - par2;
-        		double yd = data.getCollectorY() - par3;
-        		double zd = data.getCollectorZ() - par4;
-        		distance = Math.sqrt(xd*xd + yd*yd + zd*zd);
-        		if (distance >= 80.0D)
-        		{
-        			announce = "Collector too far";
-        			goodDistance = false;
-        		}
-        		if (distance <= 25.0D)
-        		{
-        			announce = "Collector too near";
-        			goodDistance = false;
-        		}	
-			}
-			
-			if (!(par1World.provider.dimensionId == 0))
-				announce = "Must be placed in surface dimension";
-			
-			if (data.checkPortal())
-				announce = "Portal already placed. (" + data.getPortalX() + ", " + data.getPortalY() + ", " + data.getPortalZ() + ")";
-			
-			if (!data.checkPortal() && goodDistance == true && par1World.provider.dimensionId == 0)
-			{
-				data.setPortal(par2, par3, par4);
-				par1World.perWorldStorage.setData(EldritchWorldData.name, data);
-				data = (EldritchWorldData) par1World.perWorldStorage.loadData(EldritchWorldData.class, EldritchWorldData.name);
-				announce = "Portal set";
-			}
-			else
-			{
-				par1World.setBlockToAir(par2, par3, par4);
-				par1World.removeBlockTileEntity(par2, par3, par4);
-				ItemStack droppedItem = new ItemStack(Registration.portal, 1);
-				EntityItem entityitem = new EntityItem(par1World, (double)par2 + 0.5D, (double)par3 + 0.5D, (double)par4 + 0.5D, droppedItem);
-				entityitem.delayBeforeCanPickup = 10;
-				par1World.spawnEntityInWorld(entityitem);
-				
-			}
-			
-			int announceRadius = 100;
-			List<?> var4 = par1World.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(par2 - announceRadius, par3 - announceRadius, par4 - announceRadius, par2 + announceRadius, par3 + announceRadius, par4 + announceRadius));
-
-			if (var4 != null && !var4.isEmpty()) {
-				Iterator<?> var5 = var4.iterator();
-
-				while (var5.hasNext()) {
-					EntityPlayer var6 = (EntityPlayer)var5.next();
-					var6.addChatMessage(announce);
-				}
-			}
-			
-		}
-	}
+//	public void onBlockAdded(World par1World, int par2, int par3, int par4) 
+//	{
+//		if (!par1World.isRemote)
+//		{
+//			String announce = "";
+//			double distance;
+//			boolean goodDistance = true;
+//			data = EldritchWorldData.forWorld(par1World);
+//			
+//			if (data.checkCollector())
+//			{
+//        		double xd = data.getCollectorX() - par2;
+//        		double yd = data.getCollectorY() - par3;
+//        		double zd = data.getCollectorZ() - par4;
+//        		distance = Math.sqrt(xd*xd + yd*yd + zd*zd);
+//        		if (distance >= 80.0D)
+//        		{
+//        			announce = "Collector too far";
+//        			goodDistance = false;
+//        		}
+//        		if (distance <= 25.0D)
+//        		{
+//        			announce = "Collector too near";
+//        			goodDistance = false;
+//        		}	
+//			}
+//			
+//			if (!(par1World.provider.dimensionId == 0))
+//				announce = "Must be placed in surface dimension";
+//			
+//			if (data.checkPortal())
+//				announce = "Portal already placed. (" + data.getPortalX() + ", " + data.getPortalY() + ", " + data.getPortalZ() + ")";
+//			
+//			if (!data.checkPortal() && goodDistance == true && par1World.provider.dimensionId == 0)
+//			{
+//				data.setPortal(par2, par3, par4);
+//				par1World.perWorldStorage.setData(EldritchWorldData.name, data);
+//				data = (EldritchWorldData) par1World.perWorldStorage.loadData(EldritchWorldData.class, EldritchWorldData.name);
+//				announce = "Portal set";
+//			}
+//			else
+//			{
+//				par1World.setBlockToAir(par2, par3, par4);
+//				par1World.removeBlockTileEntity(par2, par3, par4);
+////				ItemStack droppedItem = new ItemStack(Registration.portal, 1);
+////				EntityItem entityitem = new EntityItem(par1World, (double)par2 + 0.5D, (double)par3 + 0.5D, (double)par4 + 0.5D, droppedItem);
+////				entityitem.delayBeforeCanPickup = 10;
+////				par1World.spawnEntityInWorld(entityitem);
+//				
+//			}
+//			
+//			int announceRadius = 100;
+//			List<?> var4 = par1World.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(par2 - announceRadius, par3 - announceRadius, par4 - announceRadius, par2 + announceRadius, par3 + announceRadius, par4 + announceRadius));
+//
+//			if (var4 != null && !var4.isEmpty()) {
+//				Iterator<?> var5 = var4.iterator();
+//
+//				while (var5.hasNext()) {
+//					EntityPlayer var6 = (EntityPlayer)var5.next();
+//					var6.addChatMessage(announce);
+//				}
+//			}
+//			
+//		}
+//	}
 	
     @SideOnly(Side.CLIENT)
     private Icon[] icons;

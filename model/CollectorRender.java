@@ -31,14 +31,14 @@ public class CollectorRender extends TileEntitySpecialRenderer {
     {
         int i = par1TileEntity.getBlockMetadata();
 
-        if (i == 0)
-        {
-        	this.func_110628_a(collector);;
-        }
-
         if (i == 1)
         {
-        	this.func_110628_a(inactiveCollector);;
+        	this.bindTexture(collector);;
+        }
+
+        if (i == 0)
+        {
+        	this.bindTexture(inactiveCollector);;
         }
 
         GL11.glPushMatrix();

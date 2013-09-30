@@ -22,13 +22,13 @@ import net.minecraftforge.client.MinecraftForgeClient;
 
 import org.lwjgl.opengl.GL11;
 
-import eldritchempires.entity.ZoblinBoss;
+import eldritchempires.entity.ZoblinWarrior;
 
-public class ZoblinBossRender extends RenderBiped {
+public class ZoblinWarriorRender extends RenderBiped {
 	
-	private static final ResourceLocation textureLocation = new ResourceLocation("eldritchempires:model/texture/zoblinBoss.png");
+	private static final ResourceLocation textureLocation = new ResourceLocation("eldritchempires:model/texture/zoblinWarrior.png");
 	
-	public ZoblinBossRender() {
+	public ZoblinWarriorRender() {
 		super(new ZoblinModel(), 0.5F);
 	}
 
@@ -36,20 +36,20 @@ public class ZoblinBossRender extends RenderBiped {
 	public void doRender(Entity entity, double d, double d1, double d2,
 			float f, float f1)
 	{
-		renderZoblin((ZoblinBoss) entity, d, d1, d2, f, f1);
+		renderZoblin((ZoblinWarrior) entity, d, d1, d2, f, f1);
 	}
 
 	@Override
 	public void doRenderLiving(EntityLiving entityliving, double d,
 			double d1, double d2, float f, float f1)
 	{
-		renderZoblin((ZoblinBoss) entityliving, d, d1, d2, f,
+		renderZoblin((ZoblinWarrior) entityliving, d, d1, d2, f,
 				f1);
 	}
 
     protected void preRenderCallback(EntityLivingBase par1EntityLivingBase, float par2)
     {
-    	GL11.glScalef(1.5F, 1.5F, 1.5F);
+    	GL11.glScalef(0.9F, 0.9F, 0.9F);
     }
 
 	
@@ -179,10 +179,10 @@ public class ZoblinBossRender extends RenderBiped {
 //        GL11.glTranslatef(0.0F, 0.1875F, 0.0F);
 //    }
 
-	public void renderZoblin(ZoblinBoss zoblinBoss,
+	public void renderZoblin(ZoblinWarrior zoblinWarrior,
 			double d, double d1, double d2, float f, float f1)
 	{
-		super.doRenderLiving(zoblinBoss, d, d1, d2, f, f1);
+		super.doRenderLiving(zoblinWarrior, d, d1, d2, f, f1);
 	}
 	
 	@Override

@@ -21,9 +21,6 @@ public class MagicEssence extends EntityMob{
 	
 	public MagicEssence(World par1World) {
 		super(par1World);
-//		this.getNavigator().setBreakDoors(true);
-//		this.tasks.addTask(0, new EntityAISwimming(this));
-//		this.tasks.addTask(1, new EntityAIBreakDoor(this));
 	}
 	
 	@Override
@@ -63,20 +60,20 @@ public class MagicEssence extends EntityMob{
         super.onLivingUpdate();
     }
 	
-    protected void func_110147_ax()
-	 {
-		 super.func_110147_ax();
-		 // Max Health - default 20.0D - min 0.0D - max Double.MAX_VALUE
-		 this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(30.0D);
-		 // Follow Range - default 32.0D - min 0.0D - max 2048.0D
-		 this.func_110148_a(SharedMonsterAttributes.field_111265_b).func_111128_a(80.0D);
-		 // Knockback Resistance - default 0.0D - min 0.0D - max 1.0D
-		 this.func_110148_a(SharedMonsterAttributes.field_111266_c).func_111128_a(0.0D);
-		 // Movement Speed - default 0.699D - min 0.0D - max Double.MAX_VALUE
-		 this.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(2.699D);
-		 // Attack Damage - default 2.0D - min 0.0D - max Doubt.MAX_VALUE
-		 this.func_110148_a(SharedMonsterAttributes.field_111264_e).func_111128_a(2.0D);
-	 }
+    protected void applyEntityAttributes()
+    {
+        super.applyEntityAttributes();
+		// Default 20.0D - min 0.0D - max Double.MAX_VALUE
+		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setAttribute(30.0D);
+		 // Default 32.0D - min 0.0D - max 2048.0D
+		this.getEntityAttribute(SharedMonsterAttributes.followRange).setAttribute(80.0D);
+		// Default 0.0D - min 0.0D - max 1.0D
+		this.getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setAttribute(0.0D);
+		// Default 0.699D - min 0.0D - max Double.MAX_VALUE
+		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(2.699D);
+		// Default 2.0D - min 0.0D - max Doubt.MAX_VALUE
+		this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setAttribute(2.0D);
+    }
     
 	@Override
     protected Entity findPlayerToAttack()

@@ -33,12 +33,12 @@ public class NodeRender extends TileEntitySpecialRenderer {
 
         if (i == 0)
         {
-        	this.func_110628_a(playerNode);;
+        	this.bindTexture(playerNode);;
         }
 
         if (i == 1)
         {
-        	this.func_110628_a(zoblinNode);;
+        	this.bindTexture(zoblinNode);;
         }
 
         GL11.glPushMatrix();

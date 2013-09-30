@@ -77,18 +77,18 @@ public class StoneArcher extends EntityMob implements IRangedAttackMob
         return true;
     }
     
-    protected void func_110147_ax()
-	 {
-		 super.func_110147_ax();
-		 // Max Health - default 20.0D - min 0.0D - max Double.MAX_VALUE
-		 this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(20.0D);
-		 // Follow Range - default 32.0D - min 0.0D - max 2048.0D
-		 this.func_110148_a(SharedMonsterAttributes.field_111265_b).func_111128_a(32.0D);
-		 // Movement Speed - default 0.699D - min 0.0D - max Double.MAX_VALUE
-		 this.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(0.20D);
-		 // Knockback Resistance - default 0.0D - min 0.0D - max 1.0D
-		 this.func_110148_a(SharedMonsterAttributes.field_111266_c).func_111128_a(1.0D);
-	 }
+    protected void applyEntityAttributes()
+    {
+        super.applyEntityAttributes();
+		// Default 20.0D - min 0.0D - max Double.MAX_VALUE
+		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setAttribute(20.0D);
+		 // Default 32.0D - min 0.0D - max 2048.0D
+		this.getEntityAttribute(SharedMonsterAttributes.followRange).setAttribute(32.0D);
+		// Default 0.0D - min 0.0D - max 1.0D
+		this.getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setAttribute(1.0D);
+		// Default 0.699D - min 0.0D - max Double.MAX_VALUE
+		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(0.2D);
+    }
     
 	@Override
     protected Entity findPlayerToAttack()
