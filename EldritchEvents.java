@@ -155,7 +155,6 @@ public class EldritchEvents {
 //			data = (EldritchWorldData) event.world.perWorldStorage.loadData(EldritchWorldData.class, EldritchWorldData.name);
 //			int test = data.getTest();
 //
-//			Minecraft.getMinecraft().thePlayer.addChatMessage("Tile Entity Exists!" + test);
 //			
 			tickCount = 0;
 		}

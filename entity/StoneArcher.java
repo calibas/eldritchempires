@@ -32,12 +32,14 @@ public class StoneArcher extends EntityMob implements IRangedAttackMob
 	
 	public StoneArcher(World par1World) {
 		super(par1World);
+		this.experienceValue = 0;
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2,  new EntityAIArrowAttack(this, 1.0D, 20, 60, 15.0F));
 //		this.tasks.addTask(3, new EntityAIMoveTowardsTarget(this, 0.9D, 32.0F));
 //		this.tasks.addTask(4, new EntityAIWander(this, 0.5D));
         this.targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, ZoblinBomber.class, 0, true));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, ZoblinBoss.class, 0, true));
+        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, ZoblinWarrior.class, 0, true));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, Zoblin.class, 0, true));
         this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityZombie.class, 0, true));
         this.targetTasks.addTask(4, new EntityAINearestAttackableTarget(this, EntitySkeleton.class, 0, true));
@@ -59,7 +61,7 @@ public class StoneArcher extends EntityMob implements IRangedAttackMob
 //        	setPathToEntity(path);
 //        	this.getMoveHelper().setMoveTo((double)nodex, (double)nodey + 1.0D, (double)nodez, 0.25D);
 //        	Minecraft.getMinecraft().thePlayer.addChatMessage("SA: I'm supposed to path to" + nodex + " " + nodey + " " + nodez + " " + guarding);
-        	this.setPosition((double)nodeX + 0.5D, nodeY + 0.1D, nodeZ + 0.5D);
+        	this.setPosition((double)(nodeX + 0.5D), (double)(nodeY + 0.11D), (double)(nodeZ + 0.5D));
         }
         
 		super.onLivingUpdate();        

@@ -9,6 +9,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import eldritchempires.EldritchEmpires;
 import eldritchempires.entity.StoneArcher;
 import eldritchempires.entity.TileEntitySpawner;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -23,6 +24,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 
 public class BlockSpawner extends BlockContainer{
 
@@ -74,16 +76,32 @@ public class BlockSpawner extends BlockContainer{
     }
 	
 	@Override
+    public boolean canPlaceBlockAt(World par1World, int par2, int par3, int par4)
+    {
+        return !(par1World.isAirBlock(par2, par3 - 1, par4));
+    }
+	
+	@Override
+    public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5)
+    {
+        if (!par1World.isRemote)
+        {
+            boolean flag = this.canPlaceBlockAt(par1World, par2, par3, par4);
+
+            if (!flag)
+            {
+                this.dropBlockAsItem(par1World, par2, par3, par4, 0, 0);
+                par1World.setBlockToAir(par2, par3, par4);
+            }
+
+            super.onNeighborBlockChange(par1World, par2, par3, par4, par5);
+        }
+    }
+	
+	@Override
     public TileEntity createNewTileEntity(World par1World)
     {
-        try
-        {
-        	return new TileEntitySpawner();
-        }
-        catch (Exception exception)
-        {
-            throw new RuntimeException(exception);
-        }
+       	return new TileEntitySpawner();
     }
 	
     @SideOnly(Side.CLIENT)

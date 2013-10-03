@@ -13,10 +13,10 @@ import cpw.mods.fml.common.TickType;
 public class EldritchTick implements ITickHandler{
 
 	public static EldritchWorldData worldData = null;
-	private final Minecraft mc;
+//	private final Minecraft mc;
 	
 	public EldritchTick() {
-		mc = Minecraft.getMinecraft();
+//		mc = Minecraft.getMinecraft();
 	}
 
 	

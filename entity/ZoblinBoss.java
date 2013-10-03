@@ -20,7 +20,7 @@ public class ZoblinBoss extends EntityMob{
 	public ZoblinBoss(World par1World) {
 		super(par1World);
 		this.experienceValue = 50;
-		this.setSize(1.0F, 2.8F);
+		this.setSize(0.9F, 2.8F);
 	}
 	
 	@Override

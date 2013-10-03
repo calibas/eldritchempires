@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import cpw.mods.fml.common.network.FMLNetworkHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -118,6 +119,10 @@ public class BlockCollector extends BlockContainer{
     {
     	if (!par1World.isRemote)
     	{
+    		FMLNetworkHandler.openGui(par5EntityPlayer, EldritchEmpires.instance, 0, par1World, par2, par3, par4);
+    		
+
+    		
     		if (!data.isWaveActive())
     		{
     			par1World.setBlockMetadataWithNotify(par2, par3, par4, 1, 2);

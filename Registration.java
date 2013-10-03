@@ -105,6 +105,9 @@ public class Registration {
 		// Tick Handler
 		TickRegistry.registerTickHandler(new EldritchTick(), Side.SERVER);
 		
+		// GUI Handler
+		new EldritchGuiHandler();
+		
 		// Add Spawns
 //		EntityRegistry.addSpawn(HoneyBee.class, 15, 1, 1, EnumCreatureType.monster, new BiomeGenBase[] { BiomeGenBase.swampland, BiomeGenBase.plains, BiomeGenBase.extremeHills, BiomeGenBase.forest, BiomeGenBase.forestHills, BiomeGenBase.jungle, BiomeGenBase.jungleHills, BiomeGenBase.taiga });
 		
