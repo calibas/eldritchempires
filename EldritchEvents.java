@@ -56,6 +56,7 @@ public class EldritchEvents {
 				int collectorY = data.getCollectorY();
 				int collectorZ = data.getCollectorZ();
 				int wave = data.getWave();
+				int round = data.getRound();
 //				if (event.world.checkChunksExist(markerX, markerY, markerZ, nodeX, nodeY, nodeZ))
 //				if (event.world.activeChunkSet != null)
 //				{
@@ -110,11 +111,19 @@ public class EldritchEvents {
 				{
 					if (!data.checkPortal())
 					{
-						EldritchMethods.broadcastMessageLocal("A zoblin portal opens", collectorX, collectorY, collectorZ, 100, event.world);
 						int[] location = EldritchMethods.createPortal("zoblin", collectorX, collectorY, collectorZ, event.world);
 						data.setPortal(location[0], location[1], location[2]);
+						event.world.setBlockMetadataWithNotify(collectorX, collectorY, collectorZ, 1, 2);
 					}
-					waves(wave, portalX, portalY, portalZ, event.world);
+					
+					if (wave > 11)
+					{
+						data.setWave(0);
+						wave = 0;
+						event.world.perWorldStorage.setData(EldritchWorldData.name, data);
+					}
+					
+					waves(round, wave, portalX, portalY, portalZ, event.world);
 //					System.out.println("Spawn code here");
 //					List<?> var4 = event.world.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(collectorX - announceRadius, collectorY - announceRadius, collectorZ - announceRadius, collectorX + announceRadius, collectorY + announceRadius, collectorZ + announceRadius));
 //
@@ -126,6 +135,7 @@ public class EldritchEvents {
 //							var6.addChatMessage(announce);
 //						}
 //					}
+					
 					if (announce != "")
 						EldritchMethods.broadcastMessageLocal(announce, collectorX, collectorY, collectorZ, 100, event.world);
 					
@@ -142,6 +152,7 @@ public class EldritchEvents {
 				if (!data.isWaveActive() && data.checkPortal())
 				{
 					EldritchMethods.broadcastMessageLocal("The portal closes", portalX, portalY, portalZ, 100, event.world);
+					event.world.setBlockMetadataWithNotify(collectorX, collectorY, collectorZ, 0, 2);
 					data.unSetPortal();
 					event.world.perWorldStorage.setData(EldritchWorldData.name, data);
 					event.world.setBlockToAir(portalX, portalY, portalZ);
@@ -160,11 +171,13 @@ public class EldritchEvents {
 		}
 	}
 	
-	public void waves(int wave, int x, int y, int z, World world)
+	public void waves(int round, int wave, int x, int y, int z, World world)
 	{
+		if (round == 1)
+		{
 		switch (wave){
 			case 0: 
-				announce = "Zoblins approaching!";
+				announce = "You hear strange noises in the distance";
 				break;
 			case 1:
 				spawnWave("zoblin", 2, x, y, z, world);
@@ -212,66 +225,159 @@ public class EldritchEvents {
 //				waveActive = false;
 				break;
 			case 11:
-				announce = "";
-				break;
-			case 12: 
-				announce = "More zoblins approaching!";
-				break;
-			case 13:
-				spawnWave("zoblinWarrior", 2, x, y, z, world);
-				break;
-			case 14:
-				spawnWave("zoblin", 2, x, y, z, world);
-				spawnWave("zoblinWarrior", 1, x, y, z, world);
-				spawnWave("zoblinBomber", 1, x, y, z, world);
-				spawnWave("magicEssence", 1, x, y, z, world);
-				break;
-			case 15:
-				spawnWave("zoblin", 2, x, y, z, world);
-				spawnWave("zoblinWarrior", 1, x, y, z, world);
-				spawnWave("zoblinBomber", 2, x, y, z, world);
-				break;
-			case 16:
-				spawnWave("zoblinWarrior", 2, x, y, z, world);
-				spawnWave("zoblinBomber", 3, x, y, z, world);
-				spawnWave("magicEssence", 1, x, y, z, world);
-				break;
-			case 17:
-				spawnWave("zoblinWarrior", 4, x, y, z, world);
-				break;
-			case 18:
-				spawnWave("zoblin", 4, x, y, z, world);
-				spawnWave("zoblinBomber", 2, x, y, z, world);
-				spawnWave("magicEssence", 1, x, y, z, world);
-				break;
-			case 19:
-				spawnWave("zoblin", 2, x, y, z, world);
-				spawnWave("zoblinWarrior", 2, x, y, z, world);
-				spawnWave("zoblinBomber", 1, x, y, z, world);
-				break;
-			case 20:
-				spawnWave("zoblinWarrior", 3, x, y, z, world);
-				spawnWave("zoblinBomber", 2, x, y, z, world);
-				spawnWave("magicEssence", 1, x, y, z, world);
-				break;
-			case 21:
-				spawnWave("zoblin", 2, x, y, z, world);
-				spawnWave("zoblinBomber", 4, x, y, z, world);
-				break;
-			case 22:
-				spawnWave("zoblinWarrior", 2, x, y, z, world);
-				spawnWave("zoblinBoss", 1, x, y, z, world);
-				spawnWave("magicEssence", 1, x, y, z, world);
-				break;
-			case 23:
 				announce = "The portal closes";
 				world.setBlockToAir(x, y, z);
 				world.removeBlockTileEntity(x, y, z);
 				world.setBlockMetadataWithNotify(data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 0, 2);
 				data.unSetPortal();
-				world.perWorldStorage.setData(EldritchWorldData.name, data);
 				data.setActiveWave(false);
+				if (data.getProgress() < 1)
+				{
+					data.increaseProgress();
+				}
+				world.perWorldStorage.setData(EldritchWorldData.name, data);
 				break;
+			}
+		}
+		
+		if (round == 2)
+		{
+		switch (wave){
+			case 0: 
+				announce = "You hear strange noises in the distance";
+				break;
+			case 1:
+				spawnWave("zoblin", 3, x, y, z, world);
+				break;
+			case 2:
+				spawnWave("zoblin", 2, x, y, z, world);
+				spawnWave("zoblinBomber", 2, x, y, z, world);
+				break;
+			case 3:
+				spawnWave("zoblin", 3, x, y, z, world);
+				spawnWave("zoblinBomber", 2, x, y, z, world);
+				spawnWave("magicEssence", 1, x, y, z, world);
+				break;
+			case 4:
+				spawnWave("zoblin", 3, x, y, z, world);
+				spawnWave("zoblinBomber", 2, x, y, z, world);
+				break;
+			case 5:
+				spawnWave("zoblin", 2, x, y, z, world);
+				spawnWave("zoblinBomber", 3, x, y, z, world);
+				spawnWave("magicEssence", 1, x, y, z, world);
+				break;
+			case 6:
+				spawnWave("zoblin", 2, x, y, z, world);
+				spawnWave("zoblinWarrior", 1, x, y, z, world);
+				spawnWave("zoblinBomber", 2, x, y, z, world);
+				break;
+			case 7:
+				spawnWave("zoblin", 3, x, y, z, world);
+				spawnWave("zoblinBomber", 2, x, y, z, world);
+				spawnWave("magicEssence", 1, x, y, z, world);
+				break;
+			case 8:
+				spawnWave("zoblin", 2, x, y, z, world);
+				spawnWave("zoblinWarrior", 1, x, y, z, world);
+				spawnWave("zoblinBomber", 1, x, y, z, world);
+				break;
+			case 9:
+				spawnWave("zoblinWarrior", 2, x, y, z, world);
+				spawnWave("zoblinBomber", 2, x, y, z, world);
+				spawnWave("magicEssence", 1, x, y, z, world);
+				break;
+			case 10:
+				spawnWave("zoblinBoss", 1, x, y, z, world);
+				spawnWave("zoblin", 2, x, y, z, world);
+				spawnWave("magicEssence", 1, x, y, z, world);
+//				waveActive = false;
+				break;
+			case 11:
+				announce = "The portal closes";
+				world.setBlockToAir(x, y, z);
+				world.removeBlockTileEntity(x, y, z);
+				world.setBlockMetadataWithNotify(data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 0, 2);
+				data.unSetPortal();
+				data.setActiveWave(false);
+				if (data.getProgress() < 2)
+				{
+					data.increaseProgress();
+				}
+				world.perWorldStorage.setData(EldritchWorldData.name, data);
+				break;
+			}
+		}
+		
+		if (round == 3)
+		{
+		switch (wave){			
+			case 0: 
+				announce = "You hear strange noises in the distance";
+				if (data.getProgress() < 1)
+					data.increaseProgress();
+				world.perWorldStorage.setData(EldritchWorldData.name, data);
+				break;
+			case 1:
+				spawnWave("zoblinWarrior", 2, x, y, z, world);
+				break;
+			case 2:
+				spawnWave("zoblin", 2, x, y, z, world);
+				spawnWave("zoblinWarrior", 1, x, y, z, world);
+				spawnWave("zoblinBomber", 1, x, y, z, world);
+				spawnWave("magicEssence", 1, x, y, z, world);
+				break;
+			case 3:
+				spawnWave("zoblin", 2, x, y, z, world);
+				spawnWave("zoblinWarrior", 1, x, y, z, world);
+				spawnWave("zoblinBomber", 2, x, y, z, world);
+				break;
+			case 4:
+				spawnWave("zoblinWarrior", 2, x, y, z, world);
+				spawnWave("zoblinBomber", 3, x, y, z, world);
+				spawnWave("magicEssence", 1, x, y, z, world);
+				break;
+			case 5:
+				spawnWave("zoblinWarrior", 4, x, y, z, world);
+				break;
+			case 6:
+				spawnWave("zoblin", 4, x, y, z, world);
+				spawnWave("zoblinBomber", 2, x, y, z, world);
+				spawnWave("magicEssence", 1, x, y, z, world);
+				break;
+			case 7:
+				spawnWave("zoblin", 2, x, y, z, world);
+				spawnWave("zoblinWarrior", 2, x, y, z, world);
+				spawnWave("zoblinBomber", 1, x, y, z, world);
+				break;
+			case 8:
+				spawnWave("zoblinWarrior", 3, x, y, z, world);
+				spawnWave("zoblinBomber", 2, x, y, z, world);
+				spawnWave("magicEssence", 1, x, y, z, world);
+				break;
+			case 9:
+				spawnWave("zoblin", 2, x, y, z, world);
+				spawnWave("zoblinBomber", 4, x, y, z, world);
+				break;
+			case 10:
+				spawnWave("zoblinWarrior", 2, x, y, z, world);
+				spawnWave("zoblinBoss", 1, x, y, z, world);
+				spawnWave("magicEssence", 1, x, y, z, world);
+				break;
+			case 11:
+				announce = "The portal closes";
+				world.setBlockToAir(x, y, z);
+				world.removeBlockTileEntity(x, y, z);
+				world.setBlockMetadataWithNotify(data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 0, 2);
+				data.unSetPortal();
+				data.setActiveWave(false);
+				if (data.getProgress() < 3)
+				{
+					data.increaseProgress();
+				}
+				world.perWorldStorage.setData(EldritchWorldData.name, data);
+				break;
+			}
 		}
 	}
 	

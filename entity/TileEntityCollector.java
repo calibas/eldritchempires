@@ -34,7 +34,7 @@ public class TileEntityCollector extends TileEntity implements IInventory
 	
 	public void updateEntity() 
 	{
-		if (i < 100 && (this.getBlockMetadata() == 1))
+		if (i < 100 && data.isWaveActive())
 		{
 			i++;
 			if (i % 5 == 0)
@@ -238,13 +238,11 @@ public class TileEntityCollector extends TileEntity implements IInventory
 
 	@Override
 	public boolean isInvNameLocalized() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public int getInventoryStackLimit() {
-		// TODO Auto-generated method stub
 		return 16;
 	}
 

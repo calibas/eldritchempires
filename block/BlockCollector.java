@@ -123,22 +123,22 @@ public class BlockCollector extends BlockContainer{
     		
 
     		
-    		if (!data.isWaveActive())
-    		{
-    			par1World.setBlockMetadataWithNotify(par2, par3, par4, 1, 2);
-    			data.setActiveWave(true);
-    			par1World.perWorldStorage.setData(EldritchWorldData.name, data);
-    			data = (EldritchWorldData) par1World.perWorldStorage.loadData(EldritchWorldData.class, EldritchWorldData.name);
-  //  			EldritchMethods.broadcastMessageLocal("Collector Active", par2, par3, par4, 100, par1World);
-    		}
-    		else
-    		{
-    			par1World.setBlockMetadataWithNotify(par2, par3, par4, 0, 2);
-    			data.setActiveWave(false);
-    			par1World.perWorldStorage.setData(EldritchWorldData.name, data);
-    			data = (EldritchWorldData) par1World.perWorldStorage.loadData(EldritchWorldData.class, EldritchWorldData.name);
-//    			EldritchMethods.broadcastMessageLocal("Collector Inactive", par2, par3, par4, 100, par1World);
-    		}
+//    		if (!data.isWaveActive())
+//    		{
+//    			par1World.setBlockMetadataWithNotify(par2, par3, par4, 1, 2);
+//    			data.setActiveWave(true);
+//    			par1World.perWorldStorage.setData(EldritchWorldData.name, data);
+//    			data = (EldritchWorldData) par1World.perWorldStorage.loadData(EldritchWorldData.class, EldritchWorldData.name);
+//  //  			EldritchMethods.broadcastMessageLocal("Collector Active", par2, par3, par4, 100, par1World);
+//    		}
+//    		else
+//    		{
+//    			par1World.setBlockMetadataWithNotify(par2, par3, par4, 0, 2);
+//    			data.setActiveWave(false);
+//    			par1World.perWorldStorage.setData(EldritchWorldData.name, data);
+//    			data = (EldritchWorldData) par1World.perWorldStorage.loadData(EldritchWorldData.class, EldritchWorldData.name);
+////    			EldritchMethods.broadcastMessageLocal("Collector Inactive", par2, par3, par4, 100, par1World);
+//    		}
     	}
 		return true;
     }

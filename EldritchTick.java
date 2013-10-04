@@ -23,23 +23,22 @@ public class EldritchTick implements ITickHandler{
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
 		if(type.equals(EnumSet.of(TickType.WORLDLOAD))){
-			System.out.println("tickStart TickType.WORLDLOAD");
 //			World world = null;
 			final WorldServer world = (WorldServer) tickData[0];
-			for(int i = 0; i < tickData.length; i++)
-			{
+//			for(int i = 0; i < tickData.length; i++)
+//			{
 //				if(mc.theWorld != null)
 //				{
 //					world = mc.theWorld;
 //					System.out.println("mc.theWorld != null");
 //				}
-				
-				if(world.provider instanceof WorldProviderSurface)
-				{
-					System.out.println("world instanceof Surface");
-				}
-		
-			}
+//				
+//				if(world.provider instanceof WorldProviderSurface)
+//				{
+//					System.out.println("world instanceof Surface");
+//				}
+//		
+//			}
 	    
 //			if(world == null){
 //				System.out.println("world == null");

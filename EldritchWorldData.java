@@ -16,6 +16,8 @@ public class EldritchWorldData extends WorldSavedData {
         private static int collectorZ = 0;
         private static boolean waveActive = false;
         private static int wave = 0;
+        private static int round = 0;
+        private static int progress = 0;
         
         public static String name = "EldritchData";
     	
@@ -50,6 +52,8 @@ public class EldritchWorldData extends WorldSavedData {
                collectorSet = nbt.getBoolean("collectorSet");
                waveActive = nbt.getBoolean("waveActive");
                wave = nbt.getInteger("wave");
+               round = nbt.getInteger("round");
+               progress = nbt.getInteger("progress");
         }
  
         @Override
@@ -64,6 +68,8 @@ public class EldritchWorldData extends WorldSavedData {
                 nbt.setBoolean("collectorSet", collectorSet);
                 nbt.setBoolean("waveActive", waveActive);
                 nbt.setInteger("wave", wave);
+                nbt.setInteger("round", round);
+                nbt.setInteger("progress", progress);
         }
         
         public void setActiveWave(boolean par1)
@@ -176,6 +182,26 @@ public class EldritchWorldData extends WorldSavedData {
         public boolean checkCollector()
         {
         	return collectorSet;
+        }
+        
+        public int getProgress()
+        {
+        	return progress;
+        }
+        
+        public void increaseProgress()
+        {
+        	progress++;
+        }
+        
+        public int getRound()
+        {
+        	return round;
+        }
+        
+        public void setRound(int newRound)
+        {
+        	round = newRound;
         }
 }
 

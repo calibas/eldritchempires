@@ -42,7 +42,7 @@ public class EldritchTickHandler implements ITickHandler {
    @Override
    public String getLabel() {
       // TODO Auto-generated method stub
-      return "HiveCraft_Ticker";
+      return "Eldritch_Ticker";
    }
    
 }
