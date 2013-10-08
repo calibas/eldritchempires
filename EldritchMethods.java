@@ -10,6 +10,8 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
 public class EldritchMethods {
+	
+	private static long messageTime = 0;
 
     public static int getFirstUncoveredBlockHeight(int par1, int par2, World world)
     {
@@ -40,6 +42,21 @@ public class EldritchMethods {
     			EntityPlayer player = (EntityPlayer)iterator.next();
     			player.addChatMessage(announce);
     		}
+    	}
+    }
+    
+    public static void attackMessage(String announce, int posX, int posY, int posZ, int announceRadius, World world)
+    {
+    	if ((world.getWorldTime() - messageTime) < 0)
+		{
+			messageTime = world.getWorldTime();
+		}
+    	
+//    	messageTime = world.getWorldTime();
+    	if (world.getWorldTime() - messageTime > 50)
+    	{
+    		broadcastMessageLocal(announce, posX, posY, posZ, announceRadius, world);
+    		messageTime = world.getWorldTime();
     	}
     }
     

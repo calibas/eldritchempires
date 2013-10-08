@@ -114,6 +114,7 @@ public class GuiCollector extends GuiContainer{
 //    			this.mc.theWorld.setBlockMetadataWithNotify(data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 1, 2);
     			data.setActiveWave(true);
     			data.setRound(1);
+    			data.resetCollectorHealth();
     			EldritchMethods.broadcastMessageLocal("A zoblin portal begins to open", data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 100, this.mc.theWorld);
     			this.mc.theWorld.perWorldStorage.setData(EldritchWorldData.name, data);
     			data = (EldritchWorldData) this.mc.theWorld.perWorldStorage.loadData(EldritchWorldData.class, EldritchWorldData.name);
@@ -128,6 +129,7 @@ public class GuiCollector extends GuiContainer{
 //    			this.mc.theWorld.setBlockMetadataWithNotify(data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 1, 2);
     			data.setActiveWave(true);
     			data.setRound(2);
+    			data.resetCollectorHealth();
     			EldritchMethods.broadcastMessageLocal("A zoblin portal begins to open", data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 100, this.mc.theWorld);
     			this.mc.theWorld.perWorldStorage.setData(EldritchWorldData.name, data);
     			data = (EldritchWorldData) this.mc.theWorld.perWorldStorage.loadData(EldritchWorldData.class, EldritchWorldData.name);
@@ -141,6 +143,7 @@ public class GuiCollector extends GuiContainer{
 //    			this.mc.theWorld.setBlockMetadataWithNotify(data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 1, 2);
     			data.setActiveWave(true);
     			data.setRound(3);
+    			data.resetCollectorHealth();
     			EldritchMethods.broadcastMessageLocal("A zoblin portal begins to open", data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 100, this.mc.theWorld);
     			this.mc.theWorld.perWorldStorage.setData(EldritchWorldData.name, data);
     			data = (EldritchWorldData) this.mc.theWorld.perWorldStorage.loadData(EldritchWorldData.class, EldritchWorldData.name);

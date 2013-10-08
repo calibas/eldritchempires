@@ -19,6 +19,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.storage.WorldInfo;
@@ -64,9 +65,9 @@ public class EldritchEvents {
 //					System.out.println("Server time: " + event.world.provider.getWorldTime());
 
 				
-				if(data.checkPortal() && !data.checkCollector())
+				if(data.checkPortal() && !data.checkCollector() && event.world.blockExists(portalX, portalY, portalZ))
 				{
-					event.world.getChunkProvider().loadChunk(portalX >> 4, portalZ >> 4);
+//					event.world.getChunkProvider().loadChunk(portalX >> 4, portalZ >> 4);
 					Chunk portalChunk = event.world.getChunkFromBlockCoords(portalX, portalZ);
 					if (portalChunk.isChunkLoaded)
 					{
@@ -83,11 +84,13 @@ public class EldritchEvents {
 					}
 				}
 				
-				if(data.checkCollector())
+				if(data.checkCollector() && event.world.blockExists(collectorX, collectorY, collectorZ))
 				{
-					event.world.getChunkProvider().loadChunk(collectorX >> 4, collectorZ >> 4);
-					Chunk nodeChunk = event.world.getChunkFromBlockCoords(collectorX, collectorZ);
-					if (nodeChunk.isChunkLoaded)
+//					event.world.getChunkProvider().loadChunk(collectorX >> 4, collectorZ >> 4);
+//					Chunk nodeChunk = event.world.getChunkFromBlockCoords(collectorX, collectorZ);
+			        Chunk chunk = event.world.getChunkFromBlockCoords(MathHelper.floor_double(collectorX), MathHelper.floor_double(collectorZ));
+
+					if (chunk.isChunkLoaded)
 					{
 //					System.out.println("Marker found at:" + markerX + " " + markerY + " " + markerZ);
 //					System.out.println("BlockID:" + event.world.getBlockId(markerX, markerY, markerZ));
@@ -107,7 +110,7 @@ public class EldritchEvents {
 					lastSpawn = event.world.provider.getWorldTime();
 				}
 				
-				if (data.isWaveActive() && data.checkCollector() && (event.world.provider.getWorldTime() - lastSpawn) >= 600)
+				if (data.isWaveActive() && data.checkCollector() && (event.world.provider.getWorldTime() - lastSpawn) >= 600 && event.world.blockExists(collectorX, collectorY, collectorZ) && event.world.blockExists(portalX, portalY, portalZ))
 				{
 					if (!data.checkPortal())
 					{
@@ -116,7 +119,7 @@ public class EldritchEvents {
 						event.world.setBlockMetadataWithNotify(collectorX, collectorY, collectorZ, 1, 2);
 					}
 					
-					if (wave > 11)
+					if (wave > 12)
 					{
 						data.setWave(0);
 						wave = 0;
@@ -149,7 +152,7 @@ public class EldritchEvents {
 //				}
 				}
 				
-				if (!data.isWaveActive() && data.checkPortal())
+				if (!data.isWaveActive() && data.checkPortal() && event.world.blockExists(portalX, portalY, portalZ))
 				{
 					EldritchMethods.broadcastMessageLocal("The portal closes", portalX, portalY, portalZ, 100, event.world);
 					event.world.setBlockMetadataWithNotify(collectorX, collectorY, collectorZ, 0, 2);
@@ -225,6 +228,9 @@ public class EldritchEvents {
 //				waveActive = false;
 				break;
 			case 11:
+				announce = "The zoblin attack seems to have ended";
+				break;
+			case 12:
 				announce = "The portal closes";
 				world.setBlockToAir(x, y, z);
 				world.removeBlockTileEntity(x, y, z);
@@ -294,6 +300,9 @@ public class EldritchEvents {
 //				waveActive = false;
 				break;
 			case 11:
+				announce = "The zoblin attack seems to have ended";
+				break;
+			case 12:
 				announce = "The portal closes";
 				world.setBlockToAir(x, y, z);
 				world.removeBlockTileEntity(x, y, z);
@@ -365,6 +374,9 @@ public class EldritchEvents {
 				spawnWave("magicEssence", 1, x, y, z, world);
 				break;
 			case 11:
+				announce = "The zoblin attack seems to have ended";
+				break;
+			case 12:
 				announce = "The portal closes";
 				world.setBlockToAir(x, y, z);
 				world.removeBlockTileEntity(x, y, z);
@@ -394,9 +406,9 @@ public class EldritchEvents {
 //				zoblin.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(2.099D);
 				entity.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(2.099D);
 				entity.attacking = true;
-				entity.nodeX = data.getCollectorX();
-				entity.nodeY = data.getCollectorY();
-				entity.nodeZ = data.getCollectorZ();
+				entity.collectorX = data.getCollectorX();
+				entity.collectorY = data.getCollectorY();
+				entity.collectorZ = data.getCollectorZ();
 				world.spawnEntityInWorld(entity);
 				name = "Zoblin";
 			}
@@ -407,9 +419,9 @@ public class EldritchEvents {
 //				zoblinBomber.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(1.599D);
 				entity.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(1.599D);
 				entity.attacking = true;
-				entity.nodeX = data.getCollectorX();
-				entity.nodeY = data.getCollectorY();
-				entity.nodeZ = data.getCollectorZ();
+				entity.collectorX = data.getCollectorX();
+				entity.collectorY = data.getCollectorY();
+				entity.collectorZ = data.getCollectorZ();
         		double xd = data.getCollectorX() - x;
         		double yd = data.getCollectorY() - y;
         		double zd = data.getCollectorZ() - z;
@@ -447,9 +459,9 @@ public class EldritchEvents {
 				ZoblinWarrior entity = new ZoblinWarrior(world);
 				entity.setLocationAndAngles((double)x, (double)y + 1, (double)z, 0.0F, 0.0F);
 				entity.attacking = true;
-				entity.nodeX = data.getCollectorX();
-				entity.nodeY = data.getCollectorY();
-				entity.nodeZ = data.getCollectorZ();
+				entity.collectorX = data.getCollectorX();
+				entity.collectorY = data.getCollectorY();
+				entity.collectorZ = data.getCollectorZ();
 				entity.setCurrentItemOrArmor(0, new ItemStack(Item.swordIron));
 				world.spawnEntityInWorld(entity);
 				name = "Zoblin Warrior";

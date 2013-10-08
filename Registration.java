@@ -24,6 +24,7 @@ import eldritchempires.block.BlockPortal;
 import eldritchempires.block.BlockCollector;
 import eldritchempires.block.BlockSpawner;
 import eldritchempires.entity.MagicEssence;
+import eldritchempires.entity.RabidDwarf;
 import eldritchempires.entity.StoneArcher;
 import eldritchempires.entity.TileEntityCollector;
 import eldritchempires.entity.TileEntitySpawner;
@@ -67,11 +68,12 @@ public class Registration {
 		
 		// Add Entities
 		registerEntity(Zoblin.class, "Zoblin");
-		registerEntity(ZoblinBomber.class, "ZoblinBomber");
-		registerEntity(StoneArcher.class, "StoneArcher");
-		registerEntity(MagicEssence.class, "MagicEssence");
-		registerEntity(ZoblinBoss.class, "ZoblinBoss");
-		registerEntity(ZoblinWarrior.class, "ZoblinWarrior");
+		registerEntity(ZoblinBomber.class, "Zoblin Bomber");
+		registerEntity(StoneArcher.class, "Stone Archer");
+		registerEntity(MagicEssence.class, "Magic Essence");
+		registerEntity(ZoblinBoss.class, "Zoblin Boss");
+		registerEntity(ZoblinWarrior.class, "Zoblin Warrior");
+		registerEntity(RabidDwarf.class, "Rabid Dwarf");
 		
 		// Add TileEntities
 		GameRegistry.registerTileEntity(TileEntityCollector.class, "NodeEntity");
@@ -94,7 +96,7 @@ public class Registration {
 		// Add Recipes
 		GameRegistry.addRecipe(new ItemStack(collector, 1, 0), new Object[] { "ROR", "ORO", "ROR", 'R', Item.redstone, 'O', new ItemStack(Block.obsidian, 1)});
 //		GameRegistry.addRecipe(new ItemStack(portal, 1, 0), new Object[] { "CRC", "RER", "CRC", 'R', Item.redstone, 'E', Item.emerald, 'C', new ItemStack(Block.cobblestone, 1)});
-		GameRegistry.addRecipe(new ItemStack(spawner, 1, 0), new Object[] { " G ", "GBG", "GGG", 'G', golemPart, 'B', Item.bow});
+		GameRegistry.addRecipe(new ItemStack(spawner, 1, 0), new Object[] { " E ", "GBG", "GEG", 'G', golemPart, 'B', Item.bow, 'E', condensedEssence});
 		GameRegistry.addRecipe(new ItemStack(golemPart, 1), new Object[] { "CCC", "III", "CCC", 'C', new ItemStack(Block.cobblestone, 1), 'I', Item.ingotIron});
 		GameRegistry.addRecipe(new ItemStack(Item.diamond, 1, 0), new Object[] { "EEE", "EEE", "EEE", 'E', condensedEssence});
 //		GameRegistry.addRecipe(new ItemStack(collector, 1, 0), new Object[] { " R ", "RIR", " R ", 'R', Item.redstone, 'I', inactiveCollector});

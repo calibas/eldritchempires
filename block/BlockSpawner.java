@@ -29,6 +29,7 @@ import net.minecraftforge.common.ForgeDirection;
 public class BlockSpawner extends BlockContainer{
 
 	private PathEntity path;
+	private int entityId;
 	
 	public BlockSpawner(int par1, Material par2Material) {
 		super(par1, Material.plants);
@@ -43,36 +44,6 @@ public class BlockSpawner extends BlockContainer{
     public boolean isOpaqueCube()
     {
         return false;
-    }
-	
-	@Override
-	public void updateTick(World par1World, int par2, int par3, int par4, Random par5Random) 
-	{
-		int i = par1World.getBlockMetadata(par2, par3, par4);
-		
-		// Stone Archer Spawner
-		if (i == 0)
-		{
-			int searchRadius = 2;
-			int j = par1World.getEntitiesWithinAABB(StoneArcher.class, AxisAlignedBB.getAABBPool().getAABB(par2 - searchRadius, par3 - searchRadius, par4 - searchRadius, par2 + searchRadius, par3 + searchRadius, par4 + searchRadius)).size();
-        
-			if (j < 1)
-			{
-				StoneArcher stoneArcher = new StoneArcher(par1World);
-				stoneArcher.setLocationAndAngles((double)par2 + 0.5D, (double)par3 + 0.1D, (double)par4 + 0.5D, 0.0F, 0.0F);
-				stoneArcher.guarding = true;
-				stoneArcher.nodeX = par2;
-				stoneArcher.nodeY = par3;
-				stoneArcher.nodeZ = par4;
-				par1World.spawnEntityInWorld(stoneArcher);
-			}
-		}
-		
-		// Placeholder Spawner
-		if (i == 1)
-		{
-
-		}
     }
 	
 	@Override

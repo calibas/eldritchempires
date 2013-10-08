@@ -19,9 +19,9 @@ public class ZoblinBomber extends EntityCreature{
 
 	private PathEntity path;
 	public boolean attacking = false;
-	public int nodeX;
-	public int nodeY;
-	public int nodeZ;
+	public int collectorX;
+	public int collectorY;
+	public int collectorZ;
 	public int timer = 20;
 	
 	public ZoblinBomber(World par1World) {
@@ -48,9 +48,9 @@ public class ZoblinBomber extends EntityCreature{
         {
         	if (attacking == true)
             {
-        		double xd = nodeX - this.posX;
-        		double yd = nodeY - this.posY;
-        		double zd = nodeZ - this.posZ;
+        		double xd = collectorX - this.posX;
+        		double yd = collectorY - this.posY;
+        		double zd = collectorZ - this.posZ;
         		double distance = Math.sqrt(xd*xd + yd*yd + zd*zd);
         		if (distance > 40.0D)
         		{
@@ -66,7 +66,7 @@ public class ZoblinBomber extends EntityCreature{
         		else
         		{
 //            		Minecraft.getMinecraft().thePlayer.addChatMessage("Zoblin: Attacking!");
-        			path = this.worldObj.getEntityPathToXYZ(this, nodeX, nodeY, nodeZ, 70.0F, true, true, false, false);
+        			path = this.worldObj.getEntityPathToXYZ(this, collectorX, collectorY, collectorZ, 70.0F, true, true, false, false);
         			setPathToEntity(path);
         		}
             }
@@ -77,27 +77,27 @@ public class ZoblinBomber extends EntityCreature{
         		int diffY = 0;
         		int diffZ = 0;
         		
-        		if (nodeX > this.posX)
+        		if (collectorX > this.posX)
         		{
         			diffX = 1;
         		}
-        		if (nodeX < this.posX)
+        		if (collectorX < this.posX)
         		{
         			diffX = -1;
         		}
-        		if (nodeY > this.posY + 1)
+        		if (collectorY > this.posY + 1)
         		{
         			diffY = 1;
         		}
-        		if (nodeY < this.posY)
+        		if (collectorY < this.posY)
         		{
         			diffY = -1;
         		}
-        		if (nodeZ > this.posZ)
+        		if (collectorZ > this.posZ)
         		{
         			diffZ = 1;
         		}
-        		if (nodeZ < this.posZ)
+        		if (collectorZ < this.posZ)
         		{
         			diffZ = -1;
         		}
@@ -150,9 +150,9 @@ public class ZoblinBomber extends EntityCreature{
         if (attacking == true)
         {
         	par1NBTTagCompound.setBoolean("Attacking", attacking);
-        	par1NBTTagCompound.setInteger("AttackX", nodeX);
-        	par1NBTTagCompound.setInteger("AttackY", nodeY);
-        	par1NBTTagCompound.setInteger("AttackZ", nodeZ);
+        	par1NBTTagCompound.setInteger("AttackX", collectorX);
+        	par1NBTTagCompound.setInteger("AttackY", collectorY);
+        	par1NBTTagCompound.setInteger("AttackZ", collectorZ);
         }
     }
 
@@ -165,9 +165,9 @@ public class ZoblinBomber extends EntityCreature{
         if (par1NBTTagCompound.hasKey("Attacking"))
         {
             attacking = par1NBTTagCompound.getBoolean("Attacking");
-            nodeX = par1NBTTagCompound.getInteger("AttackX");
-            nodeY = par1NBTTagCompound.getInteger("AttackY");
-            nodeZ = par1NBTTagCompound.getInteger("AttackZ");
+            collectorX = par1NBTTagCompound.getInteger("AttackX");
+            collectorY = par1NBTTagCompound.getInteger("AttackY");
+            collectorZ = par1NBTTagCompound.getInteger("AttackZ");
         }
         
     }

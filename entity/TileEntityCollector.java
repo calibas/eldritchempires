@@ -2,6 +2,7 @@ package eldritchempires.entity;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import eldritchempires.Registration;
 import eldritchempires.EldritchWorldData;
@@ -36,6 +37,11 @@ public class TileEntityCollector extends TileEntity implements IInventory
 	{
 		if (i < 100 && data.isWaveActive())
 		{
+			if (data.getCollectorHealth() < this.worldObj.rand.nextInt(100))
+			{
+				this.worldObj.spawnParticle("crit", this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D, 1.0D - 2* this.worldObj.rand.nextDouble(), 1.0D, 1.0D - 2* this.worldObj.rand.nextDouble());
+			}
+			
 			i++;
 			if (i % 5 == 0)
 			{
