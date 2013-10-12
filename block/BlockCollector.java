@@ -15,7 +15,7 @@ import eldritchempires.EldritchMethods;
 import eldritchempires.EldritchWorldData;
 import eldritchempires.Registration;
 import eldritchempires.entity.TileEntityCollector;
-import eldritchempires.entity.Zoblin;
+import eldritchempires.entity.EntityZoblin;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;

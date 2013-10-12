@@ -67,6 +67,7 @@ public class EldritchMethods {
 //    	int z = posZ;
     	Random generator = new Random();
     	int randomInt = generator.nextInt(4);
+    	int[] location = {0, 0, 0};
 //    	broadcastMessageLocal("randomInt: " + randomInt, x, y, z, 100, world);
     	
     	if (randomInt == 0)
@@ -89,14 +90,19 @@ public class EldritchMethods {
     		x = x - 10 + generator.nextInt(21);
     		z = z - 40 - generator.nextInt(21);
     	}
-    	y = getFirstUncoveredBlockHeight(x, z, world);
-    	if (!(world.getBlockId(x, y, z) == Block.snow.blockID || world.getBlockId(x, y, z) == Block.tallGrass.blockID || world.getBlockId(x, y, z) == Block.vine.blockID))
+    	if (world.blockExists(x, y, z))
     	{
-    		y = y + 1;
-    	}
+    		y = getFirstUncoveredBlockHeight(x, z, world);
+    		if (!(world.getBlockId(x, y, z) == Block.snow.blockID || world.getBlockId(x, y, z) == Block.tallGrass.blockID || world.getBlockId(x, y, z) == Block.vine.blockID))
+    		{
+    			y = y + 1;
+    		}
     		
-    	int[] location = {x, y, z};
-    	world.setBlock(location[0], location[1], location [2], Registration.portal.blockID, 0, 2);
+    		location[0] = x;
+    		location[1] = y;
+    		location[2] = z;
+    		world.setBlock(location[0], location[1], location [2], Registration.portal.blockID, 0, 2);
+    	}
 
     	return location;
     }

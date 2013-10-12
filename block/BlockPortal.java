@@ -29,7 +29,7 @@ public class BlockPortal extends Block{
 	public BlockPortal(int par1) {
 		super(par1, Material.rock);
 		this.setHardness(1.5F);
-		this.setResistance(5.0F);
+		this.setResistance(2000.0F);
 		this.setCreativeTab(EldritchEmpires.tabEldritch);
 		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1F, 0.1F, 1F);
 		this.setBlockUnbreakable();

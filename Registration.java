@@ -23,17 +23,25 @@ import cpw.mods.fml.relauncher.Side;
 import eldritchempires.block.BlockPortal;
 import eldritchempires.block.BlockCollector;
 import eldritchempires.block.BlockSpawner;
-import eldritchempires.entity.MagicEssence;
-import eldritchempires.entity.RabidDwarf;
-import eldritchempires.entity.StoneArcher;
+import eldritchempires.client.gui.EldritchGuiHandler;
+import eldritchempires.entity.EntityMagicEssence;
+import eldritchempires.entity.EntityRabidDwarf;
+import eldritchempires.entity.EntityRabidMiner;
+import eldritchempires.entity.EntityRabidWarrior;
+import eldritchempires.entity.EntityStoneArcher;
+import eldritchempires.entity.EntityStoneMage;
+import eldritchempires.entity.EntityStoneWarrior;
 import eldritchempires.entity.TileEntityCollector;
 import eldritchempires.entity.TileEntitySpawner;
-import eldritchempires.entity.Zoblin;
-import eldritchempires.entity.ZoblinBomber;
-import eldritchempires.entity.ZoblinBoss;
-import eldritchempires.entity.ZoblinWarrior;
+import eldritchempires.entity.EntityZoblin;
+import eldritchempires.entity.EntityZoblinBomber;
+import eldritchempires.entity.EntityZoblinBoss;
+import eldritchempires.entity.EntityZoblinWarrior;
+import eldritchempires.entity.projectile.EntityIceBolt;
+import eldritchempires.entity.projectile.EntityNiceArrow;
 import eldritchempires.item.ItemCondensedEssence;
 import eldritchempires.item.ItemGolemPart;
+import eldritchempires.item.ItemIceCrystal;
 import eldritchempires.item.ItemInactiveCollector;
 import eldritchempires.item.ItemPortal;
 import eldritchempires.item.ItemCollector;
@@ -47,6 +55,7 @@ public class Registration {
 	public static Block spawner;
 	public static Item golemPart;
 	public static Item condensedEssence;
+	public static Item iceCrystal;
 	
 	public static void registration()
 	{
@@ -59,21 +68,37 @@ public class Registration {
 		spawner = new BlockSpawner(2865, Material.rock).setUnlocalizedName("spawner");
 		GameRegistry.registerBlock(spawner, ItemSpawner.class, EldritchEmpires.modid + (spawner.getUnlocalizedName().substring(5)));
 		LanguageRegistry.addName(new ItemStack(spawner, 1, 0), "Stone Archer Spawner");
-		LanguageRegistry.addName(new ItemStack(spawner, 1, 1), "Placeholder Spawner");
+		LanguageRegistry.addName(new ItemStack(spawner, 1, 1), "Stone Mage Spawner");
+		LanguageRegistry.addName(new ItemStack(spawner, 1, 2), "Stone Warrior Spawner");
 	
 		portal = new BlockPortal(2866).setUnlocalizedName("portal");
 		GameRegistry.registerBlock(portal, ItemPortal.class, EldritchEmpires.modid + (portal.getUnlocalizedName().substring(5)));
-		LanguageRegistry.addName(new ItemStack(portal, 1, 0), "Zoblin Portal");
+		LanguageRegistry.addName(new ItemStack(portal, 1, 0), "Portal Focus");
 		LanguageRegistry.addName(new ItemStack(portal, 1, 1), "Placeholder Portal");
 		
 		// Add Entities
-		registerEntity(Zoblin.class, "Zoblin");
-		registerEntity(ZoblinBomber.class, "Zoblin Bomber");
-		registerEntity(StoneArcher.class, "Stone Archer");
-		registerEntity(MagicEssence.class, "Magic Essence");
-		registerEntity(ZoblinBoss.class, "Zoblin Boss");
-		registerEntity(ZoblinWarrior.class, "Zoblin Warrior");
-		registerEntity(RabidDwarf.class, "Rabid Dwarf");
+		registerEntity(EntityZoblin.class, "Zoblin");
+		registerEntity(EntityZoblinBomber.class, "Zoblin Bomber");
+		registerEntity(EntityZoblinBoss.class, "Zoblin Boss");
+		registerEntity(EntityZoblinWarrior.class, "Zoblin Warrior");
+		registerEntity(EntityRabidDwarf.class, "Rabid Dwarf");
+		registerEntity(EntityRabidMiner.class, "Rabid Miner");
+		registerEntity(EntityRabidWarrior.class, "Rabid Warrior");
+		
+		registerEntity(EntityStoneArcher.class, "Stone Archer");
+		registerEntity(EntityStoneMage.class, "Stone Mage");
+		registerEntity(EntityStoneWarrior.class, "Stone Warrior");
+		
+		registerEntity(EntityMagicEssence.class, "Magic Essence");
+		
+		// Projectile Entities
+		int entityID = EntityRegistry.findGlobalUniqueEntityId();
+	    EntityRegistry.registerGlobalEntityID(EntityIceBolt.class, "Ice Bolt", entityID);
+	    EntityRegistry.registerModEntity(EntityIceBolt.class, "Ice Bolt", entityID, EldritchEmpires.instance, 64, 1, true);
+	    
+		entityID = EntityRegistry.findGlobalUniqueEntityId();
+	    EntityRegistry.registerGlobalEntityID(EntityNiceArrow.class, "Nice Arrow", entityID);
+	    EntityRegistry.registerModEntity(EntityNiceArrow.class, "Nice Arrow", entityID, EldritchEmpires.instance, 64, 1, true);
 		
 		// Add TileEntities
 		GameRegistry.registerTileEntity(TileEntityCollector.class, "NodeEntity");
@@ -89,6 +114,10 @@ public class Registration {
 		GameRegistry.registerItem(condensedEssence, "Condensed Essence");
 		LanguageRegistry.addName(condensedEssence, "Condensed Essence");
 		
+		iceCrystal = new ItemIceCrystal(7622).setUnlocalizedName("iceCrystal").setCreativeTab(EldritchEmpires.tabEldritch);
+		GameRegistry.registerItem(iceCrystal, "Ice Crystal");
+		LanguageRegistry.addName(iceCrystal, "Ice Crystal");
+		
 //		inactiveCollector = new ItemInactiveCollector(7622).setUnlocalizedName("inactiveCollector").setCreativeTab(EldritchEmpires.tabEldritch);
 //		GameRegistry.registerItem(inactiveCollector, "Inactive Collector");
 //		LanguageRegistry.addName(inactiveCollector, "Inactive Collector");
@@ -97,7 +126,9 @@ public class Registration {
 		GameRegistry.addRecipe(new ItemStack(collector, 1, 0), new Object[] { "ROR", "ORO", "ROR", 'R', Item.redstone, 'O', new ItemStack(Block.obsidian, 1)});
 //		GameRegistry.addRecipe(new ItemStack(portal, 1, 0), new Object[] { "CRC", "RER", "CRC", 'R', Item.redstone, 'E', Item.emerald, 'C', new ItemStack(Block.cobblestone, 1)});
 		GameRegistry.addRecipe(new ItemStack(spawner, 1, 0), new Object[] { " E ", "GBG", "GEG", 'G', golemPart, 'B', Item.bow, 'E', condensedEssence});
+		GameRegistry.addRecipe(new ItemStack(spawner, 1, 1), new Object[] { " E ", "GIG", "GEG", 'G', golemPart, 'I', iceCrystal, 'E', condensedEssence});
 		GameRegistry.addRecipe(new ItemStack(golemPart, 1), new Object[] { "CCC", "III", "CCC", 'C', new ItemStack(Block.cobblestone, 1), 'I', Item.ingotIron});
+		GameRegistry.addRecipe(new ItemStack(iceCrystal, 1), new Object[] { "SSS", "SES", "SSS", 'S', Item.snowball, 'E', condensedEssence});
 		GameRegistry.addRecipe(new ItemStack(Item.diamond, 1, 0), new Object[] { "EEE", "EEE", "EEE", 'E', condensedEssence});
 //		GameRegistry.addRecipe(new ItemStack(collector, 1, 0), new Object[] { " R ", "RIR", " R ", 'R', Item.redstone, 'I', inactiveCollector});
 		

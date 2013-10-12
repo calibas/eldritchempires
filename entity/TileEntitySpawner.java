@@ -57,7 +57,7 @@ public class TileEntitySpawner extends TileEntity
 //					System.out.println(golemUUIDmost);
 //					System.out.println(golemUUIDleast);
 						UUID uuid = new UUID(golemUUIDmost, golemUUIDleast);
-						List list = this.worldObj.getEntitiesWithinAABB(StoneArcher.class, AxisAlignedBB.getAABBPool().getAABB(this.xCoord - searchRadius, this.yCoord - searchRadius, this.zCoord - searchRadius, this.xCoord + searchRadius, this.yCoord + searchRadius, this.zCoord + searchRadius));
+						List list = this.worldObj.getEntitiesWithinAABB(EntityStoneArcher.class, AxisAlignedBB.getAABBPool().getAABB(this.xCoord - searchRadius, this.yCoord - searchRadius, this.zCoord - searchRadius, this.xCoord + searchRadius, this.yCoord + searchRadius, this.zCoord + searchRadius));
 		                Iterator iterator = list.iterator();
 
 		                while (iterator.hasNext())
@@ -82,25 +82,143 @@ public class TileEntitySpawner extends TileEntity
 			
 				if (golemBound == false && !this.worldObj.isRemote)
 				{
-				StoneArcher stoneArcher = new StoneArcher(this.worldObj);
-				stoneArcher.setLocationAndAngles((double)this.xCoord + 0.5D, (double)this.yCoord + 0.1D, (double)this.zCoord + 0.5D, 0.0F, 0.0F);
-				stoneArcher.guarding = true;
-				stoneArcher.collectorX = this.xCoord;
-				stoneArcher.collectorY = this.yCoord;
-				stoneArcher.collectorZ = this.zCoord;
-				golemUUIDmost = stoneArcher.getUniqueID().getMostSignificantBits();
-				golemUUIDleast = stoneArcher.getUniqueID().getLeastSignificantBits();
-				this.worldObj.spawnEntityInWorld(stoneArcher);
-				golemBound = true;
+					EntityStoneArcher stoneArcher = new EntityStoneArcher(this.worldObj);
+					stoneArcher.setLocationAndAngles((double)this.xCoord + 0.5D, (double)this.yCoord + 0.1D, (double)this.zCoord + 0.5D, 0.0F, 0.0F);
+					stoneArcher.guarding = true;
+					stoneArcher.homeX = this.xCoord;
+					stoneArcher.homeY = this.yCoord;
+					stoneArcher.homeZ = this.zCoord;
+					golemUUIDmost = stoneArcher.getUniqueID().getMostSignificantBits();
+					golemUUIDleast = stoneArcher.getUniqueID().getLeastSignificantBits();
+					this.worldObj.spawnEntityInWorld(stoneArcher);
+					golemBound = true;
 				}
 			
 
 			}
 		
-		// Placeholder Spawner
-			if (i == 1)
+		// Stone Mage Spawner
+			if (i == 1 && !this.worldObj.isRemote)
 			{
+				int searchRadius = 10;
+				
+				if (golemBound == true)
+				{
+					
+					boolean found = false;
+//					List list = this.worldObj.getEntitiesWithinAABB(StoneArcher.class, AxisAlignedBB.getAABBPool().getAABB(this.xCoord - searchRadius, this.yCoord - searchRadius, this.zCoord - searchRadius, this.xCoord + searchRadius, this.yCoord + searchRadius, this.zCoord + searchRadius));
+//					Iterator iterator = list.iterator();
+//
+//	                while (iterator.hasNext())
+//	                {
+//	                    EntityLivingBase entitylivingbase = (EntityLivingBase)iterator.next();
+//
+//	                    if (entitylivingbase.getUniqueID().equals(uuid))
+//	                    {
+//
+//	                    }
+//	                }
+//					System.out.println(golemUUIDmost);
+//					System.out.println(golemUUIDleast);
+						UUID uuid = new UUID(golemUUIDmost, golemUUIDleast);
+						List list = this.worldObj.getEntitiesWithinAABB(EntityStoneMage.class, AxisAlignedBB.getAABBPool().getAABB(this.xCoord - searchRadius, this.yCoord - searchRadius, this.zCoord - searchRadius, this.xCoord + searchRadius, this.yCoord + searchRadius, this.zCoord + searchRadius));
+		                Iterator iterator = list.iterator();
 
+		                while (iterator.hasNext())
+		                {
+		                    EntityLivingBase entitylivingbase = (EntityLivingBase)iterator.next();
+
+		                    if (entitylivingbase.getUniqueID().getLeastSignificantBits() == golemUUIDleast && entitylivingbase.getUniqueID().getMostSignificantBits() == golemUUIDmost)
+		                    {
+		                        found = true;
+		                        break;
+		                    }
+		                }
+//					System.out.println("GolemId: " + golemId);
+//					StoneArcher entity = (StoneArcher)this.worldObj.getEntityByID(golemId);
+//					
+					if (found != true)
+					{
+						golemBound = false;
+					}
+					
+				}
+			
+				if (golemBound == false && !this.worldObj.isRemote)
+				{
+					EntityStoneMage stoneMage = new EntityStoneMage(this.worldObj);
+					stoneMage.setLocationAndAngles((double)this.xCoord + 0.5D, (double)this.yCoord + 0.1D, (double)this.zCoord + 0.5D, 0.0F, 0.0F);
+					stoneMage.guarding = true;
+					stoneMage.homeX = this.xCoord;
+					stoneMage.homeY = this.yCoord;
+					stoneMage.homeZ = this.zCoord;
+					golemUUIDmost = stoneMage.getUniqueID().getMostSignificantBits();
+					golemUUIDleast = stoneMage.getUniqueID().getLeastSignificantBits();
+					this.worldObj.spawnEntityInWorld(stoneMage);
+					golemBound = true;
+				}
+			}
+			
+			// Stone Warrior Spawner
+			if (i == 2 && !this.worldObj.isRemote)
+			{
+				int searchRadius = 10;
+				
+				if (golemBound == true)
+				{
+					
+					boolean found = false;
+//					List list = this.worldObj.getEntitiesWithinAABB(StoneArcher.class, AxisAlignedBB.getAABBPool().getAABB(this.xCoord - searchRadius, this.yCoord - searchRadius, this.zCoord - searchRadius, this.xCoord + searchRadius, this.yCoord + searchRadius, this.zCoord + searchRadius));
+//					Iterator iterator = list.iterator();
+//
+//	                while (iterator.hasNext())
+//	                {
+//	                    EntityLivingBase entitylivingbase = (EntityLivingBase)iterator.next();
+//
+//	                    if (entitylivingbase.getUniqueID().equals(uuid))
+//	                    {
+//
+//	                    }
+//	                }
+//					System.out.println(golemUUIDmost);
+//					System.out.println(golemUUIDleast);
+						UUID uuid = new UUID(golemUUIDmost, golemUUIDleast);
+						List list = this.worldObj.getEntitiesWithinAABB(EntityStoneWarrior.class, AxisAlignedBB.getAABBPool().getAABB(this.xCoord - searchRadius, this.yCoord - searchRadius, this.zCoord - searchRadius, this.xCoord + searchRadius, this.yCoord + searchRadius, this.zCoord + searchRadius));
+		                Iterator iterator = list.iterator();
+
+		                while (iterator.hasNext())
+		                {
+		                    EntityLivingBase entitylivingbase = (EntityLivingBase)iterator.next();
+
+		                    if (entitylivingbase.getUniqueID().getLeastSignificantBits() == golemUUIDleast && entitylivingbase.getUniqueID().getMostSignificantBits() == golemUUIDmost)
+		                    {
+		                        found = true;
+		                        break;
+		                    }
+		                }
+//					System.out.println("GolemId: " + golemId);
+//					StoneArcher entity = (StoneArcher)this.worldObj.getEntityByID(golemId);
+//					
+					if (found != true)
+					{
+						golemBound = false;
+					}
+					
+				}
+			
+				if (golemBound == false && !this.worldObj.isRemote)
+				{
+					EntityStoneWarrior stoneMage = new EntityStoneWarrior(this.worldObj);
+					stoneMage.setLocationAndAngles((double)this.xCoord + 0.5D, (double)this.yCoord + 0.1D, (double)this.zCoord + 0.5D, 0.0F, 0.0F);
+					stoneMage.guarding = true;
+					stoneMage.homeX = this.xCoord;
+					stoneMage.homeY = this.yCoord;
+					stoneMage.homeZ = this.zCoord;
+					golemUUIDmost = stoneMage.getUniqueID().getMostSignificantBits();
+					golemUUIDleast = stoneMage.getUniqueID().getLeastSignificantBits();
+					this.worldObj.spawnEntityInWorld(stoneMage);
+					golemBound = true;
+				}
 			}
 			count = 0;
 		}

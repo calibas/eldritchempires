@@ -78,7 +78,7 @@ public class TileEntityCollector extends TileEntity implements IInventory
 //			}
 //			
 			
-			List<?> var4 = this.worldObj.getEntitiesWithinAABB(MagicEssence.class, AxisAlignedBB.getAABBPool().getAABB(this.xCoord - searchRadius, this.yCoord - searchRadius, this.zCoord - searchRadius, this.xCoord + searchRadius, this.yCoord + searchRadius, this.zCoord + searchRadius));
+			List<?> var4 = this.worldObj.getEntitiesWithinAABB(EntityMagicEssence.class, AxisAlignedBB.getAABBPool().getAABB(this.xCoord - searchRadius, this.yCoord - searchRadius, this.zCoord - searchRadius, this.xCoord + searchRadius, this.yCoord + searchRadius, this.zCoord + searchRadius));
 
 			if (var4 != null && !var4.isEmpty()) {
 				Iterator<?> var5 = var4.iterator();

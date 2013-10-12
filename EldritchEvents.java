@@ -3,11 +3,14 @@ package eldritchempires;
 import java.util.Iterator;
 import java.util.List;
 
-import eldritchempires.entity.MagicEssence;
-import eldritchempires.entity.Zoblin;
-import eldritchempires.entity.ZoblinBomber;
-import eldritchempires.entity.ZoblinBoss;
-import eldritchempires.entity.ZoblinWarrior;
+import eldritchempires.entity.EntityMagicEssence;
+import eldritchempires.entity.EntityRabidDwarf;
+import eldritchempires.entity.EntityRabidMiner;
+import eldritchempires.entity.EntityRabidWarrior;
+import eldritchempires.entity.EntityZoblin;
+import eldritchempires.entity.EntityZoblinBomber;
+import eldritchempires.entity.EntityZoblinBoss;
+import eldritchempires.entity.EntityZoblinWarrior;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -110,13 +113,23 @@ public class EldritchEvents {
 					lastSpawn = event.world.provider.getWorldTime();
 				}
 				
-				if (data.isWaveActive() && data.checkCollector() && (event.world.provider.getWorldTime() - lastSpawn) >= 600 && event.world.blockExists(collectorX, collectorY, collectorZ) && event.world.blockExists(portalX, portalY, portalZ))
+//				System.out.println(data.isWaveActive() + data.checkCollector());
+				
+				if (data.isWaveActive() && data.checkCollector() && (event.world.provider.getWorldTime() - lastSpawn) >= 600 && event.world.blockExists(collectorX, collectorY, collectorZ))
 				{
 					if (!data.checkPortal())
 					{
+						System.out.println("Trying to create portal" );
 						int[] location = EldritchMethods.createPortal("zoblin", collectorX, collectorY, collectorZ, event.world);
-						data.setPortal(location[0], location[1], location[2]);
-						event.world.setBlockMetadataWithNotify(collectorX, collectorY, collectorZ, 1, 2);
+						if (location[0] == 0 && location[1] == 0 && location[2] == 0)
+						{
+							data.setActiveWave(false);
+						}
+						else 
+						{
+							data.setPortal(location[0], location[1], location[2]);
+							event.world.setBlockMetadataWithNotify(collectorX, collectorY, collectorZ, 1, 2);
+						}
 					}
 					
 					if (wave > 12)
@@ -323,8 +336,6 @@ public class EldritchEvents {
 		switch (wave){			
 			case 0: 
 				announce = "You hear strange noises in the distance";
-				if (data.getProgress() < 1)
-					data.increaseProgress();
 				world.perWorldStorage.setData(EldritchWorldData.name, data);
 				break;
 			case 1:
@@ -391,6 +402,81 @@ public class EldritchEvents {
 				break;
 			}
 		}
+		
+		if (round == 4)
+		{
+		switch (wave){			
+			case 0: 
+				announce = "You hear strange noises in the distance";
+				if (data.getProgress() < 1)
+					data.increaseProgress();
+				world.perWorldStorage.setData(EldritchWorldData.name, data);
+				break;
+			case 1:
+				spawnWave("rabidDwarf", 3, x, y, z, world);
+				break;
+			case 2:
+				spawnWave("rabidDwarf", 2, x, y, z, world);
+				spawnWave("rabidMiner", 1, x, y, z, world);
+				spawnWave("magicEssence", 1, x, y, z, world);
+				break;
+			case 3:
+				spawnWave("rabidMiner", 2, x, y, z, world);
+				spawnWave("rabidWarrior", 1, x, y, z, world);
+				break;
+			case 4:
+				spawnWave("rabidDwarf", 1, x, y, z, world);
+				spawnWave("rabidMiner", 2, x, y, z, world);
+				spawnWave("rabidWarrior", 1, x, y, z, world);
+				spawnWave("magicEssence", 1, x, y, z, world);
+				break;
+			case 5:
+				spawnWave("rabidDwarf", 2, x, y, z, world);
+				spawnWave("rabidMiner", 2, x, y, z, world);
+				break;
+			case 6:
+				spawnWave("rabidMiner", 2, x, y, z, world);
+				spawnWave("rabidWarrior", 2, x, y, z, world);
+				spawnWave("magicEssence", 1, x, y, z, world);
+				break;
+			case 7:
+				spawnWave("rabidDwarf", 2, x, y, z, world);
+				spawnWave("rabidMiner", 2, x, y, z, world);
+				spawnWave("rabidWarrior", 1, x, y, z, world);
+				break;
+			case 8:
+				spawnWave("rabidMiner", 2, x, y, z, world);
+				spawnWave("rabidWarrior", 2, x, y, z, world);
+				spawnWave("magicEssence", 1, x, y, z, world);
+				break;
+			case 9:
+				spawnWave("rabidDwarf", 2, x, y, z, world);
+				spawnWave("rabidMiner", 1, x, y, z, world);
+				spawnWave("rabidWarrior", 2, x, y, z, world);
+				break;
+			case 10:
+				spawnWave("rabidMiner", 2, x, y, z, world);
+				spawnWave("rabidWarrior", 3, x, y, z, world);
+				spawnWave("magicEssence", 1, x, y, z, world);
+				break;
+			case 11:
+				announce = "The rabid dwarf attack seems to have ended";
+				break;
+			case 12:
+				announce = "The portal closes";
+				world.setBlockToAir(x, y, z);
+				world.removeBlockTileEntity(x, y, z);
+				world.setBlockMetadataWithNotify(data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 0, 2);
+				data.unSetPortal();
+				data.setActiveWave(false);
+				if (data.getProgress() < 4)
+				{
+					data.increaseProgress();
+				}
+				world.perWorldStorage.setData(EldritchWorldData.name, data);
+				break;
+			}
+		}
 	}
 	
 	public void spawnWave(String mobName, int count, int x, int y, int z, World world)
@@ -401,7 +487,7 @@ public class EldritchEvents {
 		{
 			if (mobName == "zoblin")
 			{
-				Zoblin entity = new Zoblin(world);
+				EntityZoblin entity = new EntityZoblin(world);
 				entity.setLocationAndAngles((double)x, (double)y + 1, (double)z, 0.0F, 0.0F);
 //				zoblin.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(2.099D);
 				entity.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(2.099D);
@@ -414,7 +500,7 @@ public class EldritchEvents {
 			}
 			if (mobName == "zoblinBomber")
 			{
-				ZoblinBomber entity = new ZoblinBomber(world);
+				EntityZoblinBomber entity = new EntityZoblinBomber(world);
 				entity.setLocationAndAngles((double)x, (double)y + 1, (double)z, 0.0F, 0.0F);
 //				zoblinBomber.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(1.599D);
 				entity.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(1.599D);
@@ -433,7 +519,7 @@ public class EldritchEvents {
 			}
 			if (mobName == "magicEssence")
 			{
-				MagicEssence entity = new MagicEssence(world);
+				EntityMagicEssence entity = new EntityMagicEssence(world);
 				entity.setLocationAndAngles((double)x, (double)y + 1, (double)z, 0.0F, 0.0F);
 				entity.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(2.599D);
 				entity.attacking = true;
@@ -445,7 +531,7 @@ public class EldritchEvents {
 			}
 			if (mobName == "zoblinBoss")
 			{
-				ZoblinBoss entity = new ZoblinBoss(world);
+				EntityZoblinBoss entity = new EntityZoblinBoss(world);
 				entity.setLocationAndAngles((double)x, (double)y + 1, (double)z, 0.0F, 0.0F);
 				entity.attacking = true;
 				entity.collectorX = data.getCollectorX();
@@ -456,7 +542,7 @@ public class EldritchEvents {
 			}
 			if (mobName == "zoblinWarrior")
 			{
-				ZoblinWarrior entity = new ZoblinWarrior(world);
+				EntityZoblinWarrior entity = new EntityZoblinWarrior(world);
 				entity.setLocationAndAngles((double)x, (double)y + 1, (double)z, 0.0F, 0.0F);
 				entity.attacking = true;
 				entity.collectorX = data.getCollectorX();
@@ -465,6 +551,41 @@ public class EldritchEvents {
 				entity.setCurrentItemOrArmor(0, new ItemStack(Item.swordIron));
 				world.spawnEntityInWorld(entity);
 				name = "Zoblin Warrior";
+			}
+			if (mobName == "rabidMiner")
+			{
+				EntityRabidMiner entity = new EntityRabidMiner(world);
+				entity.setLocationAndAngles((double)x, (double)y + 1, (double)z, 0.0F, 0.0F);
+				entity.attacking = true;
+				entity.collectorX = data.getCollectorX();
+				entity.collectorY = data.getCollectorY();
+				entity.collectorZ = data.getCollectorZ();
+				entity.setCurrentItemOrArmor(0, new ItemStack(Item.pickaxeIron));
+				world.spawnEntityInWorld(entity);
+				name = "Rabid Miner";
+			}
+			if (mobName == "rabidDwarf")
+			{
+				EntityRabidDwarf entity = new EntityRabidDwarf(world);
+				entity.setLocationAndAngles((double)x, (double)y + 1, (double)z, 0.0F, 0.0F);
+				entity.attacking = true;
+				entity.collectorX = data.getCollectorX();
+				entity.collectorY = data.getCollectorY();
+				entity.collectorZ = data.getCollectorZ();
+				world.spawnEntityInWorld(entity);
+				name = "Rabid Dwarf";
+			}
+			if (mobName == "rabidWarrior")
+			{
+				EntityRabidWarrior entity = new EntityRabidWarrior(world);
+				entity.setLocationAndAngles((double)x, (double)y + 1, (double)z, 0.0F, 0.0F);
+				entity.attacking = true;
+				entity.collectorX = data.getCollectorX();
+				entity.collectorY = data.getCollectorY();
+				entity.collectorZ = data.getCollectorZ();
+				entity.setCurrentItemOrArmor(0, new ItemStack(Item.swordIron));
+				world.spawnEntityInWorld(entity);
+				name = "Rabid Dwarf";
 			}
 
 		}

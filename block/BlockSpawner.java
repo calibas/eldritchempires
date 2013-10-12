@@ -1,5 +1,6 @@
 package eldritchempires.block;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -7,7 +8,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import eldritchempires.EldritchEmpires;
-import eldritchempires.entity.StoneArcher;
+import eldritchempires.Registration;
+import eldritchempires.entity.EntityStoneArcher;
 import eldritchempires.entity.TileEntitySpawner;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -75,13 +77,28 @@ public class BlockSpawner extends BlockContainer{
        	return new TileEntitySpawner();
     }
 	
+	@Override
+    public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
+    {
+             ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+             int count = quantityDropped(metadata, fortune, world.rand);
+             for(int i = 0; i < count; i++)
+             {
+            	 if(world.getBlockMetadata(x, y, z) == 0);
+                     ret.add(new ItemStack(Registration.spawner, 1, 0));
+                 if(world.getBlockMetadata(x, y, z) == 1);
+                     ret.add(new ItemStack(Registration.spawner, 1, 1));    
+             }
+             return ret;
+    }
+	
     @SideOnly(Side.CLIENT)
     private Icon[] icons;
   
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-         icons = new Icon[2];
+         icons = new Icon[3];
         
          for(int i = 0; i < icons.length; i++)
          {
@@ -98,7 +115,7 @@ public class BlockSpawner extends BlockContainer{
     @SideOnly(Side.CLIENT)
     public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
-    	for (int var4 = 0; var4 < 1; ++var4)
+    	for (int var4 = 0; var4 < 3; ++var4)
     	{
     		par3List.add(new ItemStack(par1, 1, var4));
     	}
