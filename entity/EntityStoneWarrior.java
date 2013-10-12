@@ -105,7 +105,7 @@ public class EntityStoneWarrior extends EntityGuard
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(0.25D);
         this.getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setAttribute(1.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setAttribute(2.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setAttribute(1.5D);
         this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setAttribute(25.0D);
         this.getEntityAttribute(SharedMonsterAttributes.followRange).setAttribute(5.0D);
     }

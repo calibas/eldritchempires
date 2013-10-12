@@ -127,7 +127,7 @@ public class Registration {
 //		GameRegistry.addRecipe(new ItemStack(portal, 1, 0), new Object[] { "CRC", "RER", "CRC", 'R', Item.redstone, 'E', Item.emerald, 'C', new ItemStack(Block.cobblestone, 1)});
 		GameRegistry.addRecipe(new ItemStack(spawner, 1, 0), new Object[] { " E ", "GBG", "GEG", 'G', golemPart, 'B', Item.bow, 'E', condensedEssence});
 		GameRegistry.addRecipe(new ItemStack(spawner, 1, 1), new Object[] { " E ", "GIG", "GEG", 'G', golemPart, 'I', iceCrystal, 'E', condensedEssence});
-		GameRegistry.addRecipe(new ItemStack(spawner, 1, 1), new Object[] { " E ", "GSG", "GEG", 'G', golemPart, 'S', Item.swordIron, 'E', condensedEssence});
+		GameRegistry.addRecipe(new ItemStack(spawner, 1, 2), new Object[] { " E ", "GSG", "GEG", 'G', golemPart, 'S', Item.swordIron, 'E', condensedEssence});
 		GameRegistry.addRecipe(new ItemStack(golemPart, 1), new Object[] { "CCC", "III", "CCC", 'C', new ItemStack(Block.cobblestone, 1), 'I', Item.ingotIron});
 		GameRegistry.addRecipe(new ItemStack(iceCrystal, 1), new Object[] { "SSS", "SES", "SSS", 'S', Item.snowball, 'E', condensedEssence});
 		GameRegistry.addRecipe(new ItemStack(Item.diamond, 1, 0), new Object[] { "EEE", "EEE", "EEE", 'E', condensedEssence});
