@@ -489,7 +489,6 @@ public class EldritchEvents {
 			{
 				EntityZoblin entity = new EntityZoblin(world);
 				entity.setLocationAndAngles((double)x, (double)y + 1, (double)z, 0.0F, 0.0F);
-//				zoblin.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(2.099D);
 				entity.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(2.099D);
 				entity.attacking = true;
 				entity.collectorX = data.getCollectorX();
@@ -502,7 +501,6 @@ public class EldritchEvents {
 			{
 				EntityZoblinBomber entity = new EntityZoblinBomber(world);
 				entity.setLocationAndAngles((double)x, (double)y + 1, (double)z, 0.0F, 0.0F);
-//				zoblinBomber.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(1.599D);
 				entity.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(1.599D);
 				entity.attacking = true;
 				entity.collectorX = data.getCollectorX();
@@ -513,7 +511,6 @@ public class EldritchEvents {
         		double zd = data.getCollectorZ() - z;
         		double distance = Math.sqrt(xd*xd + yd*yd + zd*zd);
 				entity.timer = (int)(distance/2);
-//				System.out.println("ZoblinBomber distance timer: " + distance + " " + zoblinBomber.timer );
 				world.spawnEntityInWorld(entity);
 				name = "Zoblin Bomber";
 			}
@@ -548,7 +545,6 @@ public class EldritchEvents {
 				entity.collectorX = data.getCollectorX();
 				entity.collectorY = data.getCollectorY();
 				entity.collectorZ = data.getCollectorZ();
-				entity.setCurrentItemOrArmor(0, new ItemStack(Item.swordIron));
 				world.spawnEntityInWorld(entity);
 				name = "Zoblin Warrior";
 			}
@@ -560,7 +556,6 @@ public class EldritchEvents {
 				entity.collectorX = data.getCollectorX();
 				entity.collectorY = data.getCollectorY();
 				entity.collectorZ = data.getCollectorZ();
-				entity.setCurrentItemOrArmor(0, new ItemStack(Item.pickaxeIron));
 				world.spawnEntityInWorld(entity);
 				name = "Rabid Miner";
 			}
@@ -583,7 +578,6 @@ public class EldritchEvents {
 				entity.collectorX = data.getCollectorX();
 				entity.collectorY = data.getCollectorY();
 				entity.collectorZ = data.getCollectorZ();
-				entity.setCurrentItemOrArmor(0, new ItemStack(Item.swordIron));
 				world.spawnEntityInWorld(entity);
 				name = "Rabid Dwarf";
 			}

@@ -27,6 +27,7 @@ public class EntityRabidMiner extends EntityAttacker{
 	public EntityRabidMiner(World par1World) {
 		super(par1World);
 		
+		this.setCurrentItemOrArmor(0, new ItemStack(Item.pickaxeIron));
 		this.collectorDamage = 2;
 	}
 	

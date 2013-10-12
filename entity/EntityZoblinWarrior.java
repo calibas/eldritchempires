@@ -8,6 +8,8 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBreakDoor;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.world.World;
@@ -16,10 +18,8 @@ public class EntityZoblinWarrior extends EntityAttacker{
 
 	public EntityZoblinWarrior(World par1World) {
 		super(par1World);
-		this.getNavigator().setBreakDoors(true);
-		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(1, new EntityAIBreakDoor(this));
-		
+
+		this.setCurrentItemOrArmor(0, new ItemStack(Item.swordIron));		
 		this.collectorDamage = 2;
 
 	}
