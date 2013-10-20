@@ -4,6 +4,7 @@ import eldritchempires.entity.EntityStoneArcher;
 import eldritchempires.entity.EntityStoneMage;
 import eldritchempires.entity.EntityGuard;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 
@@ -36,6 +37,10 @@ public class EntityAIGolemStill extends EntityAIBase
 	@Override
 	public boolean continueExecuting()
 	{
+//   		EntityGuard entityGuard = (EntityGuard)entity;
+//   		System.out.println(this.entity.getAttackTarget() == (EntityLivingBase)null);
+//   		System.out.println(entity.posX != entityGuard.homeX || entity.posZ != entityGuard.homeZ);
+//    	return this.entity.getAttackTarget() == (EntityLivingBase)null && (entity.posX != entityGuard.homeX || entity.posZ != entityGuard.homeZ);
 		return !this.entity.getNavigator().noPath() && this.entity.isEntityAlive();
 	}
 
@@ -45,7 +50,7 @@ public class EntityAIGolemStill extends EntityAIBase
     	if (entity instanceof EntityGuard)
     	{
     		EntityGuard entityGuard = (EntityGuard)entity;
-    		entity.getNavigator().tryMoveToXYZ(entityGuard.homeX, entityGuard.homeY, entityGuard.homeZ, 1.5D);
+    		entity.getNavigator().tryMoveToXYZ(entityGuard.homeX, entityGuard.homeY, entityGuard.homeZ, 1.0D);
     		if ((int)entityGuard.posX != stillX || (int)entityGuard.posZ != stillZ)
     		{
     			stillX = (int) entityGuard.posX;

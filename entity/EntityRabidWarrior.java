@@ -15,14 +15,6 @@ import net.minecraft.world.World;
 
 public class EntityRabidWarrior extends EntityAttacker{
 
-	int[] closestNode = new int[3];
-	int shortestDistance = 200;
-	private PathEntity path;
-	public boolean attacking = false;
-	public int collectorX;
-	public int collectorY;
-	public int collectorZ;
-	
 	public EntityRabidWarrior(World par1World) {
 		super(par1World);
 		

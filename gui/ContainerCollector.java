@@ -1,4 +1,4 @@
-package eldritchempires;
+package eldritchempires.gui;
 
 import eldritchempires.entity.TileEntityCollector;
 import net.minecraft.entity.player.EntityPlayer;

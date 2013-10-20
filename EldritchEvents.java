@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import eldritchempires.entity.EntityMagicEssence;
+import eldritchempires.entity.EntityRabidDemo;
 import eldritchempires.entity.EntityRabidDwarf;
 import eldritchempires.entity.EntityRabidMiner;
 import eldritchempires.entity.EntityRabidWarrior;
@@ -455,8 +456,83 @@ public class EldritchEvents {
 				spawnWave("rabidWarrior", 2, x, y, z, world);
 				break;
 			case 10:
+				spawnWave("rabidDemo", 1, x, y, z, world);
+				spawnWave("rabidWarrior", 2, x, y, z, world);
+				spawnWave("magicEssence", 1, x, y, z, world);
+				break;
+			case 11:
+				announce = "The rabid dwarf attack seems to have ended";
+				break;
+			case 12:
+				announce = "The portal closes";
+				world.setBlockToAir(x, y, z);
+				world.removeBlockTileEntity(x, y, z);
+				world.setBlockMetadataWithNotify(data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 0, 2);
+				data.unSetPortal();
+				data.setActiveWave(false);
+				if (data.getProgress() < 4)
+				{
+					data.increaseProgress();
+				}
+				world.perWorldStorage.setData(EldritchWorldData.name, data);
+				break;
+			}
+		}
+		
+		if (round == 5)
+		{
+		switch (wave){			
+			case 0: 
+				announce = "You hear strange noises in the distance";
+				if (data.getProgress() < 1)
+					data.increaseProgress();
+				world.perWorldStorage.setData(EldritchWorldData.name, data);
+				break;
+			case 1:
+				spawnWave("rabidWarrior", 3, x, y, z, world);
+				break;
+			case 2:
+				spawnWave("rabidDwarf", 3, x, y, z, world);
+				spawnWave("rabidMiner", 2, x, y, z, world);
+				spawnWave("magicEssence", 1, x, y, z, world);
+				break;
+			case 3:
 				spawnWave("rabidMiner", 2, x, y, z, world);
 				spawnWave("rabidWarrior", 3, x, y, z, world);
+				break;
+			case 4:
+				spawnWave("rabidDwarf", 2, x, y, z, world);
+				spawnWave("rabidMiner", 2, x, y, z, world);
+				spawnWave("rabidWarrior", 2, x, y, z, world);
+				spawnWave("magicEssence", 1, x, y, z, world);
+				break;
+			case 5:
+				spawnWave("rabidDwarf", 4, x, y, z, world);
+				spawnWave("rabidMiner", 3, x, y, z, world);
+				break;
+			case 6:
+				spawnWave("rabidDwarf", 3, x, y, z, world);
+				spawnWave("rabidWarrior", 3, x, y, z, world);
+				spawnWave("magicEssence", 1, x, y, z, world);
+				break;
+			case 7:
+				spawnWave("rabidDwarf", 3, x, y, z, world);
+				spawnWave("rabidMiner", 2, x, y, z, world);
+				spawnWave("rabidWarrior", 2, x, y, z, world);
+				break;
+			case 8:
+				spawnWave("rabidMiner", 4, x, y, z, world);
+				spawnWave("rabidWarrior", 3, x, y, z, world);
+				spawnWave("magicEssence", 1, x, y, z, world);
+				break;
+			case 9:
+				spawnWave("rabidDwarf", 2, x, y, z, world);
+				spawnWave("rabidMiner", 2, x, y, z, world);
+				spawnWave("rabidWarrior", 4, x, y, z, world);
+				break;
+			case 10:
+				spawnWave("rabidDemo", 1, x, y, z, world);
+				spawnWave("rabidWarrior", 4, x, y, z, world);
 				spawnWave("magicEssence", 1, x, y, z, world);
 				break;
 			case 11:
@@ -490,7 +566,6 @@ public class EldritchEvents {
 				EntityZoblin entity = new EntityZoblin(world);
 				entity.setLocationAndAngles((double)x, (double)y + 1, (double)z, 0.0F, 0.0F);
 				entity.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(2.099D);
-				entity.attacking = true;
 				entity.collectorX = data.getCollectorX();
 				entity.collectorY = data.getCollectorY();
 				entity.collectorZ = data.getCollectorZ();
@@ -530,7 +605,6 @@ public class EldritchEvents {
 			{
 				EntityZoblinBoss entity = new EntityZoblinBoss(world);
 				entity.setLocationAndAngles((double)x, (double)y + 1, (double)z, 0.0F, 0.0F);
-				entity.attacking = true;
 				entity.collectorX = data.getCollectorX();
 				entity.collectorY = data.getCollectorY();
 				entity.collectorZ = data.getCollectorZ();
@@ -541,7 +615,6 @@ public class EldritchEvents {
 			{
 				EntityZoblinWarrior entity = new EntityZoblinWarrior(world);
 				entity.setLocationAndAngles((double)x, (double)y + 1, (double)z, 0.0F, 0.0F);
-				entity.attacking = true;
 				entity.collectorX = data.getCollectorX();
 				entity.collectorY = data.getCollectorY();
 				entity.collectorZ = data.getCollectorZ();
@@ -552,7 +625,6 @@ public class EldritchEvents {
 			{
 				EntityRabidMiner entity = new EntityRabidMiner(world);
 				entity.setLocationAndAngles((double)x, (double)y + 1, (double)z, 0.0F, 0.0F);
-				entity.attacking = true;
 				entity.collectorX = data.getCollectorX();
 				entity.collectorY = data.getCollectorY();
 				entity.collectorZ = data.getCollectorZ();
@@ -563,7 +635,6 @@ public class EldritchEvents {
 			{
 				EntityRabidDwarf entity = new EntityRabidDwarf(world);
 				entity.setLocationAndAngles((double)x, (double)y + 1, (double)z, 0.0F, 0.0F);
-				entity.attacking = true;
 				entity.collectorX = data.getCollectorX();
 				entity.collectorY = data.getCollectorY();
 				entity.collectorZ = data.getCollectorZ();
@@ -574,12 +645,21 @@ public class EldritchEvents {
 			{
 				EntityRabidWarrior entity = new EntityRabidWarrior(world);
 				entity.setLocationAndAngles((double)x, (double)y + 1, (double)z, 0.0F, 0.0F);
-				entity.attacking = true;
 				entity.collectorX = data.getCollectorX();
 				entity.collectorY = data.getCollectorY();
 				entity.collectorZ = data.getCollectorZ();
 				world.spawnEntityInWorld(entity);
-				name = "Rabid Dwarf";
+				name = "Rabid Warrior";
+			}
+			if (mobName == "rabidDemo")
+			{
+				EntityRabidDemo entity = new EntityRabidDemo(world);
+				entity.setLocationAndAngles((double)x, (double)y + 1, (double)z, 0.0F, 0.0F);
+				entity.collectorX = data.getCollectorX();
+				entity.collectorY = data.getCollectorY();
+				entity.collectorZ = data.getCollectorZ();
+				world.spawnEntityInWorld(entity);
+				name = "Rabid Demolitionist";
 			}
 
 		}

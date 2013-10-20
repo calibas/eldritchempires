@@ -14,7 +14,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 import eldritchempires.proxy.CommonProxy;
 
 @Mod(modid="EldritchEmpires", name="Eldritch Empires", version="0.1.0")
-@NetworkMod(clientSideRequired=true, serverSideRequired=false)
+@NetworkMod(clientSideRequired=true, serverSideRequired=false,  channels={"Eldritch"}, packetHandler = EldritchPacketHandler.class)
 public class EldritchEmpires {
 	
 	public static final String modid = "EldritchEmpires";
@@ -30,7 +30,7 @@ public class EldritchEmpires {
     
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-            // Stub Method
+
     }
    
     @EventHandler
@@ -41,6 +41,6 @@ public class EldritchEmpires {
    
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-            // Stub Method
+
     }
 }

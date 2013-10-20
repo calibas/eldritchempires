@@ -1,11 +1,10 @@
 // Borrowed largely from MrrGingerNinja's [1.6.2] Advanced Minecraft Forge Modding Tutorial #1 - Interfaces Part 3
 // http://www.minecraftforum.net/topic/1931778-162-advanced-minecraft-forge-modding-tutorial-1-interfaces-part-3/
 
-package eldritchempires.client.gui;
+package eldritchempires.gui;
 
 import org.lwjgl.opengl.GL11;
 
-import eldritchempires.ContainerCollector;
 import eldritchempires.EldritchMethods;
 import eldritchempires.EldritchWorldData;
 import eldritchempires.entity.TileEntityCollector;
@@ -169,6 +168,17 @@ public class GuiCollector extends GuiContainer{
 			this.mc.thePlayer.closeScreen();
 			break;
 		case 4:
+    		if (!data.isWaveActive())
+    		{
+//    			this.mc.theWorld.setBlockMetadataWithNotify(data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 1, 2);
+    			data.setActiveWave(true);
+    			data.setRound(5);
+    			data.resetCollectorHealth();
+    			EldritchMethods.broadcastMessageLocal("A rabid dwarf portal begins to open", data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 100, this.mc.theWorld);
+    			this.mc.theWorld.perWorldStorage.setData(EldritchWorldData.name, data);
+    			data = (EldritchWorldData) this.mc.theWorld.perWorldStorage.loadData(EldritchWorldData.class, EldritchWorldData.name);
+  //  			EldritchMethods.broadcastMessageLocal("Collector Active", par2, par3, par4, 100, par1World);
+    		}
 			this.mc.thePlayer.closeScreen();
 			break;
 		case 5:

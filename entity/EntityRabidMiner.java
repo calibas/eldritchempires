@@ -1,7 +1,9 @@
 package eldritchempires.entity;
 
+import eldritchempires.EldritchWorldData;
 import eldritchempires.Registration;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBreakDoor;
 import net.minecraft.entity.ai.EntityAISwimming;
@@ -23,6 +25,8 @@ public class EntityRabidMiner extends EntityAttacker{
 	private int removingX;
 	private int removingY;
 	private int removingZ;
+	EldritchWorldData data = new EldritchWorldData();
+//	private PathEntity path;
 	
 	public EntityRabidMiner(World par1World) {
 		super(par1World);
@@ -43,7 +47,7 @@ public class EntityRabidMiner extends EntityAttacker{
     {
       super.onLivingUpdate();
       
-	  if (this.rand.nextInt(10) == 0 && !this.worldObj.isRemote && attacking && this.getHeldItem().itemID == Item.pickaxeIron.itemID) {
+	  if (this.rand.nextInt(10) == 0 && !this.worldObj.isRemote && data.isWaveActive() && this.getHeldItem().itemID == Item.pickaxeIron.itemID) {
 		int targetX = 1;
 		int targetY = 1;
 		
@@ -70,6 +74,8 @@ public class EntityRabidMiner extends EntityAttacker{
     			if (this.worldObj.isAirBlock(removingX, removingY + 1, removingZ)) {
     				removingBlock = false;
     				this.dataWatcher.updateObject(16, Byte.valueOf((byte)0));
+//    				path = this.worldObj.getEntityPathToXYZ(this, collectorX, collectorY, collectorZ, 40F, true, true, false, false);
+//    				setPathToEntity(path);
     			}
     		}
 		}
@@ -93,6 +99,7 @@ public class EntityRabidMiner extends EntityAttacker{
     		int directionX = (int)(deltaX * 1.9D);
     		int directionZ = (int)(deltaZ * 1.9D);
     		System.out.println("Standing still " + directionX + " " + directionZ);
+    		System.out.println(removingBlock);
     		removingX = (int)this.posX + directionX;
     		removingY = (int)this.posY;
     		removingZ = (int)this.posZ + directionZ;
@@ -105,8 +112,13 @@ public class EntityRabidMiner extends EntityAttacker{
     		}
 		}
 	   }
-		
     }
+	
+	@Override
+	public void setAttackTarget(EntityLivingBase entity)
+	{
+	}
+	
 	
 	@Override
     protected void applyEntityAttributes()

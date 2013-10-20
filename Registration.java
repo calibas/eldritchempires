@@ -1,19 +1,19 @@
 package eldritchempires;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockStone;
+//import net.minecraft.block.BlockStone;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityEggInfo;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.entity.player.EntityPlayer;
+//import net.minecraft.entity.EnumCreatureType;
+//import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagInt;
-import net.minecraft.world.biome.BiomeGenBase;
+//import net.minecraft.nbt.NBTBase;
+//import net.minecraft.nbt.NBTTagCompound;
+//import net.minecraft.nbt.NBTTagInt;
+//import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -23,8 +23,9 @@ import cpw.mods.fml.relauncher.Side;
 import eldritchempires.block.BlockPortal;
 import eldritchempires.block.BlockCollector;
 import eldritchempires.block.BlockSpawner;
-import eldritchempires.client.gui.EldritchGuiHandler;
+import eldritchempires.entity.EntityBomb;
 import eldritchempires.entity.EntityMagicEssence;
+import eldritchempires.entity.EntityRabidDemo;
 import eldritchempires.entity.EntityRabidDwarf;
 import eldritchempires.entity.EntityRabidMiner;
 import eldritchempires.entity.EntityRabidWarrior;
@@ -39,8 +40,10 @@ import eldritchempires.entity.EntityZoblinBoss;
 import eldritchempires.entity.EntityZoblinWarrior;
 import eldritchempires.entity.projectile.EntityIceBolt;
 import eldritchempires.entity.projectile.EntityNiceArrow;
+import eldritchempires.gui.EldritchGuiHandler;
 import eldritchempires.item.ItemCondensedEssence;
 import eldritchempires.item.ItemGolemPart;
+import eldritchempires.item.ItemGolemWand;
 import eldritchempires.item.ItemIceCrystal;
 import eldritchempires.item.ItemInactiveCollector;
 import eldritchempires.item.ItemPortal;
@@ -56,6 +59,7 @@ public class Registration {
 	public static Item golemPart;
 	public static Item condensedEssence;
 	public static Item iceCrystal;
+	public static Item golemWand;
 	
 	public static void registration()
 	{
@@ -84,12 +88,15 @@ public class Registration {
 		registerEntity(EntityRabidDwarf.class, "Rabid Dwarf");
 		registerEntity(EntityRabidMiner.class, "Rabid Miner");
 		registerEntity(EntityRabidWarrior.class, "Rabid Warrior");
+		registerEntity(EntityRabidDemo.class, "Rabid Demolitionist");
 		
 		registerEntity(EntityStoneArcher.class, "Stone Archer");
 		registerEntity(EntityStoneMage.class, "Stone Mage");
 		registerEntity(EntityStoneWarrior.class, "Stone Warrior");
 		
 		registerEntity(EntityMagicEssence.class, "Magic Essence");
+		
+		registerEntity(EntityBomb.class, "Bomb");
 		
 		// Projectile Entities
 		int entityID = EntityRegistry.findGlobalUniqueEntityId();
@@ -99,7 +106,8 @@ public class Registration {
 		entityID = EntityRegistry.findGlobalUniqueEntityId();
 	    EntityRegistry.registerGlobalEntityID(EntityNiceArrow.class, "Nice Arrow", entityID);
 	    EntityRegistry.registerModEntity(EntityNiceArrow.class, "Nice Arrow", entityID, EldritchEmpires.instance, 64, 1, true);
-		
+
+	    
 		// Add TileEntities
 		GameRegistry.registerTileEntity(TileEntityCollector.class, "NodeEntity");
 		GameRegistry.registerTileEntity(TileEntitySpawner.class, "SpawnerEntity");
@@ -118,9 +126,9 @@ public class Registration {
 		GameRegistry.registerItem(iceCrystal, "Ice Crystal");
 		LanguageRegistry.addName(iceCrystal, "Ice Crystal");
 		
-//		inactiveCollector = new ItemInactiveCollector(7622).setUnlocalizedName("inactiveCollector").setCreativeTab(EldritchEmpires.tabEldritch);
-//		GameRegistry.registerItem(inactiveCollector, "Inactive Collector");
-//		LanguageRegistry.addName(inactiveCollector, "Inactive Collector");
+		golemWand = new ItemGolemWand(7623).setUnlocalizedName("golemWand").setCreativeTab(EldritchEmpires.tabEldritch);
+		GameRegistry.registerItem(golemWand, "Golem Wand");
+		LanguageRegistry.addName(golemWand, "Golem Wand");
 		
 		// Add Recipes
 		GameRegistry.addRecipe(new ItemStack(collector, 1, 0), new Object[] { "ROR", "ORO", "ROR", 'R', Item.redstone, 'O', new ItemStack(Block.obsidian, 1)});

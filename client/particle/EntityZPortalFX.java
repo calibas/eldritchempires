@@ -1,4 +1,4 @@
-package eldritchempires.entity;
+package eldritchempires.client.particle;
 
 import java.util.Random;
 

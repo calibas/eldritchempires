@@ -13,44 +13,17 @@ import cpw.mods.fml.common.TickType;
 public class EldritchTick implements ITickHandler{
 
 	public static EldritchWorldData worldData = null;
-//	private final Minecraft mc;
 	
-	public EldritchTick() {
-//		mc = Minecraft.getMinecraft();
-	}
-
+	public EldritchTick() {}
 	
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
 		if(type.equals(EnumSet.of(TickType.WORLDLOAD))){
-//			World world = null;
+
 			final WorldServer world = (WorldServer) tickData[0];
-//			for(int i = 0; i < tickData.length; i++)
-//			{
-//				if(mc.theWorld != null)
-//				{
-//					world = mc.theWorld;
-//					System.out.println("mc.theWorld != null");
-//				}
-//				
-//				if(world.provider instanceof WorldProviderSurface)
-//				{
-//					System.out.println("world instanceof Surface");
-//				}
-//		
-//			}
-	    
-//			if(world == null){
-//				System.out.println("world == null");
-//	            return;
-//	        }
 	         
 	         worldData = EldritchWorldData.forWorld(world);
 	         worldData.markDirty();
-		}
-		
-		if(type.equals(EnumSet.of(TickType.WORLD))){
-			System.out.println("tickStart TickType.WORLD");
 		}
 	}
 

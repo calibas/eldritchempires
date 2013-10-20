@@ -5,21 +5,29 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import eldritchempires.Registration;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
-public class TileEntitySpawner extends TileEntity
+public class TileEntitySpawner extends TileEntity implements IInventory
 {
 	boolean golemBound = false;
 //	int golemId;
 	int count = 0;
 	long golemUUIDleast;
 	long golemUUIDmost;
+	private ItemStack[] inventory;
+	public int attackLevel = 0;
+	public int healthLevel = 0;
 	
 	public TileEntitySpawner()
     {
@@ -29,10 +37,16 @@ public class TileEntitySpawner extends TileEntity
 	@Override
 	public void updateEntity() 
 	{
+		
 		if (count >= 500)
 		{
 			int i = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
 		
+			if (!this.worldObj.isRemote)
+			{
+				System.out.println("attackLevel " + attackLevel);
+			}
+			
 			// Stone Archer Spawner
 			if (i == 0 && !this.worldObj.isRemote)
 			{
@@ -42,22 +56,8 @@ public class TileEntitySpawner extends TileEntity
 				{
 					
 					boolean found = false;
-//					List list = this.worldObj.getEntitiesWithinAABB(StoneArcher.class, AxisAlignedBB.getAABBPool().getAABB(this.xCoord - searchRadius, this.yCoord - searchRadius, this.zCoord - searchRadius, this.xCoord + searchRadius, this.yCoord + searchRadius, this.zCoord + searchRadius));
-//					Iterator iterator = list.iterator();
-//
-//	                while (iterator.hasNext())
-//	                {
-//	                    EntityLivingBase entitylivingbase = (EntityLivingBase)iterator.next();
-//
-//	                    if (entitylivingbase.getUniqueID().equals(uuid))
-//	                    {
-//
-//	                    }
-//	                }
-//					System.out.println(golemUUIDmost);
-//					System.out.println(golemUUIDleast);
-						UUID uuid = new UUID(golemUUIDmost, golemUUIDleast);
-						List list = this.worldObj.getEntitiesWithinAABB(EntityStoneArcher.class, AxisAlignedBB.getAABBPool().getAABB(this.xCoord - searchRadius, this.yCoord - searchRadius, this.zCoord - searchRadius, this.xCoord + searchRadius, this.yCoord + searchRadius, this.zCoord + searchRadius));
+
+					List list = this.worldObj.getEntitiesWithinAABB(EntityStoneArcher.class, AxisAlignedBB.getAABBPool().getAABB(this.xCoord - searchRadius, this.yCoord - searchRadius, this.zCoord - searchRadius, this.xCoord + searchRadius, this.yCoord + searchRadius, this.zCoord + searchRadius));
 		                Iterator iterator = list.iterator();
 
 		                while (iterator.hasNext())
@@ -70,9 +70,7 @@ public class TileEntitySpawner extends TileEntity
 		                        break;
 		                    }
 		                }
-//					System.out.println("GolemId: " + golemId);
-//					StoneArcher entity = (StoneArcher)this.worldObj.getEntityByID(golemId);
-//					
+				
 					if (found != true)
 					{
 						golemBound = false;
@@ -106,21 +104,7 @@ public class TileEntitySpawner extends TileEntity
 				{
 					
 					boolean found = false;
-//					List list = this.worldObj.getEntitiesWithinAABB(StoneArcher.class, AxisAlignedBB.getAABBPool().getAABB(this.xCoord - searchRadius, this.yCoord - searchRadius, this.zCoord - searchRadius, this.xCoord + searchRadius, this.yCoord + searchRadius, this.zCoord + searchRadius));
-//					Iterator iterator = list.iterator();
-//
-//	                while (iterator.hasNext())
-//	                {
-//	                    EntityLivingBase entitylivingbase = (EntityLivingBase)iterator.next();
-//
-//	                    if (entitylivingbase.getUniqueID().equals(uuid))
-//	                    {
-//
-//	                    }
-//	                }
-//					System.out.println(golemUUIDmost);
-//					System.out.println(golemUUIDleast);
-						UUID uuid = new UUID(golemUUIDmost, golemUUIDleast);
+
 						List list = this.worldObj.getEntitiesWithinAABB(EntityStoneMage.class, AxisAlignedBB.getAABBPool().getAABB(this.xCoord - searchRadius, this.yCoord - searchRadius, this.zCoord - searchRadius, this.xCoord + searchRadius, this.yCoord + searchRadius, this.zCoord + searchRadius));
 		                Iterator iterator = list.iterator();
 
@@ -152,6 +136,14 @@ public class TileEntitySpawner extends TileEntity
 					stoneMage.homeX = this.xCoord;
 					stoneMage.homeY = this.yCoord;
 					stoneMage.homeZ = this.zCoord;
+					if (attackLevel > 0)
+					{
+						stoneMage.getEntityAttribute(SharedMonsterAttributes.attackDamage).setAttribute(2.0D);
+					}
+					if (healthLevel > 0)
+					{
+						stoneMage.getEntityAttribute(SharedMonsterAttributes.maxHealth).setAttribute(100D);
+					}
 					golemUUIDmost = stoneMage.getUniqueID().getMostSignificantBits();
 					golemUUIDleast = stoneMage.getUniqueID().getLeastSignificantBits();
 					this.worldObj.spawnEntityInWorld(stoneMage);
@@ -168,21 +160,7 @@ public class TileEntitySpawner extends TileEntity
 				{
 					
 					boolean found = false;
-//					List list = this.worldObj.getEntitiesWithinAABB(StoneArcher.class, AxisAlignedBB.getAABBPool().getAABB(this.xCoord - searchRadius, this.yCoord - searchRadius, this.zCoord - searchRadius, this.xCoord + searchRadius, this.yCoord + searchRadius, this.zCoord + searchRadius));
-//					Iterator iterator = list.iterator();
-//
-//	                while (iterator.hasNext())
-//	                {
-//	                    EntityLivingBase entitylivingbase = (EntityLivingBase)iterator.next();
-//
-//	                    if (entitylivingbase.getUniqueID().equals(uuid))
-//	                    {
-//
-//	                    }
-//	                }
-//					System.out.println(golemUUIDmost);
-//					System.out.println(golemUUIDleast);
-						UUID uuid = new UUID(golemUUIDmost, golemUUIDleast);
+
 						List list = this.worldObj.getEntitiesWithinAABB(EntityStoneWarrior.class, AxisAlignedBB.getAABBPool().getAABB(this.xCoord - searchRadius, this.yCoord - searchRadius, this.zCoord - searchRadius, this.xCoord + searchRadius, this.yCoord + searchRadius, this.zCoord + searchRadius));
 		                Iterator iterator = list.iterator();
 
@@ -237,6 +215,8 @@ public class TileEntitySpawner extends TileEntity
         	par1NBTTagCompound.setBoolean("golemBound", golemBound);
         	par1NBTTagCompound.setLong("golemUUIDmost", golemUUIDmost);
         	par1NBTTagCompound.setLong("golemUUIDleast", golemUUIDleast);
+        	par1NBTTagCompound.setInteger("attackLevel", attackLevel);
+        	par1NBTTagCompound.setInteger("healthLevel", healthLevel);
         }
     }
 
@@ -249,7 +229,98 @@ public class TileEntitySpawner extends TileEntity
             golemBound = par1NBTTagCompound.getBoolean("golemBound");
             golemUUIDmost = par1NBTTagCompound.getLong("golemUUIDmost");
             golemUUIDleast = par1NBTTagCompound.getLong("golemUUIDleast");
+            attackLevel = par1NBTTagCompound.getInteger("attackLevel");
+            healthLevel = par1NBTTagCompound.getInteger("healthLevel");
         }
         
     }
+	
+	//Methods required by IInventory
+	
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
+    {
+        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
+    }
+
+	@Override
+	public int getSizeInventory() {
+		return inventory.length;
+	}
+
+	@Override
+	public ItemStack getStackInSlot(int i) {
+		return inventory[i];
+	}
+
+	@Override
+	public ItemStack decrStackSize(int slot, int count) {
+		ItemStack itemstack = getStackInSlot(slot);
+
+		if(itemstack != null) 
+		{
+			if(itemstack.stackSize <= count) 
+			{
+				setInventorySlotContents(slot, null);
+			} 
+			else 
+			{
+				itemstack = itemstack.splitStack(count);
+				onInventoryChanged();
+			}
+		}
+		
+		return itemstack;
+	}
+
+	@Override
+	public ItemStack getStackInSlotOnClosing(int slot) {
+		ItemStack itemstack = getStackInSlot(slot);
+		setInventorySlotContents(slot, null);
+		return itemstack;
+	}
+
+	@Override
+	public void setInventorySlotContents(int slot, ItemStack itemstack) {
+		inventory[slot] = itemstack;
+		
+		if(itemstack != null && itemstack.stackSize > getInventoryStackLimit()) 
+		{
+			itemstack.stackSize = getInventoryStackLimit();
+		}
+		
+		onInventoryChanged();
+	}
+
+	@Override
+	public String getInvName() {
+		return "Collector";
+	}
+
+	@Override
+	public boolean isInvNameLocalized() {
+		return true;
+	}
+
+	@Override
+	public int getInventoryStackLimit() {
+		return 16;
+	}
+
+	@Override
+	public void openChest() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void closeChest() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+		return true;
+	}
 }

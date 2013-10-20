@@ -13,8 +13,9 @@ public class CreativeTabsEldritch extends CreativeTabs
 		super(position, tabLabel);
 	}
 
-  public ItemStack getIconItemStack()
-  {
-    return new ItemStack(Registration.condensedEssence, 1);
-  }
+	@Override
+	public ItemStack getIconItemStack()
+	{
+		return new ItemStack(Registration.condensedEssence, 1);
+	}
 }

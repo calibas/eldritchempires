@@ -1,6 +1,7 @@
 package eldritchempires;
 
-import eldritchempires.entity.EntityZPortalFX;
+import eldritchempires.client.particle.EntityFuseFX;
+import eldritchempires.client.particle.EntityZPortalFX;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -42,6 +43,11 @@ public class ParticleEffects
 				if (particleName.equals("zPortal"))//if the name of the particle to be spawned equals test spawn our particle note the name here is the name that you use when you call spawn particle
 				{
 					var21 = new EntityZPortalFX(theWorld, par2, par4, par6, (float)par8, (float)par10, (float)par12);
+				}
+				
+				if (particleName.equals("fuse"))//if the name of the particle to be spawned equals test spawn our particle note the name here is the name that you use when you call spawn particle
+				{
+					var21 = new EntityFuseFX(theWorld, par2, par4, par6, (float)par8, (float)par10, (float)par12);
 				}
 
 				mc.effectRenderer.addEffect((EntityFX)var21);

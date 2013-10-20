@@ -26,12 +26,11 @@ public class EntityZoblinBomber extends EntityCreature{
 	
 	public EntityZoblinBomber(World par1World) {
 		super(par1World);
-//        this.tasks.addTask(1, new EntityAISwimming(this));
-//        this.tasks.addTask(2, new EntityAIAttackOnCollide(this, 1.0D, false));
         this.isImmuneToFire = true;
 
 	}
 	
+	@Override
 	public void onLivingUpdate()
     {
 		if (timer >= 2 && timer < 5 && this.rand.nextInt(10) == 0)
@@ -111,6 +110,7 @@ public class EntityZoblinBomber extends EntityCreature{
         super.onLivingUpdate();
     }
 	
+	@Override
     protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
@@ -122,11 +122,13 @@ public class EntityZoblinBomber extends EntityCreature{
 		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(0.699D);
     }
     
+	@Override
     protected Entity findPlayerToAttack()
     {   
     	return null;
     }
     
+	@Override
     public Entity getEntityToAttack()
     {
         return null;
@@ -144,6 +146,7 @@ public class EntityZoblinBomber extends EntityCreature{
         return k;
     }
     
+    @Override
     public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
     {
         super.writeEntityToNBT(par1NBTTagCompound);
@@ -159,6 +162,7 @@ public class EntityZoblinBomber extends EntityCreature{
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
+    @Override
     public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
     {
         super.readEntityFromNBT(par1NBTTagCompound);

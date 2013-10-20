@@ -52,7 +52,6 @@ public class EldritchMethods {
 			messageTime = world.getWorldTime();
 		}
     	
-//    	messageTime = world.getWorldTime();
     	if (world.getWorldTime() - messageTime > 50)
     	{
     		broadcastMessageLocal(announce, posX, posY, posZ, announceRadius, world);
@@ -62,13 +61,9 @@ public class EldritchMethods {
     
     public static int[] createPortal(String type, int x, int y, int z, World world)
     {
-//    	int x = posX;
-//    	int y = 0;
-//    	int z = posZ;
     	Random generator = new Random();
     	int randomInt = generator.nextInt(4);
     	int[] location = {0, 0, 0};
-//    	broadcastMessageLocal("randomInt: " + randomInt, x, y, z, 100, world);
     	
     	if (randomInt == 0)
     	{
