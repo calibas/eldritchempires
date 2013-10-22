@@ -132,7 +132,7 @@ public class Registration {
 		
 		// Add Recipes
 		GameRegistry.addRecipe(new ItemStack(collector, 1, 0), new Object[] { "ROR", "ORO", "ROR", 'R', Item.redstone, 'O', new ItemStack(Block.obsidian, 1)});
-//		GameRegistry.addRecipe(new ItemStack(portal, 1, 0), new Object[] { "CRC", "RER", "CRC", 'R', Item.redstone, 'E', Item.emerald, 'C', new ItemStack(Block.cobblestone, 1)});
+		GameRegistry.addRecipe(new ItemStack(portal, 1, 0), new Object[] { "CRC", "RER", "CRC", 'R', Item.redstone, 'E', Item.emerald, 'C', new ItemStack(Block.cobblestone, 1)});
 		GameRegistry.addRecipe(new ItemStack(spawner, 1, 0), new Object[] { " E ", "GBG", "GEG", 'G', golemPart, 'B', Item.bow, 'E', condensedEssence});
 		GameRegistry.addRecipe(new ItemStack(spawner, 1, 1), new Object[] { " E ", "GIG", "GEG", 'G', golemPart, 'I', iceCrystal, 'E', condensedEssence});
 		GameRegistry.addRecipe(new ItemStack(spawner, 1, 2), new Object[] { " E ", "GSG", "GEG", 'G', golemPart, 'S', Item.swordIron, 'E', condensedEssence});
