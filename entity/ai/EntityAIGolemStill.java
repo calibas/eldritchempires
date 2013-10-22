@@ -3,6 +3,7 @@ package eldritchempires.entity.ai;
 import eldritchempires.entity.EntityStoneArcher;
 import eldritchempires.entity.EntityStoneMage;
 import eldritchempires.entity.EntityGuard;
+import eldritchempires.entity.EntityStoneWarrior;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -50,7 +51,17 @@ public class EntityAIGolemStill extends EntityAIBase
     	if (entity instanceof EntityGuard)
     	{
     		EntityGuard entityGuard = (EntityGuard)entity;
-    		entity.getNavigator().tryMoveToXYZ(entityGuard.homeX, entityGuard.homeY, entityGuard.homeZ, 1.0D);
+    		if (entity instanceof EntityStoneWarrior)
+    		{
+    			entity.getEntityAttribute(SharedMonsterAttributes.followRange).setAttribute(30.0D);
+    			entity.getNavigator().tryMoveToXYZ(entityGuard.homeX, entityGuard.homeY, entityGuard.homeZ, 0.5D);
+    			entity.getEntityAttribute(SharedMonsterAttributes.followRange).setAttribute(5.0D);
+    		}
+    		else
+    		{
+    			entity.getNavigator().tryMoveToXYZ(entityGuard.homeX, entityGuard.homeY, entityGuard.homeZ, 1.0D);
+    		}
+    		
     		if ((int)entityGuard.posX != stillX || (int)entityGuard.posZ != stillZ)
     		{
     			stillX = (int) entityGuard.posX;

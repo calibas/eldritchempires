@@ -29,7 +29,6 @@ public class GuiSpawner extends GuiContainer{
 	private EntityPlayer player;
     protected int xSize = 176;
     protected int ySize = 166;
-//    EldritchWorldData data = new EldritchWorldData();
     
 	
 	public GuiSpawner(InventoryPlayer par1InventoryPlayer, TileEntitySpawner tileEntity) {
@@ -49,27 +48,49 @@ public class GuiSpawner extends GuiContainer{
         GuiButton health1 = new GuiButton(3, guiLeft + 115, guiTop + 70, 15, 15, "1");
         GuiButton health2 = new GuiButton(4, guiLeft + 115, guiTop + 90, 15, 15, "2");
         GuiButton health3 = new GuiButton(5, guiLeft + 115, guiTop + 110, 15, 15, "3");
-//        GuiButton temp1 = new GuiButton(6, guiLeft + 20, guiTop + 103, 15, 15, "1");
-//        GuiButton temp2 = new GuiButton(7, guiLeft + 40, guiTop + 103, 15, 15, "2");
-//        GuiButton temp3 = new GuiButton(8, guiLeft + 60, guiTop + 103, 15, 15, "3");
-//        GuiButton closePortal = new GuiButton(9, guiLeft + 80, guiTop + 140, 70, 20, "Close Portal");
         GuiButton closeGui = new GuiButton(10, guiLeft + 155, guiTop + 10, 15, 15, "X");
         
-        attack1.enabled = true;
+        attack1.enabled = false;
         attack2.enabled = false;
         attack3.enabled = false;
-        health1.enabled = true;
+        health1.enabled = false;
         health2.enabled = false;
         health3.enabled = false;
-//        temp1.enabled = false;
-//        temp2.enabled = false;
-//        temp3.enabled = false;
-//        closePortal.enabled = false;
         
-//        this.mc.thePlayer.openContainer = this.inventorySlots;
         this.guiLeft = (this.width - this.xSize) / 2;
         this.guiTop = (this.height - this.ySize) / 2;
 
+        System.out.println(spawner.attackLevel + " " + spawner.healthLevel);
+        
+        if (spawner.attackLevel == 0)
+        {
+            attack1.enabled = true;
+        }
+        
+        if (spawner.attackLevel == 1)
+        {
+            attack2.enabled = true;
+        }
+        
+        if (spawner.attackLevel == 2)
+        {
+            attack3.enabled = true;
+        }
+        
+        if (spawner.healthLevel == 0)
+        {
+        	health1.enabled = true;
+        }
+        
+        if (spawner.healthLevel == 1)
+        {
+        	health2.enabled = true;
+        }
+        
+        if (spawner.healthLevel == 2)
+        {
+        	health3.enabled = true;
+        }
 //        if (data.isWaveActive())
 //        {
 //        	closePortal.enabled = true;
@@ -106,10 +127,6 @@ public class GuiSpawner extends GuiContainer{
         this.buttonList.add(health1);
         this.buttonList.add(health2);
         this.buttonList.add(health3);
-//        this.buttonList.add(temp1);
-//        this.buttonList.add(temp2);
-//        this.buttonList.add(temp3);
-//        this.buttonList.add(closePortal);
         this.buttonList.add(closeGui);
     }
 	
@@ -121,103 +138,35 @@ public class GuiSpawner extends GuiContainer{
 		case 0:
 			// Attack 1
 			sendPacket(1,0);
-			System.out.println("set attackLevel 1");
-
-//    		if (!data.isWaveActive())
-//    		{
-////    			this.mc.theWorld.setBlockMetadataWithNotify(data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 1, 2);
-//    			data.setActiveWave(true);
-//    			data.setRound(1);
-//    			data.resetCollectorHealth();
-//    			EldritchMethods.broadcastMessageLocal("A zoblin portal begins to open", data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 100, this.mc.theWorld);
-//    			this.mc.theWorld.perWorldStorage.setData(EldritchWorldData.name, data);
-//    			data = (EldritchWorldData) this.mc.theWorld.perWorldStorage.loadData(EldritchWorldData.class, EldritchWorldData.name);
-//  //  			EldritchMethods.broadcastMessageLocal("Collector Active", par2, par3, par4, 100, par1World);
-//    		}
     		this.mc.thePlayer.closeScreen();
 			break;
 		case 1:
-			// Zoblin 2
-//    		if (!data.isWaveActive())
-//    		{
-////    			this.mc.theWorld.setBlockMetadataWithNotify(data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 1, 2);
-//    			data.setActiveWave(true);
-//    			data.setRound(2);
-//    			data.resetCollectorHealth();
-//    			EldritchMethods.broadcastMessageLocal("A zoblin portal begins to open", data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 100, this.mc.theWorld);
-//    			this.mc.theWorld.perWorldStorage.setData(EldritchWorldData.name, data);
-//    			data = (EldritchWorldData) this.mc.theWorld.perWorldStorage.loadData(EldritchWorldData.class, EldritchWorldData.name);
-//  //  			EldritchMethods.broadcastMessageLocal("Collector Active", par2, par3, par4, 100, par1World);
-//    		}
+			// Attack 2
+			sendPacket(2,0);
 			this.mc.thePlayer.closeScreen();
 			break;
 		case 2:
-//    		if (!data.isWaveActive())
-//    		{
-////    			this.mc.theWorld.setBlockMetadataWithNotify(data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 1, 2);
-//    			data.setActiveWave(true);
-//    			data.setRound(3);
-//    			data.resetCollectorHealth();
-//    			EldritchMethods.broadcastMessageLocal("A zoblin portal begins to open", data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 100, this.mc.theWorld);
-//    			this.mc.theWorld.perWorldStorage.setData(EldritchWorldData.name, data);
-//    			data = (EldritchWorldData) this.mc.theWorld.perWorldStorage.loadData(EldritchWorldData.class, EldritchWorldData.name);
-//  //  			EldritchMethods.broadcastMessageLocal("Collector Active", par2, par3, par4, 100, par1World);
-//    		}
+			// Attack 3
+			sendPacket(3,0);
 			this.mc.thePlayer.closeScreen();
 			break;
 		case 3:
-//    		if (!data.isWaveActive())
-//    		{
-////    			this.mc.theWorld.setBlockMetadataWithNotify(data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 1, 2);
-//    			data.setActiveWave(true);
-//    			data.setRound(4);
-//    			data.resetCollectorHealth();
-//    			EldritchMethods.broadcastMessageLocal("A rabid dwarf portal begins to open", data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 100, this.mc.theWorld);
-//    			this.mc.theWorld.perWorldStorage.setData(EldritchWorldData.name, data);
-//    			data = (EldritchWorldData) this.mc.theWorld.perWorldStorage.loadData(EldritchWorldData.class, EldritchWorldData.name);
-//  //  			EldritchMethods.broadcastMessageLocal("Collector Active", par2, par3, par4, 100, par1World);
-//    		}
+			// Health 1
+			sendPacket(0,1);
 			this.mc.thePlayer.closeScreen();
 			break;
 		case 4:
-//    		if (!data.isWaveActive())
-//    		{
-////    			this.mc.theWorld.setBlockMetadataWithNotify(data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 1, 2);
-//    			data.setActiveWave(true);
-//    			data.setRound(5);
-//    			data.resetCollectorHealth();
-//    			EldritchMethods.broadcastMessageLocal("A rabid dwarf portal begins to open", data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 100, this.mc.theWorld);
-//    			this.mc.theWorld.perWorldStorage.setData(EldritchWorldData.name, data);
-//    			data = (EldritchWorldData) this.mc.theWorld.perWorldStorage.loadData(EldritchWorldData.class, EldritchWorldData.name);
-//  //  			EldritchMethods.broadcastMessageLocal("Collector Active", par2, par3, par4, 100, par1World);
-//    		}
+			// Health 2
+			sendPacket(0,2);
 			this.mc.thePlayer.closeScreen();
 			break;
 		case 5:
+			// Health 3
+			sendPacket(0,3);
 			this.mc.thePlayer.closeScreen();
-			break;
-		case 6:
-			this.mc.thePlayer.closeScreen();
-			break;
-		case 7:
-			this.mc.thePlayer.closeScreen();
-			break;
-		case 8:
-			this.mc.thePlayer.closeScreen();
-			break;
-		case 9:
-//			// Close portal
-//    		if (data.isWaveActive())
-//    		{
-////    			this.mc.theWorld.setBlockMetadataWithNotify(data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 0, 2);
-//    			data.setActiveWave(false);
-//    			this.mc.theWorld.perWorldStorage.setData(EldritchWorldData.name, data);
-//    			data = (EldritchWorldData) this.mc.theWorld.perWorldStorage.loadData(EldritchWorldData.class, EldritchWorldData.name);
-//  //  			EldritchMethods.broadcastMessageLocal("Collector Active", par2, par3, par4, 100, par1World);
-//    		}
-    		this.mc.thePlayer.closeScreen();
 			break;
 		case 10:
+			// Close GUI
 			this.mc.thePlayer.closeScreen();
 			break;
 		default:
@@ -230,8 +179,10 @@ public class GuiSpawner extends GuiContainer{
 		GL11.glColor4f(1F, 1F, 1F, 1F);
 		this.mc.getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
-        drawString(fontRenderer, "Current lvl:", this.guiLeft+15, this.guiTop+140, 0xFFFFFF);
-        drawString(fontRenderer, "Current lvl:", this.guiLeft+100, this.guiTop+140, 0xFFFFFF);
+        drawString(fontRenderer, "Current lvl:", this.guiLeft+15, this.guiTop+130, 0xFFFFFF);
+        drawString(fontRenderer, "Current lvl:", this.guiLeft+100, this.guiTop+130, 0xFFFFFF);
+        drawString(fontRenderer, String.valueOf(spawner.attackLevel), this.guiLeft+40, this.guiTop+145, 0xFFFFFF);
+        drawString(fontRenderer, String.valueOf(spawner.healthLevel), this.guiLeft+120, this.guiTop+145, 0xFFFFFF);
 	}
 	
 	private void sendPacket(int attackLevel, int healthLevel)

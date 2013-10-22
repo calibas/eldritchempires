@@ -36,7 +36,7 @@ public class BlockSpawner extends BlockContainer{
 	public BlockSpawner(int par1, Material par2Material) {
 		super(par1, Material.plants);
 		this.setHardness(1.5F);
-		this.setResistance(5.0F);
+		this.setResistance(25.0F);
 		this.setCreativeTab(EldritchEmpires.tabEldritch);
 		this.setTickRandomly(true);
 		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1F, 0.1F, 1F);
@@ -63,8 +63,9 @@ public class BlockSpawner extends BlockContainer{
 
             if (!flag)
             {
-                this.dropBlockAsItem(par1World, par2, par3, par4, 0, 0);
-                par1World.setBlockToAir(par2, par3, par4);
+//                this.dropBlockAsItem(par1World, par2, par3, par4, 0, 0);
+//                par1World.setBlockToAir(par2, par3, par4);
+            	par1World.destroyBlock(par2, par3, par4, true);
             }
 
             super.onNeighborBlockChange(par1World, par2, par3, par4, par5);
@@ -78,19 +79,24 @@ public class BlockSpawner extends BlockContainer{
     }
 	
 	@Override
-    public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
+    public int damageDropped(int par1)
     {
-             ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-             int count = quantityDropped(metadata, fortune, world.rand);
-             for(int i = 0; i < count; i++)
-             {
-            	 if(world.getBlockMetadata(x, y, z) == 0);
-                     ret.add(new ItemStack(Registration.spawner, 1, 0));
-                 if(world.getBlockMetadata(x, y, z) == 1);
-                     ret.add(new ItemStack(Registration.spawner, 1, 1));    
-             }
-             return ret;
+        return par1;
     }
+	
+//	@Override
+//    public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
+//    {
+//             ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+//           	 if(world.getBlockMetadata(x, y, z) == 0);
+//           	 	ret.add(new ItemStack(Registration.spawner, 1, 0));
+//             if(world.getBlockMetadata(x, y, z) == 1);
+//                ret.add(new ItemStack(Registration.spawner, 1, 1));   
+//             if(world.getBlockMetadata(x, y, z) == 2);
+//                ret.add(new ItemStack(Registration.spawner, 1, 2));  
+//             
+//             return ret;
+//    }
 	
     @SideOnly(Side.CLIENT)
     private Icon[] icons;

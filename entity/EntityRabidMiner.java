@@ -3,6 +3,7 @@ package eldritchempires.entity;
 import eldritchempires.EldritchWorldData;
 import eldritchempires.Registration;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBreakDoor;
@@ -60,22 +61,21 @@ public class EntityRabidMiner extends EntityAttacker{
     			this.dataWatcher.updateObject(16, Byte.valueOf((byte)0));
     		}
     		
-    		if (blockRemovalCounter > 10) {
-    			if (!this.worldObj.isAirBlock(removingX, removingY, removingZ)) {
+    		//Destroy blocks, if not portal
+    		if (blockRemovalCounter > 6) {
+    			if (!this.worldObj.isAirBlock(removingX, removingY, removingZ) && this.worldObj.getBlockId(removingX, removingY, removingZ) != Registration.portal.blockID && !this.worldObj.isAirBlock(removingX, removingY +2, removingZ)) {
     				int blockID = this.worldObj.getBlockId(removingX, removingY, removingZ);
     				this.worldObj.destroyBlock(removingX, removingY, removingZ, true);
     			}
-    			else if (!this.worldObj.isAirBlock(removingX, removingY + 1, removingZ)) {
+    			else if (!this.worldObj.isAirBlock(removingX, removingY + 1, removingZ) && this.worldObj.getBlockId(removingX, removingY + 1, removingZ) != Registration.portal.blockID) {
     				int blockID = this.worldObj.getBlockId(removingX, removingY + 1, removingZ);
     				this.worldObj.destroyBlock(removingX, removingY + 1, removingZ, true);
     			}
     			blockRemovalCounter = 0;
     			
-    			if (this.worldObj.isAirBlock(removingX, removingY + 1, removingZ)) {
+    			if (this.worldObj.isAirBlock(removingX, removingY + 1, removingZ) || this.worldObj.getBlockId(removingX, removingY, removingZ) == Registration.portal.blockID) {
     				removingBlock = false;
     				this.dataWatcher.updateObject(16, Byte.valueOf((byte)0));
-//    				path = this.worldObj.getEntityPathToXYZ(this, collectorX, collectorY, collectorZ, 40F, true, true, false, false);
-//    				setPathToEntity(path);
     			}
     		}
 		}
@@ -88,7 +88,7 @@ public class EntityRabidMiner extends EntityAttacker{
 			stillCounter++;
 		}
 		
-		if (stillCounter >= 6) {
+		if (stillCounter >= 5) {
 			stillCounter = 0;
 			
 			//Find direction of collector
@@ -98,14 +98,40 @@ public class EntityRabidMiner extends EntityAttacker{
     		double deltaZ = Math.cos(Math.atan2(xd, zd));
     		int directionX = (int)(deltaX * 1.9D);
     		int directionZ = (int)(deltaZ * 1.9D);
-    		System.out.println("Standing still " + directionX + " " + directionZ);
+    		
+    		System.out.println("DirectionX/Y " + directionX + " " + directionZ);
+    		
+    		//If block is diagonal, target adjacent block instead
+    		if (directionX != 0 && directionZ != 0)
+    		{
+    			int random = this.rand.nextInt(2);
+    			if (random == 0)
+    				directionX = 0;
+    			else
+    				directionZ = 0;
+    		}
+    		System.out.println("DirectionX/Y " + directionX + " " + directionZ);
+    		
+    		System.out.println("posZ " + (int)this.posZ);
+    		System.out.println((int)this.posZ + directionZ);
+    		System.out.println("posX " + (int)this.posX);
+    						
     		System.out.println(removingBlock);
     		removingX = (int)this.posX + directionX;
     		removingY = (int)this.posY;
     		removingZ = (int)this.posZ + directionZ;
     		
-    		//Make sure it's not an air block or diagonal to the entity, begin removing block, datawatcher to start animation
-    		if (!this.worldObj.isAirBlock(removingX, removingY, removingZ) || !this.worldObj.isAirBlock(removingX, removingY + 1, removingZ) && (directionX == 0 || directionZ == 0)){
+    		//Casting to an int throws negative coordinates off by 1
+    		if (this.posX < 0)
+    			removingX = removingX - 1;
+    		if (this.posZ < 0)
+    			removingZ = removingZ - 1;
+    		
+    		
+    		System.out.println("Standing still " + removingX + " " + removingZ);
+    		
+    		//Make sure it's not an air block, begin removing block, datawatcher to start animation
+    		if (!this.worldObj.isAirBlock(removingX, removingY, removingZ) || !this.worldObj.isAirBlock(removingX, removingY + 1, removingZ)){
     			removingBlock = true;
     			blockRemovalCounter = 0;
     			this.dataWatcher.updateObject(16, Byte.valueOf((byte)1));
@@ -118,6 +144,12 @@ public class EntityRabidMiner extends EntityAttacker{
 	public void setAttackTarget(EntityLivingBase entity)
 	{
 	}
+	
+	@Override
+    protected Entity findPlayerToAttack()
+    {
+        return null;
+    }
 	
 	
 	@Override

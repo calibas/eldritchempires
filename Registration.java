@@ -139,6 +139,7 @@ public class Registration {
 		GameRegistry.addRecipe(new ItemStack(golemPart, 1), new Object[] { "CCC", "III", "CCC", 'C', new ItemStack(Block.cobblestone, 1), 'I', Item.ingotIron});
 		GameRegistry.addRecipe(new ItemStack(iceCrystal, 1), new Object[] { "SSS", "SES", "SSS", 'S', Item.snowball, 'E', condensedEssence});
 		GameRegistry.addRecipe(new ItemStack(Item.diamond, 1, 0), new Object[] { "EEE", "EEE", "EEE", 'E', condensedEssence});
+		GameRegistry.addRecipe(new ItemStack(golemWand, 1), new Object[] {" EE", " SE", "S  ", 'E', condensedEssence, 'S', Item.stick});
 //		GameRegistry.addRecipe(new ItemStack(collector, 1, 0), new Object[] { " R ", "RIR", " R ", 'R', Item.redstone, 'I', inactiveCollector});
 		
 		// Add Event Handler

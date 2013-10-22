@@ -72,9 +72,9 @@ public class EldritchEvents {
 				if(data.checkPortal() && !data.checkCollector() && event.world.blockExists(portalX, portalY, portalZ))
 				{
 //					event.world.getChunkProvider().loadChunk(portalX >> 4, portalZ >> 4);
-					Chunk portalChunk = event.world.getChunkFromBlockCoords(portalX, portalZ);
-					if (portalChunk.isChunkLoaded)
-					{
+//					Chunk portalChunk = event.world.getChunkFromBlockCoords(portalX, portalZ);
+//					if (portalChunk.isChunkLoaded)
+//					{
 //					System.out.println("Marker found at:" + markerX + " " + markerY + " " + markerZ);
 //					System.out.println("BlockID:" + event.world.getBlockId(markerX, markerY, markerZ));
 					
@@ -82,20 +82,21 @@ public class EldritchEvents {
 						{
 							System.out.println("Portal unset" );
 							data.unSetPortal();
+							data.setPortalFocus(false);
 							data.setActiveWave(false);
 							event.world.perWorldStorage.setData(EldritchWorldData.name, data);
 						}
-					}
+//					}
 				}
 				
 				if(data.checkCollector() && event.world.blockExists(collectorX, collectorY, collectorZ))
 				{
 //					event.world.getChunkProvider().loadChunk(collectorX >> 4, collectorZ >> 4);
 //					Chunk nodeChunk = event.world.getChunkFromBlockCoords(collectorX, collectorZ);
-			        Chunk chunk = event.world.getChunkFromBlockCoords(MathHelper.floor_double(collectorX), MathHelper.floor_double(collectorZ));
-
-					if (chunk.isChunkLoaded)
-					{
+//			        Chunk chunk = event.world.getChunkFromBlockCoords(MathHelper.floor_double(collectorX), MathHelper.floor_double(collectorZ));
+//
+//					if (chunk.isChunkLoaded)
+//					{
 //					System.out.println("Marker found at:" + markerX + " " + markerY + " " + markerZ);
 //					System.out.println("BlockID:" + event.world.getBlockId(markerX, markerY, markerZ));
 					
@@ -106,9 +107,11 @@ public class EldritchEvents {
 							data.setActiveWave(false);
 							event.world.perWorldStorage.setData(EldritchWorldData.name, data);
 						}
-					}
+//					}
 				}
 				
+				
+				//Just in case WorldTime changes
 				if (data.checkCollector() && (event.world.provider.getWorldTime() - lastSpawn) < 0)
 				{
 					lastSpawn = event.world.provider.getWorldTime();
@@ -121,16 +124,20 @@ public class EldritchEvents {
 					if (!data.checkPortal())
 					{
 						System.out.println("Trying to create portal" );
-						int[] location = EldritchMethods.createPortal("zoblin", collectorX, collectorY, collectorZ, event.world);
-						if (location[0] == 0 && location[1] == 0 && location[2] == 0)
+						if (!data.checkPortalFocus())
 						{
-							data.setActiveWave(false);
+							int[] location = EldritchMethods.createPortal("zoblin", collectorX, collectorY, collectorZ, event.world);
+							if (location[0] == 0 && location[1] == 0 && location[2] == 0)
+							{
+									data.setActiveWave(false);
+							}
+							else 
+							{
+								data.setPortal(location[0], location[1], location[2]);
+							}
 						}
-						else 
-						{
-							data.setPortal(location[0], location[1], location[2]);
-							event.world.setBlockMetadataWithNotify(collectorX, collectorY, collectorZ, 1, 2);
-						}
+
+						event.world.setBlockMetadataWithNotify(collectorX, collectorY, collectorZ, 1, 2);
 					}
 					
 					if (wave > 12)
@@ -166,7 +173,7 @@ public class EldritchEvents {
 //				}
 				}
 				
-				if (!data.isWaveActive() && data.checkPortal() && event.world.blockExists(portalX, portalY, portalZ))
+				if (!data.isWaveActive() && data.checkPortal() && !data.checkPortalFocus() && event.world.blockExists(portalX, portalY, portalZ))
 				{
 					EldritchMethods.broadcastMessageLocal("The portal closes", portalX, portalY, portalZ, 100, event.world);
 					event.world.setBlockMetadataWithNotify(collectorX, collectorY, collectorZ, 0, 2);
@@ -188,6 +195,31 @@ public class EldritchEvents {
 		}
 	}
 	
+	public void endRound(World world)
+	{
+
+			int portalX = data.getPortalX();
+			int portalY = data.getPortalY();
+			int portalZ = data.getPortalZ();
+			if (!data.checkPortalFocus())
+			{
+				data.unSetPortal();
+			}
+			data.setActiveWave(false);
+			world.perWorldStorage.setData(EldritchWorldData.name, data);
+			if (world.getBlockId(portalX, portalY, portalZ) == Registration.portal.blockID)
+			{
+				world.setBlockToAir(portalX, portalY, portalZ);
+				world.removeBlockTileEntity(portalX, portalY, portalZ);
+			}
+
+	}
+	
+	public void startRound(World world)
+	{
+		
+	}
+	
 	public void waves(int round, int wave, int x, int y, int z, World world)
 	{
 		if (round == 1)
@@ -195,6 +227,7 @@ public class EldritchEvents {
 		switch (wave){
 			case 0: 
 				announce = "You hear strange noises in the distance";
+				lastSpawn = lastSpawn + 300;
 				break;
 			case 1:
 				spawnWave("zoblin", 2, x, y, z, world);
@@ -246,15 +279,17 @@ public class EldritchEvents {
 				break;
 			case 12:
 				announce = "The portal closes";
-				world.setBlockToAir(x, y, z);
-				world.removeBlockTileEntity(x, y, z);
-				world.setBlockMetadataWithNotify(data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 0, 2);
-				data.unSetPortal();
-				data.setActiveWave(false);
-				if (data.getProgress() < 1)
-				{
-					data.increaseProgress();
-				}
+				
+//				if (!data.checkPortalFocus())
+//				{
+//					world.setBlockToAir(x, y, z);
+//					world.removeBlockTileEntity(x, y, z);
+//					world.setBlockMetadataWithNotify(data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 0, 2);
+//					data.unSetPortal();
+//				}
+//				data.setActiveWave(false);
+				data.increaseProgress();
+				endRound(world);
 				world.perWorldStorage.setData(EldritchWorldData.name, data);
 				break;
 			}
@@ -318,15 +353,9 @@ public class EldritchEvents {
 				break;
 			case 12:
 				announce = "The portal closes";
-				world.setBlockToAir(x, y, z);
-				world.removeBlockTileEntity(x, y, z);
-				world.setBlockMetadataWithNotify(data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 0, 2);
-				data.unSetPortal();
-				data.setActiveWave(false);
-				if (data.getProgress() < 2)
-				{
-					data.increaseProgress();
-				}
+				
+				data.increaseProgress();
+				endRound(world);
 				world.perWorldStorage.setData(EldritchWorldData.name, data);
 				break;
 			}
@@ -390,15 +419,9 @@ public class EldritchEvents {
 				break;
 			case 12:
 				announce = "The portal closes";
-				world.setBlockToAir(x, y, z);
-				world.removeBlockTileEntity(x, y, z);
-				world.setBlockMetadataWithNotify(data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 0, 2);
-				data.unSetPortal();
-				data.setActiveWave(false);
-				if (data.getProgress() < 3)
-				{
-					data.increaseProgress();
-				}
+				
+				data.increaseProgress();
+				endRound(world);
 				world.perWorldStorage.setData(EldritchWorldData.name, data);
 				break;
 			}
@@ -465,15 +488,9 @@ public class EldritchEvents {
 				break;
 			case 12:
 				announce = "The portal closes";
-				world.setBlockToAir(x, y, z);
-				world.removeBlockTileEntity(x, y, z);
-				world.setBlockMetadataWithNotify(data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 0, 2);
-				data.unSetPortal();
-				data.setActiveWave(false);
-				if (data.getProgress() < 4)
-				{
-					data.increaseProgress();
-				}
+				
+				data.increaseProgress();
+				endRound(world);
 				world.perWorldStorage.setData(EldritchWorldData.name, data);
 				break;
 			}
@@ -540,15 +557,9 @@ public class EldritchEvents {
 				break;
 			case 12:
 				announce = "The portal closes";
-				world.setBlockToAir(x, y, z);
-				world.removeBlockTileEntity(x, y, z);
-				world.setBlockMetadataWithNotify(data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 0, 2);
-				data.unSetPortal();
-				data.setActiveWave(false);
-				if (data.getProgress() < 4)
-				{
-					data.increaseProgress();
-				}
+				
+				data.increaseProgress();
+				endRound(world);
 				world.perWorldStorage.setData(EldritchWorldData.name, data);
 				break;
 			}

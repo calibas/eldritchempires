@@ -49,7 +49,7 @@ public class EldritchPacketHandler implements IPacketHandler{
 				e.printStackTrace();
 				return;
 			}
-			System.out.println("attackLevel " + attackLevel + "healthLevel " + healthLevel + "x " + x);
+//			System.out.println("attackLevel " + attackLevel + "healthLevel " + healthLevel + "x " + x);
 			
 			TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 			if (tileEntity instanceof TileEntitySpawner)
@@ -59,11 +59,15 @@ public class EldritchPacketHandler implements IPacketHandler{
 				{
 					spawner.attackLevel = attackLevel;
 					System.out.println("attackLevel set");
+					spawner.killGolem();
+					spawner.spawnGolem();
 				}
 				if (healthLevel != 0)
 				{
 					spawner.healthLevel = healthLevel;
 					System.out.println("healthLevel set");
+					spawner.killGolem();
+					spawner.spawnGolem();
 				}
 			}
 	}

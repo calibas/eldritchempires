@@ -36,6 +36,17 @@ public class BlockPortal extends Block{
 		this.setLightValue(1.0F);
 		this.setTickRandomly(true);
 	}
+	
+    /**
+     * Called when a block is placed using its ItemBlock. Args: World, X, Y, Z, side, hitX, hitY, hitZ, block metadata
+     */
+	@Override
+    public int onBlockPlaced(World par1World, int par2, int par3, int par4, int par5, float par6, float par7, float par8, int par9)
+    {
+		data.setPortal(par2, par3, par4);
+        data.setPortalFocus(true);
+		return par9;
+    }
 
 	@Override
     public boolean isOpaqueCube()

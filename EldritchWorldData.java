@@ -7,6 +7,7 @@ import net.minecraft.world.WorldSavedData;
 public class EldritchWorldData extends WorldSavedData {
        
         private static boolean portalSet = false;
+        private static boolean portalFocus = false;
         private static int portalX = 0;
         private static int portalY = 0;
         private static int portalZ = 0;
@@ -47,6 +48,7 @@ public class EldritchWorldData extends WorldSavedData {
                portalY = nbt.getInteger("portalY");
                portalZ = nbt.getInteger("portalZ");
                portalSet = nbt.getBoolean("portalSet");
+               portalFocus = nbt.getBoolean("portalFocus");
                collectorX = nbt.getInteger("collectorX");
                collectorY = nbt.getInteger("collectorY");
                collectorZ = nbt.getInteger("collectorZ");
@@ -64,6 +66,7 @@ public class EldritchWorldData extends WorldSavedData {
                 nbt.setInteger("portalY", portalY);
                 nbt.setInteger("portalZ", portalZ);
                 nbt.setBoolean("portalSet", portalSet);
+                nbt.setBoolean("portalFocus", portalFocus);
                 nbt.setInteger("collectorX", collectorX);
                 nbt.setInteger("collectorY", collectorY);
                 nbt.setInteger("collectorZ", collectorZ);
@@ -142,6 +145,16 @@ public class EldritchWorldData extends WorldSavedData {
         {
         	return portalSet;
         }
+        
+        public void setPortalFocus(boolean focusSet)
+        {
+        	portalFocus = focusSet;
+        }
+        
+        public boolean checkPortalFocus()
+        {
+        	return portalFocus;
+        }
 
         public void setCollector(int par1, int par2, int par3)
         {
@@ -197,7 +210,10 @@ public class EldritchWorldData extends WorldSavedData {
         
         public void increaseProgress()
         {
-        	progress++;
+        	if (progress < round)
+        	{
+        		progress++;
+        	}
         }
         
         public int getRound()
