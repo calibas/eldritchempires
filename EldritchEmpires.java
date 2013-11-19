@@ -1,8 +1,10 @@
 package eldritchempires;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.src.BaseMod;
 import net.minecraft.src.ModLoader;
+import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -19,6 +21,13 @@ public class EldritchEmpires {
 	
 	public static final String modid = "EldritchEmpires";
 	public static int modelID;
+	public static int collectorBlockID;
+	public static int spawnerBlockID;
+	public static int portalBlockID;
+	public static int golemPartItemID;
+	public static int condensedEssenceItemID;
+	public static int iceCrystalItemID;
+	public static int golemWandItemID;
 	
     @Instance("EldritchEmpires")
     public static EldritchEmpires instance;
@@ -30,7 +39,16 @@ public class EldritchEmpires {
     
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-
+    	Configuration config = new Configuration(event.getSuggestedConfigurationFile());
+    	config.load();
+    	collectorBlockID = config.getBlock("BlockCollector", 2864).getInt();
+    	spawnerBlockID = config.getBlock("BlockSpawner", 2865).getInt();
+    	portalBlockID = config.getBlock("BlockPortal", 2866).getInt();
+    	golemPartItemID = config.getItem("ItemGolemPart", 7620).getInt();
+    	condensedEssenceItemID = config.getItem("ItemCondensedEssence", 7621).getInt();;
+    	iceCrystalItemID = config.getItem("ItemIceCrystal", 7622).getInt();;
+    	golemWandItemID = config.getItem("ItemGolemWand", 7623).getInt();;
+    	config.save();       
     }
    
     @EventHandler

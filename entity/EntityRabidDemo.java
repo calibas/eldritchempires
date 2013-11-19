@@ -30,7 +30,7 @@ public class EntityRabidDemo extends EntityAttacker{
 	public void onUpdate(){
 		super.onUpdate();
 		
-    	if(this.rand.nextInt(100) == 0 && !this.worldObj.isRemote && (data.isWaveActive() || this.entityToAttack != null))
+    	if(this.rand.nextInt(130) == 0 && !this.worldObj.isRemote && (data.isWaveActive() || this.entityToAttack != null))
 	   	{
     		if (data.isWaveActive())
     		{
@@ -90,5 +90,11 @@ public class EntityRabidDemo extends EntityAttacker{
 		// Default 2.0D - min 0.0D - max Doubt.MAX_VALUE
 		this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setAttribute(3.0D);
     }
+	
+	@Override
+	public boolean canDespawn()
+	{
+		return false;
+	}
     
 }

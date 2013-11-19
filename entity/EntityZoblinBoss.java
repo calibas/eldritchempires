@@ -38,4 +38,10 @@ public class EntityZoblinBoss extends EntityAttacker{
 		this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setAttribute(4.0D);
     }
 	
+	@Override
+	public boolean canDespawn()
+	{
+		return false;
+	}
+	
 }

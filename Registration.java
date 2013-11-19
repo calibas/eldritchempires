@@ -53,9 +53,8 @@ import eldritchempires.item.ItemSpawner;
 public class Registration {
 
 	public static Block collector;
-//	public static Item inactiveCollector;	
-	public static Block portal;	
 	public static Block spawner;
+	public static Block portal;	
 	public static Item golemPart;
 	public static Item condensedEssence;
 	public static Item iceCrystal;
@@ -64,18 +63,18 @@ public class Registration {
 	public static void registration()
 	{
 		// Add Blocks
-		collector = new BlockCollector(2864, Material.wood).setUnlocalizedName("collector");
+		collector = new BlockCollector(EldritchEmpires.collectorBlockID, Material.wood).setUnlocalizedName("collector");
 		GameRegistry.registerBlock(collector, ItemCollector.class, EldritchEmpires.modid + (collector.getUnlocalizedName().substring(5)));
 		LanguageRegistry.addName(new ItemStack(collector, 1, 0), "Collector");
 		LanguageRegistry.addName(new ItemStack(collector, 1, 1), "Active Collector");		
 		
-		spawner = new BlockSpawner(2865, Material.rock).setUnlocalizedName("spawner");
+		spawner = new BlockSpawner(EldritchEmpires.spawnerBlockID, Material.rock).setUnlocalizedName("spawner");
 		GameRegistry.registerBlock(spawner, ItemSpawner.class, EldritchEmpires.modid + (spawner.getUnlocalizedName().substring(5)));
 		LanguageRegistry.addName(new ItemStack(spawner, 1, 0), "Stone Archer Spawner");
 		LanguageRegistry.addName(new ItemStack(spawner, 1, 1), "Stone Mage Spawner");
 		LanguageRegistry.addName(new ItemStack(spawner, 1, 2), "Stone Warrior Spawner");
 	
-		portal = new BlockPortal(2866).setUnlocalizedName("portal");
+		portal = new BlockPortal(EldritchEmpires.portalBlockID).setUnlocalizedName("portal");
 		GameRegistry.registerBlock(portal, ItemPortal.class, EldritchEmpires.modid + (portal.getUnlocalizedName().substring(5)));
 		LanguageRegistry.addName(new ItemStack(portal, 1, 0), "Portal Focus");
 		LanguageRegistry.addName(new ItemStack(portal, 1, 1), "Placeholder Portal");
@@ -114,19 +113,19 @@ public class Registration {
 		
 		// Add Items
 //		Items.addItems();
-		golemPart = new ItemGolemPart(7620).setUnlocalizedName("golemPart").setCreativeTab(EldritchEmpires.tabEldritch);
+		golemPart = new ItemGolemPart(EldritchEmpires.golemPartItemID).setUnlocalizedName("golemPart").setCreativeTab(EldritchEmpires.tabEldritch);
 		GameRegistry.registerItem(golemPart, "Golem Part");
 		LanguageRegistry.addName(golemPart, "Golem Part");
 		
-		condensedEssence = new ItemCondensedEssence(7621).setUnlocalizedName("condensedEssence").setCreativeTab(EldritchEmpires.tabEldritch);
+		condensedEssence = new ItemCondensedEssence(EldritchEmpires.condensedEssenceItemID).setUnlocalizedName("condensedEssence").setCreativeTab(EldritchEmpires.tabEldritch);
 		GameRegistry.registerItem(condensedEssence, "Condensed Essence");
 		LanguageRegistry.addName(condensedEssence, "Condensed Essence");
 		
-		iceCrystal = new ItemIceCrystal(7622).setUnlocalizedName("iceCrystal").setCreativeTab(EldritchEmpires.tabEldritch);
+		iceCrystal = new ItemIceCrystal(EldritchEmpires.iceCrystalItemID).setUnlocalizedName("iceCrystal").setCreativeTab(EldritchEmpires.tabEldritch);
 		GameRegistry.registerItem(iceCrystal, "Ice Crystal");
 		LanguageRegistry.addName(iceCrystal, "Ice Crystal");
 		
-		golemWand = new ItemGolemWand(7623).setUnlocalizedName("golemWand").setCreativeTab(EldritchEmpires.tabEldritch);
+		golemWand = new ItemGolemWand(EldritchEmpires.golemWandItemID).setUnlocalizedName("golemWand").setCreativeTab(EldritchEmpires.tabEldritch);
 		GameRegistry.registerItem(golemWand, "Golem Wand");
 		LanguageRegistry.addName(golemWand, "Golem Wand");
 		
@@ -140,7 +139,6 @@ public class Registration {
 		GameRegistry.addRecipe(new ItemStack(iceCrystal, 1), new Object[] { "SSS", "SES", "SSS", 'S', Item.snowball, 'E', condensedEssence});
 		GameRegistry.addRecipe(new ItemStack(Item.diamond, 1, 0), new Object[] { "EEE", "EEE", "EEE", 'E', condensedEssence});
 		GameRegistry.addRecipe(new ItemStack(golemWand, 1), new Object[] {" EE", " SE", "S  ", 'E', condensedEssence, 'S', Item.stick});
-//		GameRegistry.addRecipe(new ItemStack(collector, 1, 0), new Object[] { " R ", "RIR", " R ", 'R', Item.redstone, 'I', inactiveCollector});
 		
 		// Add Event Handler
 		MinecraftForge.EVENT_BUS.register(new EldritchEvents());

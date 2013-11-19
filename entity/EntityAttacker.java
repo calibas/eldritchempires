@@ -4,6 +4,7 @@ import eldritchempires.EldritchMethods;
 import eldritchempires.EldritchWorldData;
 import eldritchempires.Registration;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.world.World;
@@ -87,6 +88,70 @@ public class EntityAttacker extends EntityMob{
         
         super.onLivingUpdate();
     }
+	
+	@Override
+    protected void dropFewItems(boolean hitByPlayer, int lootLevel)
+    {
+        super.dropFewItems(hitByPlayer, lootLevel);
+        
+        int itemChance = this.rand.nextInt(200);
+        
+        if (isBetween(itemChance, 1, 5)) {
+        	this.dropItem(Item.leather.itemID, 1);
+        } else if (isBetween(itemChance, 6, 7)) {
+        	this.dropItem(Item.appleRed.itemID, 1);
+        } else if (isBetween(itemChance, 8, 9)) {
+        	this.dropItem(Item.bread.itemID, 1);
+        } else if (isBetween(itemChance, 10, 15)) {
+        	this.dropItem(Item.beefCooked.itemID, 1);
+        } else if (isBetween(itemChance, 16, 16)) {
+        	this.dropItem(Item.diamond.itemID, 1);
+        } else if (isBetween(itemChance, 17, 17)) {
+        	this.dropItem(Item.expBottle.itemID, 1);
+        } else if (isBetween(itemChance, 18, 18)) {
+        	this.dropItem(Item.emerald.itemID, 1);
+        } else if (isBetween(itemChance, 19, 19)) {
+        	this.dropItem(Item.bow.itemID, 1);
+        } else if (isBetween(itemChance, 20, 35)) {
+        	this.dropItem(Item.bone.itemID, 1);
+        } else if (isBetween(itemChance, 36, 40)) {
+        	this.dropItem(Item.leather.itemID, 1);
+        } else if (isBetween(itemChance, 41, 46)) {
+        	this.dropItem(Item.arrow.itemID, 10);
+        } else if (isBetween(itemChance, 47, 50)) {
+        	this.dropItem(Item.ingotIron.itemID, 1);
+        }
+        
+//        switch (this.rand.nextInt(50))
+//        {
+//        	case 0:
+//        		this.dropItem(Item.swordIron.itemID, 1);
+//        		break;
+//        	case 1:
+//        		this.dropItem(Item.leather.itemID, 1);
+//        		break;
+//        	case 2:
+//        		this.dropItem(Item.plateIron.itemID, 1);
+//        		break;
+//        	case 3:
+//        		this.dropItem(Item.fishingRod.itemID, 1);
+//        		break;
+//        	case 4:
+//        		this.dropItem(Item.appleRed.itemID, 1);
+//        		break;
+//        	case 5:
+//        		this.dropItem(Item.appleRed.itemID, 1);
+//        		break;
+//        	case 6:
+//        		this.dropItem(Item.appleRed.itemID, 1);
+//        		break;
+//        }
+
+    }
+	
+	public static boolean isBetween(int x, int lower, int upper) {
+		  return lower <= x && x <= upper;
+		}
 	
     public int getFirstUncoveredBlockHeight(int par1, int par2)
     {

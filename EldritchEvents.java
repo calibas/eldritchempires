@@ -28,6 +28,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.WorldEvent;
 
 public class EldritchEvents {
@@ -140,12 +141,12 @@ public class EldritchEvents {
 						event.world.setBlockMetadataWithNotify(collectorX, collectorY, collectorZ, 1, 2);
 					}
 					
-					if (wave > 12)
-					{
-						data.setWave(0);
-						wave = 0;
-						event.world.perWorldStorage.setData(EldritchWorldData.name, data);
-					}
+//					if (wave > 12)
+//					{
+//						data.setWave(0);
+//						wave = 0;
+//						event.world.perWorldStorage.setData(EldritchWorldData.name, data);
+//					}
 					
 					waves(round, wave, portalX, portalY, portalZ, event.world);
 //					System.out.println("Spawn code here");
@@ -207,7 +208,7 @@ public class EldritchEvents {
 			}
 			data.setActiveWave(false);
 			world.perWorldStorage.setData(EldritchWorldData.name, data);
-			if (world.getBlockId(portalX, portalY, portalZ) == Registration.portal.blockID)
+			if (world.getBlockId(portalX, portalY, portalZ) == Registration.portal.blockID && !data.checkPortalFocus())
 			{
 				world.setBlockToAir(portalX, portalY, portalZ);
 				world.removeBlockTileEntity(portalX, portalY, portalZ);
@@ -226,8 +227,8 @@ public class EldritchEvents {
 		{
 		switch (wave){
 			case 0: 
-				announce = "You hear strange noises in the distance";
-				lastSpawn = lastSpawn + 300;
+				announce = "";
+				lastSpawn = lastSpawn + 400;
 				break;
 			case 1:
 				spawnWave("zoblin", 2, x, y, z, world);
@@ -275,22 +276,15 @@ public class EldritchEvents {
 //				waveActive = false;
 				break;
 			case 11:
-				announce = "The zoblin attack seems to have ended";
+//				announce = "The zoblin attack seems to have ended";
+				announce = "";
 				break;
 			case 12:
-				announce = "The portal closes";
-				
-//				if (!data.checkPortalFocus())
-//				{
-//					world.setBlockToAir(x, y, z);
-//					world.removeBlockTileEntity(x, y, z);
-//					world.setBlockMetadataWithNotify(data.getCollectorX(), data.getCollectorY(), data.getCollectorZ(), 0, 2);
-//					data.unSetPortal();
-//				}
-//				data.setActiveWave(false);
-				data.increaseProgress();
-				endRound(world);
-				world.perWorldStorage.setData(EldritchWorldData.name, data);
+//				announce = "The portal closes";
+				announce = "";
+//				data.increaseProgress();
+//				endRound(world);
+//				world.perWorldStorage.setData(EldritchWorldData.name, data);
 				break;
 			}
 		}
@@ -299,7 +293,8 @@ public class EldritchEvents {
 		{
 		switch (wave){
 			case 0: 
-				announce = "You hear strange noises in the distance";
+				announce = "";
+				lastSpawn = lastSpawn + 400;
 				break;
 			case 1:
 				spawnWave("zoblin", 3, x, y, z, world);
@@ -349,14 +344,15 @@ public class EldritchEvents {
 //				waveActive = false;
 				break;
 			case 11:
-				announce = "The zoblin attack seems to have ended";
+//				announce = "The zoblin attack seems to have ended";
+				announce = "";
 				break;
 			case 12:
-				announce = "The portal closes";
-				
-				data.increaseProgress();
-				endRound(world);
-				world.perWorldStorage.setData(EldritchWorldData.name, data);
+//				announce = "The portal closes";
+				announce = "";
+//				data.increaseProgress();
+//				endRound(world);
+//				world.perWorldStorage.setData(EldritchWorldData.name, data);
 				break;
 			}
 		}
@@ -365,7 +361,8 @@ public class EldritchEvents {
 		{
 		switch (wave){			
 			case 0: 
-				announce = "You hear strange noises in the distance";
+				announce = "";
+				lastSpawn = lastSpawn + 400;
 				world.perWorldStorage.setData(EldritchWorldData.name, data);
 				break;
 			case 1:
@@ -415,14 +412,15 @@ public class EldritchEvents {
 				spawnWave("magicEssence", 1, x, y, z, world);
 				break;
 			case 11:
-				announce = "The zoblin attack seems to have ended";
+//				announce = "The zoblin attack seems to have ended";
+				announce = "";
 				break;
 			case 12:
-				announce = "The portal closes";
-				
-				data.increaseProgress();
-				endRound(world);
-				world.perWorldStorage.setData(EldritchWorldData.name, data);
+//				announce = "The portal closes";
+				announce = "";
+//				data.increaseProgress();
+//				endRound(world);
+//				world.perWorldStorage.setData(EldritchWorldData.name, data);
 				break;
 			}
 		}
@@ -431,7 +429,8 @@ public class EldritchEvents {
 		{
 		switch (wave){			
 			case 0: 
-				announce = "You hear strange noises in the distance";
+				announce = "";
+				lastSpawn = lastSpawn + 400;
 				if (data.getProgress() < 1)
 					data.increaseProgress();
 				world.perWorldStorage.setData(EldritchWorldData.name, data);
@@ -484,14 +483,15 @@ public class EldritchEvents {
 				spawnWave("magicEssence", 1, x, y, z, world);
 				break;
 			case 11:
-				announce = "The rabid dwarf attack seems to have ended";
+//				announce = "The rabid dwarf attack seems to have ended";
+				announce = "";
 				break;
 			case 12:
-				announce = "The portal closes";
-				
-				data.increaseProgress();
-				endRound(world);
-				world.perWorldStorage.setData(EldritchWorldData.name, data);
+//				announce = "The portal closes";
+				announce = "";
+//				data.increaseProgress();
+//				endRound(world);
+//				world.perWorldStorage.setData(EldritchWorldData.name, data);
 				break;
 			}
 		}
@@ -500,7 +500,8 @@ public class EldritchEvents {
 		{
 		switch (wave){			
 			case 0: 
-				announce = "You hear strange noises in the distance";
+				announce = "";
+				lastSpawn = lastSpawn + 400;
 				if (data.getProgress() < 1)
 					data.increaseProgress();
 				world.perWorldStorage.setData(EldritchWorldData.name, data);
@@ -553,14 +554,15 @@ public class EldritchEvents {
 				spawnWave("magicEssence", 1, x, y, z, world);
 				break;
 			case 11:
-				announce = "The rabid dwarf attack seems to have ended";
+//				announce = "The rabid dwarf attack seems to have ended";
+				announce = "";
 				break;
 			case 12:
-				announce = "The portal closes";
-				
-				data.increaseProgress();
-				endRound(world);
-				world.perWorldStorage.setData(EldritchWorldData.name, data);
+//				announce = "The portal closes";
+				announce = "";
+//				data.increaseProgress();
+//				endRound(world);
+//				world.perWorldStorage.setData(EldritchWorldData.name, data);
 				break;
 			}
 		}
@@ -675,6 +677,29 @@ public class EldritchEvents {
 
 		}
 		announce = announce + name + " x" + count + "  ";
+	}
+	
+	@ForgeSubscribe
+	public void onMobKilled(LivingDeathEvent event)
+	{
+		if (event.entityLiving instanceof EntityZoblinBoss && data.isWaveActive())
+		{
+			data.increaseProgress();
+			endRound(event.entity.worldObj);
+			event.entity.worldObj.perWorldStorage.setData(EldritchWorldData.name, data);
+			if (!event.entityLiving.worldObj.isRemote)
+				EldritchMethods.broadcastMessageLocal("Round completed", (int)event.entityLiving.posX, (int)event.entityLiving.posY, (int)event.entityLiving.posZ, announceRadius, event.entityLiving.worldObj);
+		}
+		
+		if (event.entityLiving instanceof EntityRabidDemo && data.isWaveActive())
+		{
+			data.increaseProgress();
+			endRound(event.entityLiving.worldObj);
+			event.entityLiving.worldObj.perWorldStorage.setData(EldritchWorldData.name, data);
+			if (!event.entityLiving.worldObj.isRemote)
+				EldritchMethods.broadcastMessageLocal("Round completed", (int)event.entityLiving.posX, (int)event.entityLiving.posY, (int)event.entityLiving.posZ, announceRadius, event.entityLiving.worldObj);
+		}
+
 	}
 	
 }

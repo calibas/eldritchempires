@@ -20,6 +20,8 @@ import net.minecraft.world.World;
 
 public class ItemGolemWand extends Item{
 
+	final public int packetID = 2;
+	
 	public ItemGolemWand(int par1) {
 		super(par1);
 	}
@@ -47,6 +49,7 @@ public class ItemGolemWand extends Item{
 		int attackLevel = tileEntity.attackLevel;
 		int healthLevel = tileEntity.healthLevel;
 		try {
+				outputStream.writeInt(packetID);
 		        outputStream.writeInt(attackLevel);
 		        outputStream.writeInt(healthLevel);
 		        outputStream.writeInt(x);

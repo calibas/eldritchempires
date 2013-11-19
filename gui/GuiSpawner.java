@@ -27,6 +27,7 @@ public class GuiSpawner extends GuiContainer{
 	public static final ResourceLocation texture = new ResourceLocation("eldritchempires", "textures/gui/spawner.png");
 	private TileEntitySpawner spawner;
 	private EntityPlayer player;
+	final public int packetID = 1;
     protected int xSize = 176;
     protected int ySize = 166;
     
@@ -62,64 +63,35 @@ public class GuiSpawner extends GuiContainer{
 
         System.out.println(spawner.attackLevel + " " + spawner.healthLevel);
         
-        if (spawner.attackLevel == 0)
+        if ((spawner.attackLevel == 0 && player.experienceLevel >= 5) || player.capabilities.isCreativeMode)
         {
             attack1.enabled = true;
         }
         
-        if (spawner.attackLevel == 1)
+        if ((spawner.attackLevel == 1 && player.experienceLevel >= 10) || player.capabilities.isCreativeMode)
         {
             attack2.enabled = true;
         }
         
-        if (spawner.attackLevel == 2)
+        if ((spawner.attackLevel == 2 && player.experienceLevel >= 15) || player.capabilities.isCreativeMode)
         {
             attack3.enabled = true;
         }
         
-        if (spawner.healthLevel == 0)
+        if ((spawner.healthLevel == 0 && player.experienceLevel >= 5) || player.capabilities.isCreativeMode)
         {
         	health1.enabled = true;
         }
         
-        if (spawner.healthLevel == 1)
+        if ((spawner.healthLevel == 1 && player.experienceLevel >= 10) || player.capabilities.isCreativeMode)
         {
         	health2.enabled = true;
         }
         
-        if (spawner.healthLevel == 2)
+        if ((spawner.healthLevel == 2 && player.experienceLevel >= 15) || player.capabilities.isCreativeMode)
         {
         	health3.enabled = true;
         }
-//        if (data.isWaveActive())
-//        {
-//        	closePortal.enabled = true;
-//        	zoblin1.enabled = false;
-//        }
-//
-//        if (data.getProgress() >= 1 && !data.isWaveActive())
-//        	zoblin2.enabled = true;
-//        
-//        if (data.getProgress() >= 2 && !data.isWaveActive())
-//        	zoblin3.enabled = true;
-//        
-//        if (data.getProgress() >= 3 && !data.isWaveActive())
-//        	dwarf1.enabled = true;
-//      
-//        if (data.getProgress() >= 4 && !data.isWaveActive())
-//        	dwarf2.enabled = true;
-//        
-//        if (data.getProgress() >= 5 && !data.isWaveActive())
-//        	dwarf3.enabled = true;
-//        
-//        if (data.getProgress() >= 6 && !data.isWaveActive())
-//        	temp1.enabled = true;
-//        
-//        if (data.getProgress() >= 7 && !data.isWaveActive())
-//        	temp2.enabled = true;
-//        
-//        if (data.getProgress() >= 8 && !data.isWaveActive())
-//        	temp3.enabled = true;
         
         this.buttonList.add(attack1);
         this.buttonList.add(attack2);
@@ -137,32 +109,32 @@ public class GuiSpawner extends GuiContainer{
 		{
 		case 0:
 			// Attack 1
-			sendPacket(1,0);
+			sendPacket(1,spawner.healthLevel);
     		this.mc.thePlayer.closeScreen();
 			break;
 		case 1:
 			// Attack 2
-			sendPacket(2,0);
+			sendPacket(2,spawner.healthLevel);
 			this.mc.thePlayer.closeScreen();
 			break;
 		case 2:
 			// Attack 3
-			sendPacket(3,0);
+			sendPacket(3,spawner.healthLevel);
 			this.mc.thePlayer.closeScreen();
 			break;
 		case 3:
 			// Health 1
-			sendPacket(0,1);
+			sendPacket(spawner.attackLevel,1);
 			this.mc.thePlayer.closeScreen();
 			break;
 		case 4:
 			// Health 2
-			sendPacket(0,2);
+			sendPacket(spawner.attackLevel,2);
 			this.mc.thePlayer.closeScreen();
 			break;
 		case 5:
 			// Health 3
-			sendPacket(0,3);
+			sendPacket(spawner.attackLevel,3);
 			this.mc.thePlayer.closeScreen();
 			break;
 		case 10:
@@ -190,6 +162,7 @@ public class GuiSpawner extends GuiContainer{
 		ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
 		DataOutputStream outputStream = new DataOutputStream(bos);
 		try {
+				outputStream.writeInt(packetID);
 		        outputStream.writeInt(attackLevel);
 		        outputStream.writeInt(healthLevel);
 		        outputStream.writeInt(spawner.xCoord);
