@@ -41,7 +41,11 @@ public class EntityStoneWarrior extends EntityGuard
         this.targetTasks.addTask(4, new EntityAINearestAttackableTarget(this, EntitySkeleton.class, 0, true));
         this.setCurrentItemOrArmor(0, new ItemStack(Item.swordIron));
 
-
+        for (int i = 0; i < this.equipmentDropChances.length; ++i)
+        {
+            this.equipmentDropChances[i] = 0;
+        }
+        
 	}
 	
 	@Override

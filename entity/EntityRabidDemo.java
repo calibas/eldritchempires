@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 public class EntityRabidDemo extends EntityAttacker{
 
 	EldritchWorldData data = new EldritchWorldData();
+	int i = 0;
 	
 	public EntityRabidDemo(World par1World) {
 		super(par1World);
@@ -30,16 +31,21 @@ public class EntityRabidDemo extends EntityAttacker{
 	public void onUpdate(){
 		super.onUpdate();
 		
-    	if(this.rand.nextInt(130) == 0 && !this.worldObj.isRemote && (data.isWaveActive() || this.entityToAttack != null))
+		i++;
+    	if(i > 150)
 	   	{
-    		if (data.isWaveActive())
+    		double xd = this.collectorX - this.posX;
+			double zd = this.collectorZ - this.posZ;
+			double distance = Math.sqrt(xd*xd + zd*zd);
+    		
+    		if (data.isWaveActive() && !this.worldObj.isRemote && (distance < 25 || this.entityToAttack != null))
     		{
     			EntityBomb entity = new EntityBomb(this.worldObj);
     			entity.setLocationAndAngles((double)this.posX, (double)this.posY + 1, (double)this.posZ, 0.0F, 0.0F);
  	
     			//Find direction of collector
-    			double xd = this.collectorX - this.posX;
-    			double zd = this.collectorZ - this.posZ;
+//    			double xd = this.collectorX - this.posX;
+//    			double zd = this.collectorZ - this.posZ;
     			double deltaX = Math.sin(Math.atan2(xd,zd));
     			double deltaZ = Math.cos(Math.atan2(xd, zd));
 //    			float directionX = (float)(deltaX * 1.9D);
@@ -52,14 +58,14 @@ public class EntityRabidDemo extends EntityAttacker{
     			entity.motionZ = directionZ;
     			this.worldObj.spawnEntityInWorld(entity);
     		}
-    		else
+    		else if (this.entityToAttack != null && !this.worldObj.isRemote)
     		{
     			EntityBomb entity = new EntityBomb(this.worldObj);
     			entity.setLocationAndAngles((double)this.posX, (double)this.posY + 1, (double)this.posZ, 0.0F, 0.0F);
  	
     			//Find direction of collector
-    			double xd = this.entityToAttack.posX - this.posX;
-    			double zd = this.entityToAttack.posZ - this.posZ;
+//    			double xd = this.entityToAttack.posX - this.posX;
+//    			double zd = this.entityToAttack.posZ - this.posZ;
     			double deltaX = Math.sin(Math.atan2(xd,zd));
     			double deltaZ = Math.cos(Math.atan2(xd, zd));
 //    			float directionX = (float)(deltaX * 1.9D);
@@ -72,6 +78,7 @@ public class EntityRabidDemo extends EntityAttacker{
     			entity.motionZ = directionZ;
     			this.worldObj.spawnEntityInWorld(entity);
     		}
+    		i = 0;
 	    }
 	}
 	

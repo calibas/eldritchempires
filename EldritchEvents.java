@@ -2,6 +2,7 @@ package eldritchempires;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import eldritchempires.entity.EntityMagicEssence;
 import eldritchempires.entity.EntityRabidDemo;
@@ -38,7 +39,7 @@ public class EldritchEvents {
 //	public static int wave = 0;
 	int announceRadius = 100;
 //	public static boolean waveActive = true;
-	String announce = "Incoming: ";
+	String announce = "";
 	EldritchWorldData data = new EldritchWorldData();
 	
 	@ForgeSubscribe
@@ -161,14 +162,21 @@ public class EldritchEvents {
 //						}
 //					}
 					
-					if (announce != "")
+					if (!announce.equals(""))
 						EldritchMethods.broadcastMessageLocal(announce, collectorX, collectorY, collectorZ, 100, event.world);
 					
 					
-					announce = "Incoming: ";
 					wave++;
 					data.setWave(wave++);
 					event.world.perWorldStorage.setData(EldritchWorldData.name, data);
+					if (data.getWave() >= 1 && data.getWave() <= 10)
+					{
+						announce = "Wave " + data.getWave() + "/10: ";
+					}
+					else
+					{
+						announce = "";
+					}
 					lastSpawn = event.world.provider.getWorldTime();
 //					System.out.println("Spawn time: " + lastSpawn);
 //				}
@@ -227,8 +235,7 @@ public class EldritchEvents {
 		{
 		switch (wave){
 			case 0: 
-				announce = "";
-				lastSpawn = lastSpawn + 400;
+				lastSpawn = lastSpawn + 580;
 				break;
 			case 1:
 				spawnWave("zoblin", 2, x, y, z, world);
@@ -277,11 +284,9 @@ public class EldritchEvents {
 				break;
 			case 11:
 //				announce = "The zoblin attack seems to have ended";
-				announce = "";
 				break;
 			case 12:
 //				announce = "The portal closes";
-				announce = "";
 //				data.increaseProgress();
 //				endRound(world);
 //				world.perWorldStorage.setData(EldritchWorldData.name, data);
@@ -293,8 +298,7 @@ public class EldritchEvents {
 		{
 		switch (wave){
 			case 0: 
-				announce = "";
-				lastSpawn = lastSpawn + 400;
+				lastSpawn = lastSpawn + 580;
 				break;
 			case 1:
 				spawnWave("zoblin", 3, x, y, z, world);
@@ -345,11 +349,9 @@ public class EldritchEvents {
 				break;
 			case 11:
 //				announce = "The zoblin attack seems to have ended";
-				announce = "";
 				break;
 			case 12:
 //				announce = "The portal closes";
-				announce = "";
 //				data.increaseProgress();
 //				endRound(world);
 //				world.perWorldStorage.setData(EldritchWorldData.name, data);
@@ -361,8 +363,7 @@ public class EldritchEvents {
 		{
 		switch (wave){			
 			case 0: 
-				announce = "";
-				lastSpawn = lastSpawn + 400;
+				lastSpawn = lastSpawn + 580;
 				world.perWorldStorage.setData(EldritchWorldData.name, data);
 				break;
 			case 1:
@@ -413,11 +414,9 @@ public class EldritchEvents {
 				break;
 			case 11:
 //				announce = "The zoblin attack seems to have ended";
-				announce = "";
 				break;
 			case 12:
 //				announce = "The portal closes";
-				announce = "";
 //				data.increaseProgress();
 //				endRound(world);
 //				world.perWorldStorage.setData(EldritchWorldData.name, data);
@@ -429,8 +428,7 @@ public class EldritchEvents {
 		{
 		switch (wave){			
 			case 0: 
-				announce = "";
-				lastSpawn = lastSpawn + 400;
+				lastSpawn = lastSpawn + 580;
 				if (data.getProgress() < 1)
 					data.increaseProgress();
 				world.perWorldStorage.setData(EldritchWorldData.name, data);
@@ -484,11 +482,9 @@ public class EldritchEvents {
 				break;
 			case 11:
 //				announce = "The rabid dwarf attack seems to have ended";
-				announce = "";
 				break;
 			case 12:
 //				announce = "The portal closes";
-				announce = "";
 //				data.increaseProgress();
 //				endRound(world);
 //				world.perWorldStorage.setData(EldritchWorldData.name, data);
@@ -500,8 +496,7 @@ public class EldritchEvents {
 		{
 		switch (wave){			
 			case 0: 
-				announce = "";
-				lastSpawn = lastSpawn + 400;
+				lastSpawn = lastSpawn + 580;
 				if (data.getProgress() < 1)
 					data.increaseProgress();
 				world.perWorldStorage.setData(EldritchWorldData.name, data);
@@ -555,11 +550,9 @@ public class EldritchEvents {
 				break;
 			case 11:
 //				announce = "The rabid dwarf attack seems to have ended";
-				announce = "";
 				break;
 			case 12:
 //				announce = "The portal closes";
-				announce = "";
 //				data.increaseProgress();
 //				endRound(world);
 //				world.perWorldStorage.setData(EldritchWorldData.name, data);
@@ -574,10 +567,13 @@ public class EldritchEvents {
 		
 		for (int i = 1; i < (count + 1); i++)
 		{
+			Random rand = new Random();
+			double dx = (double)x + rand.nextDouble();
+			double dz = (double)z + rand.nextDouble();
 			if (mobName == "zoblin")
 			{
 				EntityZoblin entity = new EntityZoblin(world);
-				entity.setLocationAndAngles((double)x, (double)y + 1, (double)z, 0.0F, 0.0F);
+				entity.setLocationAndAngles(dx, (double)y + 1, dz, 0.0F, 0.0F);
 				entity.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(2.099D);
 				entity.collectorX = data.getCollectorX();
 				entity.collectorY = data.getCollectorY();
@@ -588,7 +584,7 @@ public class EldritchEvents {
 			if (mobName == "zoblinBomber")
 			{
 				EntityZoblinBomber entity = new EntityZoblinBomber(world);
-				entity.setLocationAndAngles((double)x, (double)y + 1, (double)z, 0.0F, 0.0F);
+				entity.setLocationAndAngles(dx, (double)y + 1, dz, 0.0F, 0.0F);
 				entity.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(1.599D);
 				entity.attacking = true;
 				entity.collectorX = data.getCollectorX();
@@ -605,7 +601,7 @@ public class EldritchEvents {
 			if (mobName == "magicEssence")
 			{
 				EntityMagicEssence entity = new EntityMagicEssence(world);
-				entity.setLocationAndAngles((double)x, (double)y + 1, (double)z, 0.0F, 0.0F);
+				entity.setLocationAndAngles(dx, (double)y + 1, dz, 0.0F, 0.0F);
 				entity.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(2.599D);
 				entity.attacking = true;
 				entity.nodeX = data.getCollectorX();
@@ -617,7 +613,7 @@ public class EldritchEvents {
 			if (mobName == "zoblinBoss")
 			{
 				EntityZoblinBoss entity = new EntityZoblinBoss(world);
-				entity.setLocationAndAngles((double)x, (double)y + 1, (double)z, 0.0F, 0.0F);
+				entity.setLocationAndAngles(dx, (double)y + 1, dz, 0.0F, 0.0F);
 				entity.collectorX = data.getCollectorX();
 				entity.collectorY = data.getCollectorY();
 				entity.collectorZ = data.getCollectorZ();
@@ -627,7 +623,7 @@ public class EldritchEvents {
 			if (mobName == "zoblinWarrior")
 			{
 				EntityZoblinWarrior entity = new EntityZoblinWarrior(world);
-				entity.setLocationAndAngles((double)x, (double)y + 1, (double)z, 0.0F, 0.0F);
+				entity.setLocationAndAngles(dx, (double)y + 1, dz, 0.0F, 0.0F);
 				entity.collectorX = data.getCollectorX();
 				entity.collectorY = data.getCollectorY();
 				entity.collectorZ = data.getCollectorZ();
@@ -637,7 +633,7 @@ public class EldritchEvents {
 			if (mobName == "rabidMiner")
 			{
 				EntityRabidMiner entity = new EntityRabidMiner(world);
-				entity.setLocationAndAngles((double)x, (double)y + 1, (double)z, 0.0F, 0.0F);
+				entity.setLocationAndAngles(dx, (double)y + 1, dz, 0.0F, 0.0F);
 				entity.collectorX = data.getCollectorX();
 				entity.collectorY = data.getCollectorY();
 				entity.collectorZ = data.getCollectorZ();
@@ -647,7 +643,7 @@ public class EldritchEvents {
 			if (mobName == "rabidDwarf")
 			{
 				EntityRabidDwarf entity = new EntityRabidDwarf(world);
-				entity.setLocationAndAngles((double)x, (double)y + 1, (double)z, 0.0F, 0.0F);
+				entity.setLocationAndAngles(dx, (double)y + 1, dz, 0.0F, 0.0F);
 				entity.collectorX = data.getCollectorX();
 				entity.collectorY = data.getCollectorY();
 				entity.collectorZ = data.getCollectorZ();
@@ -657,7 +653,7 @@ public class EldritchEvents {
 			if (mobName == "rabidWarrior")
 			{
 				EntityRabidWarrior entity = new EntityRabidWarrior(world);
-				entity.setLocationAndAngles((double)x, (double)y + 1, (double)z, 0.0F, 0.0F);
+				entity.setLocationAndAngles(dx, (double)y + 1, dz, 0.0F, 0.0F);
 				entity.collectorX = data.getCollectorX();
 				entity.collectorY = data.getCollectorY();
 				entity.collectorZ = data.getCollectorZ();
@@ -667,7 +663,7 @@ public class EldritchEvents {
 			if (mobName == "rabidDemo")
 			{
 				EntityRabidDemo entity = new EntityRabidDemo(world);
-				entity.setLocationAndAngles((double)x, (double)y + 1, (double)z, 0.0F, 0.0F);
+				entity.setLocationAndAngles(dx, (double)y + 1, dz, 0.0F, 0.0F);
 				entity.collectorX = data.getCollectorX();
 				entity.collectorY = data.getCollectorY();
 				entity.collectorZ = data.getCollectorZ();

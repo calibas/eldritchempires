@@ -74,7 +74,7 @@ public class EntityAIGolemStill extends EntityAIBase
     		}
     		if (stillCount > 100)
     		{
-    			entity.setPosition(entityGuard.homeX + 0.5D, entityGuard.homeY + 0.1D, entityGuard.homeZ + 0.5D);
+    			entity.setPosition(entityGuard.homeX + 0.5D, entityGuard.homeY + 0.5D, entityGuard.homeZ + 0.5D);
     			stillCount = 0;
     		}
     	}

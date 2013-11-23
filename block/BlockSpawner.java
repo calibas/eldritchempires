@@ -34,12 +34,12 @@ public class BlockSpawner extends BlockContainer{
 	private int entityId;
 	
 	public BlockSpawner(int par1, Material par2Material) {
-		super(par1, Material.plants);
+		super(par1, par2Material);
 		this.setHardness(1.5F);
-		this.setResistance(25.0F);
+		this.setResistance(50.0F);
 		this.setCreativeTab(EldritchEmpires.tabEldritch);
 		this.setTickRandomly(true);
-		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1F, 0.1F, 1F);
+		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1F, 0.5F, 1F);
 	}
 
 	@Override
@@ -49,9 +49,15 @@ public class BlockSpawner extends BlockContainer{
     }
 	
 	@Override
+    public boolean renderAsNormalBlock()
+    {
+        return false;
+    }
+	
+	@Override
     public boolean canPlaceBlockAt(World par1World, int par2, int par3, int par4)
     {
-        return !(par1World.isAirBlock(par2, par3 - 1, par4));
+        return !(par1World.getBlockId(par2, par3 - 1, par4) == Registration.spawner.blockID || par1World.getBlockId(par2, par3 + 1, par4) == Registration.spawner.blockID);
     }
 	
 	@Override
@@ -104,18 +110,27 @@ public class BlockSpawner extends BlockContainer{
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-         icons = new Icon[3];
+         icons = new Icon[4];
         
-         for(int i = 0; i < icons.length; i++)
+         for(int i = 0; i < 3; i++)
          {
                 icons[i] = par1IconRegister.registerIcon(EldritchEmpires.modid + ":" + (this.getUnlocalizedName().substring(5)) + i);
          }
+         
+         icons[3] = par1IconRegister.registerIcon(EldritchEmpires.modid + ":" + "spawner-side");
     }
   
     @SideOnly(Side.CLIENT)
-    public Icon getIcon(int par1, int par2)
+    public Icon getIcon(int side, int metadata)
     {
-         return icons[par2];
+    	if (side == 1 || side == 0)
+    	{
+    		return icons[metadata];
+    	}
+    	else
+    	{
+    		return icons[3];
+    	}
     }
   
     @SideOnly(Side.CLIENT)

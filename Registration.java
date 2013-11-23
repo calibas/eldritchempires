@@ -68,7 +68,7 @@ public class Registration {
 		LanguageRegistry.addName(new ItemStack(collector, 1, 0), "Collector");
 		LanguageRegistry.addName(new ItemStack(collector, 1, 1), "Active Collector");		
 		
-		spawner = new BlockSpawner(EldritchEmpires.spawnerBlockID, Material.rock).setUnlocalizedName("spawner");
+		spawner = new BlockSpawner(EldritchEmpires.spawnerBlockID, Material.ground).setUnlocalizedName("spawner");
 		GameRegistry.registerBlock(spawner, ItemSpawner.class, EldritchEmpires.modid + (spawner.getUnlocalizedName().substring(5)));
 		LanguageRegistry.addName(new ItemStack(spawner, 1, 0), "Stone Archer Spawner");
 		LanguageRegistry.addName(new ItemStack(spawner, 1, 1), "Stone Mage Spawner");

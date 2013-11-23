@@ -49,7 +49,11 @@ public class EntityStoneArcher extends EntityGuard implements IRangedAttackMob
         this.targetTasks.addTask(4, new EntityAINearestAttackableTarget(this, EntitySkeleton.class, 0, true));
 //        moveHelper = new EntityMoveHelper(this);
         this.setCurrentItemOrArmor(0, new ItemStack(Item.bow));
-
+        
+        for (int i = 0; i < this.equipmentDropChances.length; ++i)
+        {
+            this.equipmentDropChances[i] = 0;
+        }
 
 	}
 	

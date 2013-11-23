@@ -59,7 +59,7 @@ public class TileEntitySpawner extends TileEntity implements IInventory
 		if (i == 0 && !this.worldObj.isRemote)
 		{
 				EntityStoneArcher stoneArcher = new EntityStoneArcher(this.worldObj);
-				stoneArcher.setLocationAndAngles((double)this.xCoord + 0.5D, (double)this.yCoord + 0.1D, (double)this.zCoord + 0.5D, 0.0F, 0.0F);
+				stoneArcher.setLocationAndAngles((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D, 0.0F, 0.0F);
 				stoneArcher.guarding = true;
 				stoneArcher.homeX = this.xCoord;
 				stoneArcher.homeY = this.yCoord;
@@ -77,7 +77,7 @@ public class TileEntitySpawner extends TileEntity implements IInventory
 		if (i == 1 && !this.worldObj.isRemote)
 		{
 				EntityStoneMage stoneMage = new EntityStoneMage(this.worldObj);
-				stoneMage.setLocationAndAngles((double)this.xCoord + 0.5D, (double)this.yCoord + 0.1D, (double)this.zCoord + 0.5D, 0.0F, 0.0F);
+				stoneMage.setLocationAndAngles((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D, 0.0F, 0.0F);
 				stoneMage.guarding = true;
 				stoneMage.homeX = this.xCoord;
 				stoneMage.homeY = this.yCoord;
@@ -95,7 +95,7 @@ public class TileEntitySpawner extends TileEntity implements IInventory
 		if (i == 2 && !this.worldObj.isRemote)
 		{
 				EntityStoneWarrior stoneWarrior = new EntityStoneWarrior(this.worldObj);
-				stoneWarrior.setLocationAndAngles((double)this.xCoord + 0.5D, (double)this.yCoord + 0.1D, (double)this.zCoord + 0.5D, 0.0F, 0.0F);
+				stoneWarrior.setLocationAndAngles((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D, 0.0F, 0.0F);
 				stoneWarrior.guarding = true;
 				stoneWarrior.homeX = this.xCoord;
 				stoneWarrior.homeY = this.yCoord;
