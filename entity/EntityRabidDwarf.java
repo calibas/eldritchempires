@@ -1,7 +1,6 @@
 package eldritchempires.entity;
 
 import eldritchempires.EldritchMethods;
-import eldritchempires.EldritchWorldData;
 import eldritchempires.Registration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.SharedMonsterAttributes;

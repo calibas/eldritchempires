@@ -1,6 +1,5 @@
 package eldritchempires.entity;
 
-import eldritchempires.EldritchWorldData;
 import eldritchempires.Registration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -14,6 +13,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 public class EntityRabidMiner extends EntityAttacker{
@@ -26,7 +26,8 @@ public class EntityRabidMiner extends EntityAttacker{
 	private int removingX;
 	private int removingY;
 	private int removingZ;
-	EldritchWorldData data = new EldritchWorldData();
+//	EldritchWorldData data = new EldritchWorldData();
+	TileEntityCollector collector;
 //	private PathEntity path;
 	
 	public EntityRabidMiner(World par1World) {
@@ -44,101 +45,112 @@ public class EntityRabidMiner extends EntityAttacker{
     }
 	
 	@Override
-    public void onLivingUpdate()
-    {
-      super.onLivingUpdate();
-      
-	  if (this.rand.nextInt(10) == 0 && !this.worldObj.isRemote && data.isWaveActive() && this.getHeldItem().itemID == Item.pickaxeIron.itemID) {
-		int targetX = 1;
-		int targetY = 1;
-		
-		if (removingBlock)
-		{
-    		System.out.println(removingBlock);
-    		blockRemovalCounter++;
-    		if (this.getDistance(removingX + 0.5D, removingY - 0.5D, removingZ + 0.5D) > 2.0D) {
-    			removingBlock = false;
-    			this.dataWatcher.updateObject(16, Byte.valueOf((byte)0));
-    		}
-    		
-    		//Destroy blocks, if not portal
-    		if (blockRemovalCounter > 6) {
-    			if (!this.worldObj.isAirBlock(removingX, removingY, removingZ) && this.worldObj.getBlockId(removingX, removingY, removingZ) != Registration.portal.blockID && !this.worldObj.isAirBlock(removingX, removingY +2, removingZ)) {
-    				int blockID = this.worldObj.getBlockId(removingX, removingY, removingZ);
-    				this.worldObj.destroyBlock(removingX, removingY, removingZ, true);
-    			}
-    			else if (!this.worldObj.isAirBlock(removingX, removingY + 1, removingZ) && this.worldObj.getBlockId(removingX, removingY + 1, removingZ) != Registration.portal.blockID) {
-    				int blockID = this.worldObj.getBlockId(removingX, removingY + 1, removingZ);
-    				this.worldObj.destroyBlock(removingX, removingY + 1, removingZ, true);
-    			}
-    			blockRemovalCounter = 0;
-    			
-    			if (this.worldObj.isAirBlock(removingX, removingY + 1, removingZ) || this.worldObj.getBlockId(removingX, removingY, removingZ) == Registration.portal.blockID) {
-    				removingBlock = false;
-    				this.dataWatcher.updateObject(16, Byte.valueOf((byte)0));
-    			}
-    		}
+	public void onLivingUpdate()
+	{
+		super.onLivingUpdate();
+
+		if (this.rand.nextInt(10) == 0 && !this.worldObj.isRemote && this.getHeldItem().itemID == Item.pickaxeIron.itemID) {
+
+			TileEntity tileEntity = this.worldObj.getBlockTileEntity(collectorX, collectorY, collectorZ);
+			if (tileEntity instanceof TileEntityCollector)
+			{
+				collector = (TileEntityCollector) tileEntity;
+
+				if (collector.roundActive)
+				{
+
+					int targetX = 1;
+					int targetY = 1;
+
+					if (removingBlock)
+					{
+						System.out.println(removingBlock);
+						blockRemovalCounter++;
+						if (this.getDistance(removingX + 0.5D, removingY - 0.5D, removingZ + 0.5D) > 2.0D) {
+							removingBlock = false;
+							this.dataWatcher.updateObject(16, Byte.valueOf((byte)0));
+						}
+
+						//Destroy blocks, if not portal
+						if (blockRemovalCounter > 6) {
+							if (!this.worldObj.isAirBlock(removingX, removingY, removingZ) && this.worldObj.getBlockId(removingX, removingY, removingZ) != Registration.portal.blockID && !this.worldObj.isAirBlock(removingX, removingY +2, removingZ)) {
+								int blockID = this.worldObj.getBlockId(removingX, removingY, removingZ);
+								this.worldObj.destroyBlock(removingX, removingY, removingZ, true);
+							}
+							else if (!this.worldObj.isAirBlock(removingX, removingY + 1, removingZ) && this.worldObj.getBlockId(removingX, removingY + 1, removingZ) != Registration.portal.blockID) {
+								int blockID = this.worldObj.getBlockId(removingX, removingY + 1, removingZ);
+								this.worldObj.destroyBlock(removingX, removingY + 1, removingZ, true);
+							}
+							blockRemovalCounter = 0;
+
+							if (this.worldObj.isAirBlock(removingX, removingY + 1, removingZ) || this.worldObj.getBlockId(removingX, removingY, removingZ) == Registration.portal.blockID) {
+								removingBlock = false;
+								this.dataWatcher.updateObject(16, Byte.valueOf((byte)0));
+							}
+						}
+					}
+					else if ((int)this.posX != lastX || (int)this.posZ != lastZ) {
+						lastX = (int)this.posX;
+						lastZ = (int)this.posZ;
+						stillCounter = 0;
+					}
+					else {
+						stillCounter++;
+					}
+
+					if (stillCounter >= 5) {
+						stillCounter = 0;
+
+						//Find direction of collector
+						double xd = this.collectorX - this.posX;
+						double zd = this.collectorZ - this.posZ;
+						double deltaX = Math.sin(Math.atan2(xd,zd));
+						double deltaZ = Math.cos(Math.atan2(xd, zd));
+						int directionX = (int)(deltaX * 1.9D);
+						int directionZ = (int)(deltaZ * 1.9D);
+
+						System.out.println("DirectionX/Y " + directionX + " " + directionZ);
+
+						//If block is diagonal, target adjacent block instead
+						if (directionX != 0 && directionZ != 0)
+						{
+							int random = this.rand.nextInt(2);
+							if (random == 0)
+								directionX = 0;
+							else
+								directionZ = 0;
+						}
+						System.out.println("DirectionX/Y " + directionX + " " + directionZ);
+
+						System.out.println("posZ " + (int)this.posZ);
+						System.out.println((int)this.posZ + directionZ);
+						System.out.println("posX " + (int)this.posX);
+
+						System.out.println(removingBlock);
+						removingX = (int)this.posX + directionX;
+						removingY = (int)this.posY;
+						removingZ = (int)this.posZ + directionZ;
+
+						//Casting to an int throws negative coordinates off by 1
+						if (this.posX < 0)
+							removingX = removingX - 1;
+						if (this.posZ < 0)
+							removingZ = removingZ - 1;
+
+
+						System.out.println("Standing still " + removingX + " " + removingZ);
+
+						//Make sure it's not an air block, begin removing block, datawatcher to start animation
+						if (!this.worldObj.isAirBlock(removingX, removingY, removingZ) || !this.worldObj.isAirBlock(removingX, removingY + 1, removingZ)){
+							removingBlock = true;
+							blockRemovalCounter = 0;
+							this.dataWatcher.updateObject(16, Byte.valueOf((byte)1));
+						}
+					}
+				}
+			}
 		}
-		else if ((int)this.posX != lastX || (int)this.posZ != lastZ) {
-			lastX = (int)this.posX;
-			lastZ = (int)this.posZ;
-			stillCounter = 0;
-		}
-		else {
-			stillCounter++;
-		}
-		
-		if (stillCounter >= 5) {
-			stillCounter = 0;
-			
-			//Find direction of collector
-    		double xd = this.collectorX - this.posX;
-    		double zd = this.collectorZ - this.posZ;
-    		double deltaX = Math.sin(Math.atan2(xd,zd));
-    		double deltaZ = Math.cos(Math.atan2(xd, zd));
-    		int directionX = (int)(deltaX * 1.9D);
-    		int directionZ = (int)(deltaZ * 1.9D);
-    		
-    		System.out.println("DirectionX/Y " + directionX + " " + directionZ);
-    		
-    		//If block is diagonal, target adjacent block instead
-    		if (directionX != 0 && directionZ != 0)
-    		{
-    			int random = this.rand.nextInt(2);
-    			if (random == 0)
-    				directionX = 0;
-    			else
-    				directionZ = 0;
-    		}
-    		System.out.println("DirectionX/Y " + directionX + " " + directionZ);
-    		
-    		System.out.println("posZ " + (int)this.posZ);
-    		System.out.println((int)this.posZ + directionZ);
-    		System.out.println("posX " + (int)this.posX);
-    						
-    		System.out.println(removingBlock);
-    		removingX = (int)this.posX + directionX;
-    		removingY = (int)this.posY;
-    		removingZ = (int)this.posZ + directionZ;
-    		
-    		//Casting to an int throws negative coordinates off by 1
-    		if (this.posX < 0)
-    			removingX = removingX - 1;
-    		if (this.posZ < 0)
-    			removingZ = removingZ - 1;
-    		
-    		
-    		System.out.println("Standing still " + removingX + " " + removingZ);
-    		
-    		//Make sure it's not an air block, begin removing block, datawatcher to start animation
-    		if (!this.worldObj.isAirBlock(removingX, removingY, removingZ) || !this.worldObj.isAirBlock(removingX, removingY + 1, removingZ)){
-    			removingBlock = true;
-    			blockRemovalCounter = 0;
-    			this.dataWatcher.updateObject(16, Byte.valueOf((byte)1));
-    		}
-		}
-	   }
-    }
+	}
 	
 	@Override
 	public void setAttackTarget(EntityLivingBase entity)

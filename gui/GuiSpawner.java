@@ -9,7 +9,6 @@ import java.io.DataOutputStream;
 import org.lwjgl.opengl.GL11;
 
 import eldritchempires.EldritchMethods;
-import eldritchempires.EldritchWorldData;
 import eldritchempires.entity.TileEntitySpawner;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
@@ -61,8 +60,6 @@ public class GuiSpawner extends GuiContainer{
         this.guiLeft = (this.width - this.xSize) / 2;
         this.guiTop = (this.height - this.ySize) / 2;
 
-        System.out.println(spawner.attackLevel + " " + spawner.healthLevel);
-        
         if ((spawner.attackLevel == 0 && player.experienceLevel >= 5) || player.capabilities.isCreativeMode)
         {
             attack1.enabled = true;

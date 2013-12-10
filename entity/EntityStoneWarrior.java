@@ -35,6 +35,7 @@ public class EntityStoneWarrior extends EntityGuard
 		this.tasks.addTask(2,  new EntityAIGolemStill(this));
 		this.tasks.addTask(3, new EntityAIAttackOnCollide(this, EntityMob.class, 0.5D, false));
         this.targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityZoblinBomber.class, 0, true));
+        this.targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityBomb.class, 0, true));
         this.targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityRabidMiner.class, 0, true));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityAttacker.class, 0, true));
         this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityZombie.class, 0, true));

@@ -32,7 +32,7 @@ public class RenderCollector extends TileEntitySpecialRenderer {
     {
         int i = par1TileEntity.getBlockMetadata();
 
-        if (i == 1)
+        if (i >= 1)
         {
         	this.bindTexture(collector);;
         }

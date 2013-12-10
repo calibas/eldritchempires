@@ -29,11 +29,9 @@ public class ItemGolemWand extends Item{
 	@Override
     public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10)
     {
-//		System.out.println(par4 + " " + par5 + " " + par6 + " " + par7 + " " + par8 + " " + par9 + " " + par10);
     	if (!par3World.isRemote && par3World.getBlockTileEntity(par4, par5, par6) instanceof TileEntitySpawner)
     	{
     		sendPacket(par4, par5, par6, par2EntityPlayer, par3World);
- //   		PacketDispatcher.sendPacketToPlayer(packet, (Player)player);
     		FMLNetworkHandler.openGui(par2EntityPlayer, EldritchEmpires.instance, 1, par3World, par4, par5, par6);
     		return true;
     	}

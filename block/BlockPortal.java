@@ -7,8 +7,6 @@ import java.util.Random;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import eldritchempires.EldritchEmpires;
-import eldritchempires.EldritchEvents;
-import eldritchempires.EldritchWorldData;
 import eldritchempires.ParticleEffects;
 import eldritchempires.Registration;
 import net.minecraft.block.Block;
@@ -24,29 +22,29 @@ import net.minecraft.world.World;
 
 public class BlockPortal extends Block{
 
-	EldritchWorldData data = new EldritchWorldData();
+//	EldritchWorldData data = new EldritchWorldData();
 	
 	public BlockPortal(int par1) {
 		super(par1, Material.rock);
-		this.setHardness(1.5F);
+		this.setHardness(50.0F);
 		this.setResistance(2000.0F);
 		this.setCreativeTab(EldritchEmpires.tabEldritch);
 		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1F, 0.1F, 1F);
-		this.setBlockUnbreakable();
 		this.setLightValue(1.0F);
-		this.setTickRandomly(true);
+//		this.setTickRandomly(true);
 	}
 	
     /**
      * Called when a block is placed using its ItemBlock. Args: World, X, Y, Z, side, hitX, hitY, hitZ, block metadata
      */
-	@Override
-    public int onBlockPlaced(World par1World, int par2, int par3, int par4, int par5, float par6, float par7, float par8, int par9)
-    {
-		data.setPortal(par2, par3, par4);
-        data.setPortalFocus(true);
-		return par9;
-    }
+//	@Override
+//    public int onBlockPlaced(World par1World, int par2, int par3, int par4, int par5, float par6, float par7, float par8, int par9)
+//    {
+//		data.setPortal(par2, par3, par4);
+//        data.setPortalFocus(true);
+//        System.out.println("setPortal setPortalFocus");
+//		return par9;
+//    }
 
 	@Override
     public boolean isOpaqueCube()
@@ -60,15 +58,15 @@ public class BlockPortal extends Block{
 		ParticleEffects.spawnParticle("zPortal", par2 + 0.5D, par3 + 0.1D, par4 + 0.5D, 0, 0, 0);
 	}
 	
-	@Override
-	public void updateTick(World par1World, int par2, int par3, int par4, Random par5Random) 
-	{
-		if (data.getPortalX() != par2 || data.getPortalZ() != par4)
-		{
-			par1World.destroyBlock(par2, par3, par4, false);
-			par1World.removeBlockTileEntity(par2, par3, par4);
-		}
-	}
+//	@Override
+//	public void updateTick(World par1World, int par2, int par3, int par4, Random par5Random) 
+//	{
+//		if (data.getPortalX() != par2 || data.getPortalZ() != par4)
+//		{
+//			par1World.destroyBlock(par2, par3, par4, false);
+//			par1World.removeBlockTileEntity(par2, par3, par4);
+//		}
+//	}
 	
     @SideOnly(Side.CLIENT)
     private Icon[] icons;

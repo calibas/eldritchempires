@@ -13,6 +13,7 @@ import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 public class EntityZoblinBomber extends EntityCreature{
@@ -23,6 +24,7 @@ public class EntityZoblinBomber extends EntityCreature{
 	public int collectorY;
 	public int collectorZ;
 	public int timer = 20;
+	int collectorDamage = 40;
 	
 	public EntityZoblinBomber(World par1World) {
 		super(par1World);
@@ -59,12 +61,9 @@ public class EntityZoblinBomber extends EntityCreature{
         			int pathZ = (int)(this.posZ + (20*deltaZ));
         			path = this.worldObj.getEntityPathToXYZ(this, pathX, getFirstUncoveredBlockHeight(pathX, pathZ), pathZ, 40F, true, true, false, false);
         			setPathToEntity(path);
-        	//		Minecraft.getMinecraft().thePlayer.addChatMessage("Zoblin: Pathing to " + pathX + " " + pathZ);
-        			
         		}
         		else
         		{
-//            		Minecraft.getMinecraft().thePlayer.addChatMessage("Zoblin: Attacking!");
         			path = this.worldObj.getEntityPathToXYZ(this, collectorX, collectorY, collectorZ, 70.0F, true, true, false, false);
         			setPathToEntity(path);
         		}
@@ -72,6 +71,22 @@ public class EntityZoblinBomber extends EntityCreature{
         	timer--;
         	if(timer < 1 && !this.worldObj.isRemote)
         	{
+    			// Damage Collector
+        		double xd = (collectorX + 0.5D) - this.posX;
+        		double yd = collectorY - this.posY;
+        		double zd = (collectorZ + 0.5D) - this.posZ;
+        		double distance = Math.sqrt(xd*xd + yd*yd + zd*zd);
+        		TileEntity tileEntity = this.worldObj.getBlockTileEntity(collectorX, collectorY, collectorZ);
+        		if (tileEntity instanceof TileEntityCollector)
+        		{
+        			TileEntityCollector collector = (TileEntityCollector) tileEntity;
+        			if (distance < 2.5D && collector.roundActive && !this.worldObj.isRemote)
+        			{
+        				collector.damageCollector(collectorDamage);
+        			}
+        		}
+
+        		// Blow up
         		int diffX = 0;
         		int diffY = 0;
         		int diffZ = 0;
@@ -100,7 +115,6 @@ public class EntityZoblinBomber extends EntityCreature{
         		{
         			diffZ = -1;
         		}
-        		
         		boolean flag = this.worldObj.getGameRules().getGameRuleBooleanValue("mobGriefing");
         		this.worldObj.createExplosion(null, this.posX + diffX, this.posY + 2 + diffY, this.posZ + diffZ, 2.0F, flag);
         		this.setDead();

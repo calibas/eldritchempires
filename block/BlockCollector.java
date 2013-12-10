@@ -1,21 +1,24 @@
 package eldritchempires.block;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
 import cpw.mods.fml.common.network.FMLNetworkHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import eldritchempires.EldritchEmpires;
-import eldritchempires.EldritchEvents;
 import eldritchempires.EldritchMethods;
-import eldritchempires.EldritchWorldData;
 import eldritchempires.Registration;
 import eldritchempires.entity.TileEntityCollector;
 import eldritchempires.entity.EntityZoblin;
+import eldritchempires.entity.TileEntitySpawner;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -26,6 +29,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -37,12 +41,14 @@ public class BlockCollector extends BlockContainer{
 
 	private PathEntity path;
 	private int searchRadius = 20;
-	EldritchWorldData data = new EldritchWorldData();
+	int packetID = 4;
+	int progress;
+//	EldritchWorldData data = new EldritchWorldData();
 	
-	public BlockCollector(int par1, Material par2Material) {
-		super(par1, par2Material);
-		this.setHardness(1.5F);
-		this.setResistance(5.0F);
+	public BlockCollector(int par1) {
+		super(par1, Material.rock);
+		this.setHardness(25.0F);
+		this.setResistance(2000.0F);
 		this.setCreativeTab(EldritchEmpires.tabEldritch);
 		this.setTickRandomly(true);
 		this.setLightValue(0.5F);
@@ -50,178 +56,132 @@ public class BlockCollector extends BlockContainer{
 		this.setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.5F, 0.5F + f);
 	}
 
-	public void onBlockAdded(World par1World, int par2, int par3, int par4) 
-	{
-		if (!par1World.isRemote)
-		{
-			double distance;
-			boolean goodDistance = true;
-			data = EldritchWorldData.forWorld(par1World);
-			
-//			if (data.checkPortal())
-//			{
-//        		double xd = data.getPortalX() - par2;
-//        		double yd = data.getPortalY() - par3;
-//        		double zd = data.getPortalZ() - par4;
-//        		distance = Math.sqrt(xd*xd + yd*yd + zd*zd);
-//        		if (distance >= 80.0D)
-//        		{
-//        			announce = "Portal too far";
-//        			goodDistance = false;
-//        		}
-//        		if (distance <= 25.0D)
-//        		{
-//        			announce = "Portal too near";
-//        			goodDistance = false;
-//        		}	
-//			}
-			
-			if (!(par1World.provider.dimensionId == 0))
-				EldritchMethods.broadcastMessageLocal("Must be placed in surface dimension", par2, par3, par4, 100, par1World);
-			
-			if (data.checkCollector())
-			{
-				if (par1World.getBlockId(data.getCollectorX(), data.getCollectorY(), data.getCollectorZ()) != Registration.collector.blockID)
-				{
-					EldritchMethods.broadcastMessageLocal("Please wait to place collector", par2, par3, par4, 100, par1World);
-				}
-				else
-				{
-					EldritchMethods.broadcastMessageLocal("Collector already placed (" + data.getCollectorX() + ", " + data.getCollectorY() + ", " + data.getCollectorZ() + ")", par2, par3, par4, 100, par1World);
-				}
-			}
-				
-			if (!data.checkCollector() && goodDistance == true && par1World.provider.dimensionId == 0)
-			{
-//				int[] location = EldritchMethods.createPortal("zoblin", par2, par3, par4, par1World);
-//				data.setPortal(location[0], location[1], location[2]);
-				data.setCollector(par2, par3, par4);
-//				EldritchEvents.waveActive = true;
-				par1World.perWorldStorage.setData(EldritchWorldData.name, data);
-				data = (EldritchWorldData) par1World.perWorldStorage.loadData(EldritchWorldData.class, EldritchWorldData.name);
-//				announce = "Collector set";
-				
-			}
-			else
-			{
-				par1World.setBlockToAir(par2, par3, par4);
-				par1World.removeBlockTileEntity(par2, par3, par4);
-				ItemStack droppedItem = new ItemStack(Registration.collector, 1);
-				EntityItem entityitem = new EntityItem(par1World, (double)par2 + 0.5D, (double)par3 + 0.5D, (double)par4 + 0.5D, droppedItem);
-				entityitem.delayBeforeCanPickup = 10;
-				par1World.spawnEntityInWorld(entityitem);
-				
-			}
-		}
-	}
-	
+	@Override
     public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
     {
     	if (!par1World.isRemote)
     	{
+    		sendPacket(par2, par3, par4, par5EntityPlayer, par1World);
     		FMLNetworkHandler.openGui(par5EntityPlayer, EldritchEmpires.instance, 0, par1World, par2, par3, par4);
-    		
-
-    		
-//    		if (!data.isWaveActive())
-//    		{
-//    			par1World.setBlockMetadataWithNotify(par2, par3, par4, 1, 2);
-//    			data.setActiveWave(true);
-//    			par1World.perWorldStorage.setData(EldritchWorldData.name, data);
-//    			data = (EldritchWorldData) par1World.perWorldStorage.loadData(EldritchWorldData.class, EldritchWorldData.name);
-//  //  			EldritchMethods.broadcastMessageLocal("Collector Active", par2, par3, par4, 100, par1World);
-//    		}
-//    		else
-//    		{
-//    			par1World.setBlockMetadataWithNotify(par2, par3, par4, 0, 2);
-//    			data.setActiveWave(false);
-//    			par1World.perWorldStorage.setData(EldritchWorldData.name, data);
-//    			data = (EldritchWorldData) par1World.perWorldStorage.loadData(EldritchWorldData.class, EldritchWorldData.name);
-////    			EldritchMethods.broadcastMessageLocal("Collector Inactive", par2, par3, par4, 100, par1World);
-//    		}
-    	}
+       	}
 		return true;
     }
 	
-    public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
-    {
-//		System.out.println("Collector unset" );
-//		data.unSetCollector();
-//		world.perWorldStorage.setData(EldritchWorldData.name, data);
-//		EldritchEvents.wave = 0;
-//		world.setBlockToAir(data.getPortalX(), data.getPortalY(), data.getPortalZ());
-//		data.unSetPortal();
-        return world.setBlockToAir(x, y, z);
-    }
+	@Override
+	public void updateTick(World par1World, int par2, int par3, int par4, Random par5Random) 
+	{
+		if (par1World.isRemote)
+		{
+			System.out.println("client block meta " + par1World.getBlockMetadata(par2, par3, par4));
+		}
+		else {
+			System.out.println("server block meta " + par1World.getBlockMetadata(par2, par3, par4));
+		}
+	}
     
-    public void onBlockDestroyedByExplosion(World par1World, int x, int y, int z, Explosion par5Explosion) 
-    {
-//		System.out.println("Collector unset" );
-//		data.unSetCollector();
-//		par1World.perWorldStorage.setData(EldritchWorldData.name, data);
-//		par1World.setBlockToAir(data.getPortalX(), data.getPortalY(), data.getPortalZ());
-//		data.unSetPortal();
-//		EldritchEvents.wave = 0;
-    }
+	private void sendPacket(int x, int y, int z, EntityPlayer entityPlayer, World world)
+	{
+		ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
+		DataOutputStream outputStream = new DataOutputStream(bos);
+		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
+		if (tileEntity instanceof TileEntityCollector)
+		{
+			TileEntityCollector collector = (TileEntityCollector) tileEntity;
+			int progress = collector.progress;
+			int active = 0;
+			if (collector.roundActive)
+			{
+				active = 1;
+			}
+			try {
+				outputStream.writeInt(packetID);
+				outputStream.writeInt(progress);
+				outputStream.writeInt(active);
+				outputStream.writeInt(x);
+				outputStream.writeInt(y);
+				outputStream.writeInt(z);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+
+			Packet250CustomPayload packet = new Packet250CustomPayload();
+			packet.channel = "Eldritch";
+			packet.data = bos.toByteArray();
+			packet.length = bos.size();
+			PacketDispatcher.sendPacketToPlayer(packet, (Player)entityPlayer);
+		}
+	}
 	
-//	@Override
-//	public void updateTick(World par1World, int par2, int par3, int par4, Random par5Random) 
-//	{
-//		int i = par1World.getBlockMetadata(par2, par3, par4);
-		
-//		// Player Node
-//		if (i == 0)
+	@Override
+    public int onBlockPlaced(World par1World, int par2, int par3, int par4, int par5, float par6, float par7, float par8, int par9)
+    {
+//		TileEntityCollector collector = (TileEntityCollector) par1World.getBlockTileEntity(par2, par3, par4);
+//		int metadata = par1World.getBlockMetadata(par2, par3, par4);
+//		if (metadata != 0)
+//			progress = metadata;
+//		par1World.setBlockMetadataWithNotify(par2, par3, par4, 0, 2);
+//		if (par1World.isRemote)
 //		{
-//			Zoblin zoblin = new Zoblin(par1World);
-//			zoblin.setLocationAndAngles((double)par2 - 30.5D, (double)zoblin.getFirstUncoveredBlockHeight(par2 - 30, par4), (double)par4 + 0.5D, 0.0F, 0.0F);
-//			zoblin.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(2.699D);
-//			zoblin.attacking = true;
-//			zoblin.nodex = par2;
-//			zoblin.nodey = par3;
-//			zoblin.nodez = par4;
-//			par1World.spawnEntityInWorld(zoblin);
-
-//			path = par1World.getEntityPathToXYZ(zoblin, par2 - 20, par3, par4, 64F, true, true, false, false);
-//    		zoblin.setPathToEntity(path);
-
+//			System.out.println("client block meta " + par1World.getBlockMetadata(par2, par3, par4));
 //		}
-		
-		// Zoblin Node
-//		if (i == 1)
-//		{
-//			List<?> var4 = par1World.getEntitiesWithinAABB(Zoblin.class, AxisAlignedBB.getAABBPool().getAABB(par2 - searchRadius, par3 - searchRadius, par4 - searchRadius, par2 + searchRadius, par3 + searchRadius, par4 + searchRadius));
-//			int j = var4.size();
-//        
-//			
-//			
-//			if (j <= 5)
-//			{
-//				Zoblin zoblin = new Zoblin(par1World);
-//				zoblin.setLocationAndAngles((double)par2 + 0.5D, (double)par3, (double)par4 + 0.5D, 0.0F, 0.0F);
-//				par1World.spawnEntityInWorld(zoblin);
-//			}
-//			
-//
-////			List<?> var4 = par1World.getEntitiesWithinAABB(Zoblin.class, AxisAlignedBB.getAABBPool().getAABB(par2 - searchRadius, par3 - searchRadius, par4 - searchRadius, par2 + searchRadius, par3 + searchRadius, par4 + searchRadius));
-//
-//			if (var4 != null && !var4.isEmpty()) {
-//				Iterator<?> var5 = var4.iterator();
-//
-//				while (var5.hasNext()) {
-//					EntityLiving var6 = (EntityLiving)var5.next();
-//					var6.setPosition((double)par2 + 0.5D, (double)par3 + 20.0D, (double)par4 + 0.5D);
-//				}
-//			}
-//
+//		else {
+//			System.out.println("server block meta " + par1World.getBlockMetadata(par2, par3, par4));
 //		}
+        return par9;
+    }
+
+	@Override
+	public void onPostBlockPlaced(World par1World, int par2, int par3, int par4, int par5) 
+	{
+//		TileEntityCollector collector = (TileEntityCollector) par1World.getBlockTileEntity(par2, par3, par4);
+		int metadata = par1World.getBlockMetadata(par2, par3, par4);
+		if (metadata != 0)
+			progress = metadata;
+		par1World.setBlockMetadataWithNotify(par2, par3, par4, 0, 2);
+		if (par1World.isRemote)
+		{
+			System.out.println("client block meta " + par1World.getBlockMetadata(par2, par3, par4));
+		}
+		else {
+			System.out.println("server block meta " + par1World.getBlockMetadata(par2, par3, par4));
+		}
+		par1World.setBlockMetadataWithNotify(par2, par3, par4, 0, 2);
+	}
+	
+//    public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
+//    {
+//        return world.setBlockToAir(x, y, z);
 //    }
+    
+//    public void onBlockDestroyedByExplosion(World par1World, int x, int y, int z, Explosion par5Explosion) 
+//    {
+//
+//    }
+	
+    /**
+     * Called on server worlds only when the block has been replaced by a different block ID, or the same block with a
+     * different metadata value, but before the new metadata value is set. Args: World, x, y, z, old block ID, old
+     * metadata
+     */
+	@Override
+    public void breakBlock(World par1World, int par2, int par3, int par4, int par5, int par6)
+    {
+		System.out.println("breakBlock()");
+        TileEntityCollector collector = (TileEntityCollector) par1World.getBlockTileEntity(par2, par3, par4);
+        progress = collector.progress;
+        par1World.removeBlockTileEntity(par2, par3, par4);
+        super.breakBlock(par1World, par2, par3, par4, par5, par6);
+    }
 	
 	@Override
     public TileEntity createNewTileEntity(World par1World)
     {
         try
         {
-        	return new TileEntityCollector();
+        	TileEntityCollector collector = new TileEntityCollector();
+        	if (progress != 0)
+        		collector.progress = progress;
+        	return collector;
         }
         catch (Exception exception)
         {
@@ -229,29 +189,34 @@ public class BlockCollector extends BlockContainer{
         }
     }
 	
+	@Override
     public boolean isOpaqueCube()
     {
         return false;
     }
     
+	@Override
     public boolean renderAsNormalBlock()
     {
         return false;
     }
 
+	@Override
     public int getRenderType()
     {
         return -1;
     }
     
+	@Override
     public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
     {
              ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-             int count = quantityDropped(metadata, fortune, world.rand);
-             for(int i = 0; i < count; i++)
-             {
-                     ret.add(new ItemStack(Registration.collector, 1, 0));
-             }
+             ret.add(new ItemStack(Registration.collector, 1, progress));
+//             int count = quantityDropped(metadata, fortune, world.rand);
+//             for(int i = 0; i < count; i++)
+//             {
+//                     ret.add(new ItemStack(Registration.collector, 1, progress));
+//             }
              return ret;
     }
     
@@ -260,25 +225,27 @@ public class BlockCollector extends BlockContainer{
   
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
-{
+    {
          icons = new Icon[2];
         
+//         icons[0] = par1IconRegister.registerIcon(EldritchEmpires.modid + ":" + (this.getUnlocalizedName().substring(5)) + 0);
+//         
          for(int i = 0; i < icons.length; i++)
          {
                 icons[i] = par1IconRegister.registerIcon(EldritchEmpires.modid + ":" + (this.getUnlocalizedName().substring(5)) + i);
          }
-}
+    }
   
     @SideOnly(Side.CLIENT)
     public Icon getIcon(int par1, int par2)
     {
-         return icons[par2];
+         return icons[0];
     }
   
     @SideOnly(Side.CLIENT)
     public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
-    	for (int var4 = 0; var4 < 1; ++var4)
+    	for (int var4 = 0; var4 < 10; ++var4)
     	{
     		par3List.add(new ItemStack(par1, 1, var4));
     	}

@@ -141,16 +141,12 @@ public class TileEntitySpawner extends TileEntity implements IInventory
 		List list = this.worldObj.getEntitiesWithinAABB(EntityGuard.class, AxisAlignedBB.getAABBPool().getAABB(this.xCoord - searchRadius, this.yCoord - searchRadius, this.zCoord - searchRadius, this.xCoord + searchRadius, this.yCoord + searchRadius, this.zCoord + searchRadius));
         Iterator iterator = list.iterator();
         
-        System.out.println("1");
-        
         while (iterator.hasNext())
         {
         	EntityLivingBase entitylivingbase = (EntityLivingBase)iterator.next();
 
-        	System.out.println("2");
         	if (entitylivingbase.getUniqueID().getLeastSignificantBits() == golemUUIDleast && entitylivingbase.getUniqueID().getMostSignificantBits() == golemUUIDmost)
             {
-        		System.out.println("3");
                    entitylivingbase.setDead();
                    golemBound = false;
                    break;

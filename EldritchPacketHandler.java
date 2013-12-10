@@ -13,6 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
+import eldritchempires.entity.TileEntityCollector;
 import eldritchempires.entity.TileEntitySpawner;
 
 public class EldritchPacketHandler implements IPacketHandler{
@@ -43,10 +44,11 @@ public class EldritchPacketHandler implements IPacketHandler{
 			return;
 		}
 
+		// Send data to server from collector GUI
 		if (packetID == 1) {
 		  if (!player.capabilities.isCreativeMode)
 		  {
-//			System.out.println("attackLevel " + attackLevel + "healthLevel " + healthLevel + "x " + x);
+
 			TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 			if (tileEntity instanceof TileEntitySpawner)
 			{
@@ -62,9 +64,7 @@ public class EldritchPacketHandler implements IPacketHandler{
 				}
 
 				TileEntitySpawner spawner = (TileEntitySpawner) tileEntity;
-				System.out.println("attackLevel " + attackLevel + " player.experienceLevel " + player.experienceLevel + " spawner.attackLevel " + spawner.attackLevel);
-//				if(!player.capabilities.isCreativeMode)
-//				{
+
 				 if (attackLevel == 1 && player.experienceLevel >= 5 && spawner.attackLevel == 0)
 				 {
 					spawner.attackLevel = 1;
@@ -133,6 +133,7 @@ public class EldritchPacketHandler implements IPacketHandler{
 				}
 			}
 		  }
+		  // Remove upgrade cost for players in creative mode
 		  else
 		  {
 				TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
@@ -141,10 +142,13 @@ public class EldritchPacketHandler implements IPacketHandler{
 					TileEntitySpawner spawner = (TileEntitySpawner) tileEntity;
 					spawner.attackLevel = attackLevel;
 					spawner.healthLevel = healthLevel;
+					spawner.killGolem();
+					spawner.spawnGolem();
 				} 
 		  }
 		}
 		
+		// Send server data to player to setup golem upgrade GUI
 		if (packetID == 2 && world.isRemote)
 		{
 			TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
@@ -154,6 +158,43 @@ public class EldritchPacketHandler implements IPacketHandler{
 				spawner.attackLevel = attackLevel;
 				spawner.healthLevel = healthLevel;
 			}
+		}
+		
+		// Send data to server from collector GUI
+		if (packetID == 3)
+		{
+			TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
+			if (tileEntity instanceof TileEntityCollector)
+			{
+				TileEntityCollector collector = (TileEntityCollector) tileEntity;
+				if (healthLevel == 1)
+				{
+					if(attackLevel <= collector.progress)
+						collector.startRound(attackLevel);
+				} else
+				{
+					collector.endRound();
+				}
+			} 
+		}
+		
+		// Send server data to player to setup collector GUI
+		if (packetID == 4)
+		{
+			TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
+			if (tileEntity instanceof TileEntityCollector)
+			{
+				TileEntityCollector collector = (TileEntityCollector) tileEntity;
+				collector.progress = attackLevel;
+				if (healthLevel == 1)
+				{
+					collector.roundActive = true;
+				}
+				else
+				{
+					collector.roundActive = false;
+				}
+			} 
 		}
 		
 	}
