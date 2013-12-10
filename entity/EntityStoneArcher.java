@@ -43,6 +43,7 @@ public class EntityStoneArcher extends EntityGuard implements IRangedAttackMob
 //		this.tasks.addTask(4, new EntityAIWander(this, 1.0D));
 //		this.tasks.addTask(3, new EntityAIMoveTowardsTarget(this, 0.9D, 32.0F));
         this.targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityZoblinBomber.class, 0, true));
+        this.targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityBomb.class, 0, true));
         this.targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityRabidMiner.class, 0, true));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityAttacker.class, 0, true));
         this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityZombie.class, 0, true));

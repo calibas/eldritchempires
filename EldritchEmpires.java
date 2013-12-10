@@ -24,6 +24,8 @@ public class EldritchEmpires {
 	public static int collectorBlockID;
 	public static int spawnerBlockID;
 	public static int portalBlockID;
+	public static int ironTrapDoorBlockID;
+	public static int protectedRedstoneBlockID;
 	public static int golemPartItemID;
 	public static int condensedEssenceItemID;
 	public static int iceCrystalItemID;
@@ -44,6 +46,8 @@ public class EldritchEmpires {
     	collectorBlockID = config.getBlock("BlockCollector", 2864).getInt();
     	spawnerBlockID = config.getBlock("BlockSpawner", 2865).getInt();
     	portalBlockID = config.getBlock("BlockPortal", 2866).getInt();
+    	ironTrapDoorBlockID = config.getBlock("BlockIronTrapDoor", 2867).getInt();
+    	protectedRedstoneBlockID = config.getBlock("BlockProtectedRedstone", 2868).getInt();
     	golemPartItemID = config.getItem("ItemGolemPart", 7620).getInt();
     	condensedEssenceItemID = config.getItem("ItemCondensedEssence", 7621).getInt();;
     	iceCrystalItemID = config.getItem("ItemIceCrystal", 7622).getInt();;

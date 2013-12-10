@@ -1,7 +1,6 @@
 package eldritchempires.entity;
 
 import eldritchempires.EldritchMethods;
-import eldritchempires.EldritchWorldData;
 import eldritchempires.Registration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -14,11 +13,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 public class EntityRabidDemo extends EntityAttacker{
 
-	EldritchWorldData data = new EldritchWorldData();
+//	EldritchWorldData data = new EldritchWorldData();
+	TileEntityCollector collector;
 	int i = 0;
 	
 	public EntityRabidDemo(World par1World) {
@@ -37,9 +38,16 @@ public class EntityRabidDemo extends EntityAttacker{
     		double xd = this.collectorX - this.posX;
 			double zd = this.collectorZ - this.posZ;
 			double distance = Math.sqrt(xd*xd + zd*zd);
-    		
-    		if (data.isWaveActive() && !this.worldObj.isRemote && (distance < 25 || this.entityToAttack != null))
+    		TileEntity tileEntity = this.worldObj.getBlockTileEntity(collectorX, collectorY, collectorZ);
+    		if (tileEntity instanceof TileEntityCollector)
     		{
+    			collector = (TileEntityCollector) tileEntity;
+    		}
+    		
+    		if (collector != null && !this.worldObj.isRemote && (distance < 25 || this.entityToAttack != null))
+    		{
+    		  if (collector.roundActive)
+    		  {
     			EntityBomb entity = new EntityBomb(this.worldObj);
     			entity.setLocationAndAngles((double)this.posX, (double)this.posY + 1, (double)this.posZ, 0.0F, 0.0F);
  	
@@ -57,6 +65,7 @@ public class EntityRabidDemo extends EntityAttacker{
     			entity.motionY = 0.7F;
     			entity.motionZ = directionZ;
     			this.worldObj.spawnEntityInWorld(entity);
+    		  }
     		}
     		else if (this.entityToAttack != null && !this.worldObj.isRemote)
     		{

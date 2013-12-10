@@ -4,8 +4,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import eldritchempires.AttackRound;
+import eldritchempires.EldritchMethods;
 import eldritchempires.Registration;
-import eldritchempires.EldritchWorldData;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLiving;
@@ -24,9 +25,20 @@ public class TileEntityCollector extends TileEntity implements IInventory
 {
 	private int i = 0;
 	private double searchRadius = 1.5;
-	EldritchWorldData data = new EldritchWorldData();
+//	EldritchWorldData data = new EldritchWorldData();
 	private ItemStack[] inventory;
-
+	public AttackRound attackRound = new AttackRound(this);
+	public boolean roundActive = false;
+	public int currentRound;
+	public int progress = 1;
+	public int portalX;
+	public int portalY;
+	public int portalZ;
+	public int health;
+	long lastMessage;
+	long bossUUIDleast;
+	long bossUUIDmost;
+	
 	
 	public TileEntityCollector()
     {
@@ -35,55 +47,39 @@ public class TileEntityCollector extends TileEntity implements IInventory
 	
 	public void updateEntity() 
 	{
-		if (i < 100 && data.isWaveActive())
+		i++;
+		if (i >= 10 )
 		{
-			if (data.getCollectorHealth() < this.worldObj.rand.nextInt(100))
+			//Spawn Particles
+			if (this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord) != 0)
 			{
-				this.worldObj.spawnParticle("crit", this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D, 1.0D - 2* this.worldObj.rand.nextDouble(), 1.0D, 1.0D - 2* this.worldObj.rand.nextDouble());
+				if (health + 10 < this.worldObj.rand.nextInt(100))
+				{
+					this.worldObj.spawnParticle("crit", this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D, 1.0D - 2* this.worldObj.rand.nextDouble(), 1.0D, 1.0D - 2* this.worldObj.rand.nextDouble());
+				}
+				if (i % 5 == 0)
+				{
+					this.worldObj.spawnParticle("reddust", this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D, 0.0D, 0.0D, 0.0D);
+				}
+				if (i % 10 == 0)
+				{
+					this.worldObj.spawnParticle("reddust", this.xCoord + 0.5D, this.yCoord + 0.25D, this.zCoord + 0.25D, 0.0D, 0.0D, 0.0D);
+					this.worldObj.spawnParticle("reddust", this.xCoord + 0.25D, this.yCoord + 0.25D, this.zCoord + 0.5D, 0.0D, 0.0D, 0.0D);
+					this.worldObj.spawnParticle("reddust", this.xCoord + 0.75D, this.yCoord + 0.25D, this.zCoord + 0.5D, 0.0D, 0.0D, 0.0D);
+					this.worldObj.spawnParticle("reddust", this.xCoord + 0.5D, this.yCoord + 0.25D, this.zCoord + 0.75D, 0.0D, 0.0D, 0.0D);
+					this.worldObj.spawnParticle("smoke", this.xCoord + 0.5D, this.yCoord + 0.75D, this.zCoord + 0.5D, 0.0D, 0.0D, 0.0D);
+				}
 			}
 			
-			i++;
-			if (i % 5 == 0)
+			//Search for Magic Essence
+			if (!this.worldObj.isRemote)
 			{
-				this.worldObj.spawnParticle("reddust", this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D, 0.0D, 0.0D, 0.0D);
-			}
-			if (i % 10 == 0)
-			{
-				this.worldObj.spawnParticle("reddust", this.xCoord + 0.5D, this.yCoord + 0.25D, this.zCoord + 0.25D, 0.0D, 0.0D, 0.0D);
-				this.worldObj.spawnParticle("reddust", this.xCoord + 0.25D, this.yCoord + 0.25D, this.zCoord + 0.5D, 0.0D, 0.0D, 0.0D);
-				this.worldObj.spawnParticle("reddust", this.xCoord + 0.75D, this.yCoord + 0.25D, this.zCoord + 0.5D, 0.0D, 0.0D, 0.0D);
-				this.worldObj.spawnParticle("reddust", this.xCoord + 0.5D, this.yCoord + 0.25D, this.zCoord + 0.75D, 0.0D, 0.0D, 0.0D);
-				this.worldObj.spawnParticle("smoke", this.xCoord + 0.5D, this.yCoord + 0.75D, this.zCoord + 0.5D, 0.0D, 0.0D, 0.0D);
-			}
-		}
-		else
-		{
-////			if(this.worldObj.loadItemData(WorldSavedDataEE.class, "EEWorldSaveData") == null){
-////				WorldSavedData data = new WorldSavedDataEE("EEWorldSaveData");
-////				this.worldObj.setItemData("EEWorldSaveData", data);
-////			}
-//
-////			worldSavedDataEE = (WorldSavedDataEE) this.worldObj.loadItemData(WorldSavedDataEE.class, "EEWorldSaveData");
-//			
-////			worldSaveData = (WorldSaveData) world.loadItemData(WorldSaveData.class, "LegendzWorldSaveData");
-////			
-//			if (!this.worldObj.isRemote)
-//			{
-//				data.setTest(8);
-//				this.worldObj.perWorldStorage.setData(EldritchWorldData.name, data);
-//				data = (EldritchWorldData) this.worldObj.perWorldStorage.loadData(EldritchWorldData.class, EldritchWorldData.name);
-//				int test = data.getTest();
-//
-//				Minecraft.getMinecraft().thePlayer.addChatMessage("Tile Entity Exists!" + test);
-//			}
-//			
-			
-			List<?> var4 = this.worldObj.getEntitiesWithinAABB(EntityMagicEssence.class, AxisAlignedBB.getAABBPool().getAABB(this.xCoord - searchRadius, this.yCoord - searchRadius, this.zCoord - searchRadius, this.xCoord + searchRadius, this.yCoord + searchRadius, this.zCoord + searchRadius));
+				List<?> var4 = this.worldObj.getEntitiesWithinAABB(EntityMagicEssence.class, AxisAlignedBB.getAABBPool().getAABB(this.xCoord - searchRadius, this.yCoord - searchRadius, this.zCoord - searchRadius, this.xCoord + searchRadius, this.yCoord + searchRadius, this.zCoord + searchRadius));
 
-			if (var4 != null && !var4.isEmpty()) {
-				Iterator<?> var5 = var4.iterator();
+				if (var4 != null && !var4.isEmpty()) {
+				  Iterator<?> var5 = var4.iterator();
 
-				while (var5.hasNext()) {
+				  while (var5.hasNext()) {
 					EntityLiving var6 = (EntityLiving)var5.next();
 					if (!this.worldObj.isRemote && !var6.isDead)
 					{
@@ -93,95 +89,122 @@ public class TileEntityCollector extends TileEntity implements IInventory
 						entityitem.delayBeforeCanPickup = 10;
 						this.worldObj.spawnEntityInWorld(entityitem);
 					}
+				  }
 				}
 			}
 			
+			if (roundActive && !this.worldObj.isRemote)
+			{
+				attackRound.update();
+			}
+			
 			i = 0;
-//			
-//			int k = this.worldObj.rand.nextInt(4);
-//			if (k == 0)
-//			{
-//				randX = -30.5D;
-//			}
-//			
-//			if (k == 1)
-//			{
-//				randX = 30.5D;
-//			}
-//			
-//			if (k == 2)
-//			{
-//				randZ = -30.5D;
-//			}
-//			
-//			if (k == 3)
-//			{
-//				randZ = 30.5D;
-//			}
-//			
-//			i = 0;
-//			
-//			if (blockType == -1)
-//			{
-//				blockType = this.blockMetadata;
-//			}
-//			
-//			if (!this.worldObj.isRemote && blockType == 0)
-//			{
-////				for (int j = 0;j < 2; j++)
-////				{
-//					Zoblin zoblin = new Zoblin(this.worldObj);
-//					zoblin.setLocationAndAngles((double)this.xCoord + randX, (double)zoblin.getFirstUncoveredBlockHeight(this.xCoord + (int)randX, this.zCoord + (int)randZ) + 1.0D, (double)this.zCoord + randZ, 0.0F, 0.0F);
-//					zoblin.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(2.099D);
-//					zoblin.attacking = true;
-//					zoblin.nodex = this.xCoord;
-//					zoblin.nodey = this.yCoord;
-//					zoblin.nodez = this.zCoord;
-//					this.worldObj.spawnEntityInWorld(zoblin);
-////				}
-//				ZoblinBomber zoblinBomber = new ZoblinBomber(this.worldObj);
-//				zoblinBomber.setLocationAndAngles((double)this.xCoord + randX, (double)zoblinBomber.getFirstUncoveredBlockHeight(this.xCoord + (int)randX, this.zCoord + (int)randZ) + 1.0D, (double)this.zCoord + randZ, 0.0F, 0.0F);
-//				zoblinBomber.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(2.099D);
-//				zoblinBomber.attacking = true;
-//				zoblinBomber.nodex = this.xCoord;
-//				zoblinBomber.nodey = this.yCoord;
-//				zoblinBomber.nodez = this.zCoord;
-//				this.worldObj.spawnEntityInWorld(zoblinBomber);
-//				
-//				MagicEssence magicEssence = new MagicEssence(this.worldObj);
-//				magicEssence.setLocationAndAngles((double)this.xCoord + randX, (double)zoblinBomber.getFirstUncoveredBlockHeight(this.xCoord + (int)randX, this.zCoord + (int)randZ) + 1.0D, (double)this.zCoord + randZ, 0.0F, 0.0F);
-//				magicEssence.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(2.699D);
-//				magicEssence.attacking = true;
-//				magicEssence.nodex = this.xCoord;
-//				magicEssence.nodey = this.yCoord;
-//				magicEssence.nodez = this.zCoord;
-//				this.worldObj.spawnEntityInWorld(magicEssence);
-//			}
-//			
-//			randX = 0.0D;
-//			randZ = 0.0D;
-//		}
-//	}
-//	
-//    public void writeToNBT(NBTTagCompound par1NBTTagCompound)
-//    {
-//        super.writeToNBT(par1NBTTagCompound);
-//        par1NBTTagCompound.setInteger("BlockType", blockType);
-//    }
-//
-//    /**
-//     * (abstract) Protected helper method to read subclass entity data from NBT.
-//     */
-//    public void readFromNBT(NBTTagCompound par1NBTTagCompound)
-//    {
-//        super.readFromNBT(par1NBTTagCompound);
-//        if (par1NBTTagCompound.hasKey("BlockType"))
-//        {
-//            blockType = par1NBTTagCompound.getInteger("BlockType");
-//        }
 		}
-	
+		
 	}
+	
+	public void startRound(int round)
+	{
+		if (!this.worldObj.isRemote)
+		{
+			attackRound.initialize();
+			currentRound = round;
+			health = 100;
+			roundActive = true;
+			this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, progress, 2);
+		}
+	}
+	
+	public void endRound()
+	{		
+		if (!this.worldObj.isRemote)
+		{
+			roundActive = false;
+			attackRound.wave = 0;
+			attackRound.removePortal();
+			this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 2);
+		}
+	}
+	
+	public void damageCollector(int damage)
+	{
+		if (roundActive)
+		{
+			health = health - damage;
+			if (health > 0)
+			{
+				if (lastMessage + 3000 < System.currentTimeMillis())
+				{
+					EldritchMethods.broadcastMessageLocal("Collector under attack! " + health + "% health left.", this.xCoord, this.yCoord, this.zCoord, 100, this.worldObj);
+					lastMessage = System.currentTimeMillis();
+				}
+			} 
+			else 
+			{
+				EldritchMethods.broadcastMessageLocal("Collector deactivated!", this.xCoord, this.yCoord, this.zCoord, 100, this.worldObj);
+				endRound();
+			}
+		}
+
+	}
+	
+	public void bossKilled(long UUIDleast, long UUIDmost)
+	{
+		if (UUIDleast == bossUUIDleast && UUIDmost == bossUUIDmost && roundActive)
+		{
+			EldritchMethods.broadcastMessageLocal("Round completed.", this.xCoord, this.yCoord, this.zCoord, 100, this.worldObj);
+			endRound();
+			// Increase progress
+			if (currentRound == progress)
+			{
+				progress++;
+			}
+		}
+	}
+	
+	public void setBossUUID (long UUIDleast, long UUIDmost)
+	{
+		bossUUIDleast = UUIDleast;
+		bossUUIDmost = UUIDmost;
+	}
+	
+	@Override
+    public void writeToNBT(NBTTagCompound nbt)
+    {
+        super.writeToNBT(nbt);
+        nbt.setInteger("portalX", portalX);
+        nbt.setInteger("portalY", portalY);
+        nbt.setInteger("portalZ", portalZ);
+        nbt.setBoolean("portalSet", attackRound.portalSet);
+        nbt.setInteger("currentRound", currentRound);
+        nbt.setInteger("progress", progress);
+        nbt.setBoolean("roundActive", roundActive);
+        nbt.setInteger("wave", attackRound.wave);
+        nbt.setInteger("health", health);
+        nbt.setLong("bossUUIDleast", bossUUIDleast);
+        nbt.setLong("bossUUIDmost", bossUUIDmost);
+     }
+ 
+	@Override
+    public void readFromNBT(NBTTagCompound nbt)
+    {
+        super.readFromNBT(nbt);
+        portalX = nbt.getInteger("portalX");
+        portalY = nbt.getInteger("portalY");
+        portalZ = nbt.getInteger("portalZ");
+        attackRound.portalSet = nbt.getBoolean("portalSet");
+        currentRound = nbt.getInteger("currentRound");
+        progress = nbt.getInteger("progress");
+        roundActive = nbt.getBoolean("roundActive");
+        attackRound.wave = nbt.getInteger("wave");
+        health = nbt.getInteger("health");
+        bossUUIDleast = nbt.getLong("bossUUIDleast");
+        bossUUIDmost = nbt.getLong("bossUUIDmost");
+    }
+
+	
+	
+	// Methods required by IInventory
 	
     public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
     {

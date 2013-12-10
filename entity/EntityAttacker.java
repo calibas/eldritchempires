@@ -1,22 +1,23 @@
 package eldritchempires.entity;
 
 import eldritchempires.EldritchMethods;
-import eldritchempires.EldritchWorldData;
 import eldritchempires.Registration;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 public class EntityAttacker extends EntityMob{
 
 	private PathEntity path;
-//	public boolean attacking = false;
+	public boolean attacking = false;
 	public int collectorX;
 	public int collectorY;
 	public int collectorZ;
-	EldritchWorldData data = new EldritchWorldData();
+//	EldritchWorldData data = new EldritchWorldData();
+	private TileEntityCollector collector;
 
 	public int collectorDamage = 1;
 	
@@ -27,43 +28,53 @@ public class EntityAttacker extends EntityMob{
 	@Override
     public void onLivingUpdate()
     {
-		if (this.rand.nextInt(10) == 0 && data.isWaveActive() && !this.isDead)
+//		if (this.rand.nextInt(10) == 0 && data.isWaveActive() && !this.isDead)
+		if (this.rand.nextInt(10) == 0 && attacking && !this.isDead)
 		{
-			collectorX = data.getCollectorX();
-			collectorY = data.getCollectorY();
-			collectorZ = data.getCollectorZ();
+//			collectorX = data.getCollectorX();
+//			collectorY = data.getCollectorY();
+//			collectorZ = data.getCollectorZ();
 			
+			// Damage Collector
     		double xd = (collectorX + 0.5D) - this.posX;
     		double yd = collectorY - this.posY;
     		double zd = (collectorZ + 0.5D) - this.posZ;
     		double distance = Math.sqrt(xd*xd + yd*yd + zd*zd);
-    		
-    		if (distance < 1.7D && data.checkCollector() && !this.worldObj.isRemote)
+    		TileEntity tileEntity = this.worldObj.getBlockTileEntity(collectorX, collectorY, collectorZ);
+    		if (tileEntity instanceof TileEntityCollector)
     		{
+    			collector = (TileEntityCollector) tileEntity;
+
+    		
+    		  if (distance < 1.7D && collector.roundActive && !this.worldObj.isRemote)
+    		  {
     			path = this.worldObj.getEntityPathToXYZ(this, collectorX, collectorY, collectorZ, 40F, true, true, false, false);
     			setPathToEntity(path);
-    			data.damageCollector(collectorDamage);
-    			this.worldObj.perWorldStorage.setData(EldritchWorldData.name, data);
-
-    			if (data.getCollectorHealth() > 0)
-    				EldritchMethods.attackMessage("Collector under attack! (" + data.getCollectorHealth() + "/100)" , collectorX, collectorY, collectorZ, 100, this.worldObj);
+    			collector.damageCollector(collectorDamage);
+//    			data.damageCollector(collectorDamage);
+//    			this.worldObj.perWorldStorage.setData(EldritchWorldData.name, data);
+//
+//    			if (data.getCollectorHealth() > 0)
+//    				EldritchMethods.attackMessage("Collector under attack! (" + data.getCollectorHealth() + "/100)" , collectorX, collectorY, collectorZ, 100, this.worldObj);
     			
     			this.worldObj.playAuxSFX(1010, (int)this.posX, (int)this.posY, (int)this.posZ, 0);
     			this.worldObj.spawnParticle("crit", this.posX, this.posY, this.posZ, 0.0D, 1.0D, 0.0D);
     			
-    			if (data.getCollectorHealth() <= 0){
-    				this.worldObj.setBlockToAir(collectorX, collectorY, collectorZ);
-    				this.worldObj.removeBlockTileEntity(collectorX, collectorY, collectorZ);
-    				EldritchMethods.broadcastMessageLocal("Collector destroyed!" , collectorX, collectorY, collectorZ, 100, this.worldObj);
-    			}
+//    			if (data.getCollectorHealth() <= 0){
+//    				this.worldObj.setBlockToAir(collectorX, collectorY, collectorZ);
+//    				this.worldObj.removeBlockTileEntity(collectorX, collectorY, collectorZ);
+//    				EldritchMethods.broadcastMessageLocal("Collector destroyed!" , collectorX, collectorY, collectorZ, 100, this.worldObj);
+//    			}
+    		  }
     		}
 		}
 		
-        if (this.rand.nextInt(50) == 0 && data.isWaveActive())
+//		if (this.rand.nextInt(50) == 0 && data.isWaveActive())
+        if (this.rand.nextInt(50) == 0 && attacking)
         {
-			collectorX = data.getCollectorX();
-			collectorY = data.getCollectorY();
-			collectorZ = data.getCollectorZ();
+//			collectorX = data.getCollectorX();
+//			collectorY = data.getCollectorY();
+//			collectorZ = data.getCollectorZ();
         	
         	double xd = collectorX - this.posX;
         	double yd = collectorY - this.posY;
@@ -121,32 +132,6 @@ public class EntityAttacker extends EntityMob{
         } else if (isBetween(itemChance, 47, 50)) {
         	this.dropItem(Item.ingotIron.itemID, 1);
         }
-        
-//        switch (this.rand.nextInt(50))
-//        {
-//        	case 0:
-//        		this.dropItem(Item.swordIron.itemID, 1);
-//        		break;
-//        	case 1:
-//        		this.dropItem(Item.leather.itemID, 1);
-//        		break;
-//        	case 2:
-//        		this.dropItem(Item.plateIron.itemID, 1);
-//        		break;
-//        	case 3:
-//        		this.dropItem(Item.fishingRod.itemID, 1);
-//        		break;
-//        	case 4:
-//        		this.dropItem(Item.appleRed.itemID, 1);
-//        		break;
-//        	case 5:
-//        		this.dropItem(Item.appleRed.itemID, 1);
-//        		break;
-//        	case 6:
-//        		this.dropItem(Item.appleRed.itemID, 1);
-//        		break;
-//        }
-
     }
 	
 	public static boolean isBetween(int x, int lower, int upper) {
@@ -169,11 +154,12 @@ public class EntityAttacker extends EntityMob{
     public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
     {
         super.writeEntityToNBT(par1NBTTagCompound);
-        if (data.isWaveActive())
+        if (attacking)
         {
         	par1NBTTagCompound.setInteger("AttackX", collectorX);
         	par1NBTTagCompound.setInteger("AttackY", collectorY);
         	par1NBTTagCompound.setInteger("AttackZ", collectorZ);
+        	par1NBTTagCompound.setBoolean("attacking", attacking);
         }
     }
 
@@ -186,6 +172,7 @@ public class EntityAttacker extends EntityMob{
             collectorX = par1NBTTagCompound.getInteger("AttackX");
             collectorY = par1NBTTagCompound.getInteger("AttackY");
             collectorZ = par1NBTTagCompound.getInteger("AttackZ");
+            attacking = par1NBTTagCompound.getBoolean("attacking");
         }
         
     }

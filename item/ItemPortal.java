@@ -12,26 +12,13 @@ public class ItemPortal extends ItemBlock {
          setHasSubtypes(true);
    }
   
+   @Override
    public String getUnlocalizedName(ItemStack itemstack)
    {
-         String name = "";
-         switch(itemstack.getItemDamage())
-         {
-                case 0:
-                {
-                       name = "world";
-                       break;
-                }
-                case 1:
-                {
-                       name = "nether";
-                       break;
-                }
-                default: name = "marker";
-         }
-         return getUnlocalizedName() + "." + name;
+         return "itemPortal";
    }
   
+   @Override
    public int getMetadata(int par1)
    {
          return par1;

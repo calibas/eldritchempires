@@ -20,9 +20,11 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
+import eldritchempires.block.BlockIronTrapDoor;
 import eldritchempires.block.BlockPortal;
 import eldritchempires.block.BlockCollector;
 import eldritchempires.block.BlockSpawner;
+import eldritchempires.block.BlockProtectedRedstone;
 import eldritchempires.entity.EntityBomb;
 import eldritchempires.entity.EntityMagicEssence;
 import eldritchempires.entity.EntityRabidDemo;
@@ -55,6 +57,8 @@ public class Registration {
 	public static Block collector;
 	public static Block spawner;
 	public static Block portal;	
+	public static Block ironTrapDoor;
+	public static Block protectedRedstone;
 	public static Item golemPart;
 	public static Item condensedEssence;
 	public static Item iceCrystal;
@@ -63,21 +67,34 @@ public class Registration {
 	public static void registration()
 	{
 		// Add Blocks
-		collector = new BlockCollector(EldritchEmpires.collectorBlockID, Material.wood).setUnlocalizedName("collector");
-		GameRegistry.registerBlock(collector, ItemCollector.class, EldritchEmpires.modid + (collector.getUnlocalizedName().substring(5)));
-		LanguageRegistry.addName(new ItemStack(collector, 1, 0), "Collector");
-		LanguageRegistry.addName(new ItemStack(collector, 1, 1), "Active Collector");		
+		collector = new BlockCollector(EldritchEmpires.collectorBlockID).setUnlocalizedName("collector");
+		GameRegistry.registerBlock(collector, ItemCollector.class, EldritchEmpires.modid + collector.getUnlocalizedName().substring(5));
+		LanguageRegistry.addName(new ItemStack(collector, 1, 0), "Inactive Collector");
+//		LanguageRegistry.addName(new ItemStack(collector, 1, 1), "Level 1 Collector");
+//		LanguageRegistry.addName(new ItemStack(collector, 1, 2), "Level 2 Collector");
+		for (int i = 1;i < 10; i++)
+		{
+			LanguageRegistry.addName(new ItemStack(collector, 1, i), "Level " + i + " Collector");
+		}
 		
 		spawner = new BlockSpawner(EldritchEmpires.spawnerBlockID, Material.ground).setUnlocalizedName("spawner");
-		GameRegistry.registerBlock(spawner, ItemSpawner.class, EldritchEmpires.modid + (spawner.getUnlocalizedName().substring(5)));
+		GameRegistry.registerBlock(spawner, ItemSpawner.class, EldritchEmpires.modid + spawner.getUnlocalizedName().substring(5));
 		LanguageRegistry.addName(new ItemStack(spawner, 1, 0), "Stone Archer Spawner");
 		LanguageRegistry.addName(new ItemStack(spawner, 1, 1), "Stone Mage Spawner");
 		LanguageRegistry.addName(new ItemStack(spawner, 1, 2), "Stone Warrior Spawner");
 	
 		portal = new BlockPortal(EldritchEmpires.portalBlockID).setUnlocalizedName("portal");
-		GameRegistry.registerBlock(portal, ItemPortal.class, EldritchEmpires.modid + (portal.getUnlocalizedName().substring(5)));
+		GameRegistry.registerBlock(portal, ItemPortal.class, EldritchEmpires.modid + portal.getUnlocalizedName().substring(5));
 		LanguageRegistry.addName(new ItemStack(portal, 1, 0), "Portal Focus");
 		LanguageRegistry.addName(new ItemStack(portal, 1, 1), "Placeholder Portal");
+		
+		ironTrapDoor = new BlockIronTrapDoor(EldritchEmpires.ironTrapDoorBlockID, Material.wood).setUnlocalizedName("ironTrapDoor");
+		GameRegistry.registerBlock(ironTrapDoor, EldritchEmpires.modid + ironTrapDoor.getUnlocalizedName().substring(5));
+		LanguageRegistry.addName(new ItemStack(ironTrapDoor, 1, 0), "Iron Trap Door");
+		
+		protectedRedstone = new BlockProtectedRedstone(EldritchEmpires.protectedRedstoneBlockID).setUnlocalizedName("protectedRedstone");
+		GameRegistry.registerBlock(protectedRedstone, EldritchEmpires.modid + protectedRedstone.getUnlocalizedName().substring(5));
+		LanguageRegistry.addName(new ItemStack(protectedRedstone, 1, 0), "Protected Redstone");
 		
 		// Add Entities
 		registerEntity(EntityZoblin.class, "Zoblin");
@@ -144,7 +161,7 @@ public class Registration {
 		MinecraftForge.EVENT_BUS.register(new EldritchEvents());
 		
 		// Tick Handler
-		TickRegistry.registerTickHandler(new EldritchTick(), Side.SERVER);
+//		TickRegistry.registerTickHandler(new EldritchTick(), Side.SERVER);
 		
 		// GUI Handler
 		new EldritchGuiHandler();

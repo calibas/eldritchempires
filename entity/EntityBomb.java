@@ -1,17 +1,20 @@
 package eldritchempires.entity;
 
 import eldritchempires.ParticleEffects;
+import eldritchempires.Registration;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 public class EntityBomb extends EntityCreature {
 
 	int timer = 0;
+	int collectorDamage = 40;
 	
 	public EntityBomb(World par1World) {
 		super(par1World);
@@ -48,11 +51,36 @@ public class EntityBomb extends EntityCreature {
 		
 		
 		timer++;
+		// Explode
 		if (timer >= 200 && !this.worldObj.isRemote && !this.isDead)
 		{
-            	boolean flag = this.worldObj.getGameRules().getGameRuleBooleanValue("mobGriefing");
-            	this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, 2.0F, flag);
-                this.setDead();
+			// Search within 2 blocks for collector
+			int x = (int)this.posX;
+			int y = (int)this.posY;
+			int z = (int)this.posZ;
+
+			int range  = 2;
+			for(int i = -range; i < range; i++){
+				for(int j = -range; j < range; j++){
+					for(int k = -range; k < range; k++){
+						int id = this.worldObj.getBlockId(x+i, y+j, z+k);
+						if(id == Registration.collector.blockID)
+						{
+							TileEntity tileEntity = this.worldObj.getBlockTileEntity(x+i, y+j, z+k);
+			        		if (tileEntity instanceof TileEntityCollector)
+			        		{
+			        			TileEntityCollector collector = (TileEntityCollector) tileEntity;
+			        			collector.damageCollector(collectorDamage);
+			        		}
+			        	}
+					}
+				}
+			}
+			
+			
+            boolean flag = this.worldObj.getGameRules().getGameRuleBooleanValue("mobGriefing");
+            this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, 2.0F, flag);
+            this.setDead();
 		}
 
 		if (this.getHealth() <= 0.0F)

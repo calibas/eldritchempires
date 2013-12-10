@@ -101,6 +101,5 @@ public class EldritchMethods {
 
     	return location;
     }
-	
-	
+    
 }

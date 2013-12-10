@@ -34,9 +34,10 @@ public class EntityStoneMage extends EntityGuard implements IRangedAttackMob
 		this.tasks.addTask(2,  new EntityAIGolemStill(this));
 		this.tasks.addTask(3,  new EntityAIArrowAttack(this, 0.0D, 20, 60, 15.0F));
         this.targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityZoblinBomber.class, 0, true));
+        this.targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityBomb.class, 0, true));
         this.targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityRabidMiner.class, 0, true));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityAttacker.class, 0, true));
-         this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityZombie.class, 0, true));
+        this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityZombie.class, 0, true));
         this.targetTasks.addTask(4, new EntityAINearestAttackableTarget(this, EntitySkeleton.class, 0, true));
 
 	}
@@ -106,9 +107,7 @@ public class EntityStoneMage extends EntityGuard implements IRangedAttackMob
 			float f) {
         EntityIceBolt entityIceBolt = new EntityIceBolt(this.worldObj, this, entitylivingbase, 1.6F, (float)(14 - this.worldObj.difficultySetting * 4));
         double damage = ((double)(f * 2.0F) + this.rand.nextGaussian() * 0.25D + (double)((float)this.worldObj.difficultySetting * 0.11F)) * this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
-        System.out.println(damage);
         double attackDamage = this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
-        System.out.println(attackDamage);
         entityIceBolt.setDamage(damage);
         this.playSound("random.bow", 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
         this.worldObj.spawnEntityInWorld(entityIceBolt);
